@@ -89,7 +89,7 @@ def getCommandInputValue(commandInput, unitType):
             _ui.messageBox('Failed:\n{}'.format(traceback.format_exc()))
 
 """# Event handler for the commandCreated event.
-class GearCommandCreatedHandler(adsk.core.CommandCreatedEventHandler):
+class AIDECreatedHandler(adsk.core.CommandCreatedEventHandler):
     def __init__(self):
         super().__init__()
     def notify(self, args):
@@ -123,48 +123,37 @@ class GearCommandCreatedHandler(adsk.core.CommandCreatedEventHandler):
             if standard == 'English':
                 _units = 'in'
             else:
-                _units = 'mm'
+                _units = 'mm'      
+
+            plantFlowRate = '20 L/s'
+            plantFlowRateAttrib = des.attributes.itemByName('AIDE', 'plantFlowRate')
+            if plantFlowRateAttrib:
+                plantFlowRate = plantFlowRateAttrib.value
+
+            flocHeadLoss = '0.4'
+            flocHeadLossAttrib = des.attributes.itemByName('AIDE', 'flocHeadLoss')
+            if flocHeadLossAttrib:
+                flocHeadLoss = flocHeadLossAttrib.value
+
+            flocBlanketDepth = '24'            
+            flocBlanketDepthAttrib = des.attributes.itemByName('AIDE', 'flocBlanketDepth')
+            if flocBlanketDepthAttrib:
+                flocBlanketDepth = flocBlanketDepthAttrib.value
+
+            flocSlabThickness = '0.15'
+            flocSlabThicknessAttrib = des.attributes.itemByName('AIDE', 'flocSlabThickness')
+            if flocSlabThicknessAttrib:
+                flocSlabThickness = flocSlabThicknessAttrib.value
+
+            flocOuterWall = '0.15'
+            flocOuterWallAttrib = des.attributes.itemByName('AIDE', 'flocOuterWall')
+            if flocOuterWallAttrib:
+                flocOuterWall = flocOuterWallAttrib.value
             
-            pressureAngle = '20 deg'
-            pressureAngleAttrib = des.attributes.itemByName('SpurGear', 'pressureAngle')
-            if pressureAngleAttrib:
-                pressureAngle = pressureAngleAttrib.value
-            
-            pressureAngleCustom = 20 * (math.pi/180.0)
-            pressureAngleCustomAttrib = des.attributes.itemByName('SpurGear', 'pressureAngleCustom')
-            if pressureAngleCustomAttrib:
-                pressureAngleCustom = float(pressureAngleCustomAttrib.value)            
-
-            diaPitch = '2'
-            diaPitchAttrib = des.attributes.itemByName('SpurGear', 'diaPitch')
-            if diaPitchAttrib:
-                diaPitch = diaPitchAttrib.value
-            metricModule = 25.4 / float(diaPitch)
-
-            backlash = '0'
-            backlashAttrib = des.attributes.itemByName('SpurGear', 'backlash')
-            if backlashAttrib:
-                backlash = backlashAttrib.value
-
-            numTeeth = '24'            
-            numTeethAttrib = des.attributes.itemByName('SpurGear', 'numTeeth')
-            if numTeethAttrib:
-                numTeeth = numTeethAttrib.value
-
-            rootFilletRad = str(.0625 * 2.54)
-            rootFilletRadAttrib = des.attributes.itemByName('SpurGear', 'rootFilletRad')
-            if rootFilletRadAttrib:
-                rootFilletRad = rootFilletRadAttrib.value
-
-            thickness = str(0.5 * 2.54)
-            thicknessAttrib = des.attributes.itemByName('SpurGear', 'thickness')
-            if thicknessAttrib:
-                thickness = thicknessAttrib.value
-            
-            holeDiam = str(0.5 * 2.54)
-            holeDiamAttrib = des.attributes.itemByName('SpurGear', 'holeDiam')
-            if holeDiamAttrib:
-                holeDiam = holeDiamAttrib.value
+            flocDividingWall = '0.15'
+            flocDividingWall = des.attributes.itemByName('AIDE', 'flocDividingWall')
+            if flocDividingWall:
+                flocDividingWall = flocDividingWallAttrib.value
 
             cmd = eventArgs.command
             cmd.isExecutedWhenPreEmpted = False
