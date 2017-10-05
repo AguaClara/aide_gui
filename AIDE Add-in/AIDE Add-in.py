@@ -62,8 +62,8 @@ def stop(context):
     except:
         if ui:
             ui.messageBox('Failed:\n{}'.format(traceback.format_exc()))
-"""
-# Verfies that a value command input has a valid expression and returns the 
+
+# Verifies that a value command input has a valid expression and returns the 
 # value if it does.  Otherwise it returns False.  This works around a 
 # problem where when you get the value from a ValueCommandInput it causes the
 # current expression to be evaluated and updates the display.  Some new functionality
@@ -88,8 +88,7 @@ def getCommandInputValue(commandInput, unitType):
         if _ui:
             _ui.messageBox('Failed:\n{}'.format(traceback.format_exc()))
 
-
-# Event handler for the commandCreated event.
+"""# Event handler for the commandCreated event.
 class GearCommandCreatedHandler(adsk.core.CommandCreatedEventHandler):
     def __init__(self):
         super().__init__()
