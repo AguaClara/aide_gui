@@ -88,7 +88,8 @@ def getCommandInputValue(commandInput, unitType):
         if _ui:
             _ui.messageBox('Failed:\n{}'.format(traceback.format_exc()))
 
-"""# Event handler for the commandCreated event.
+
+# Event handler for the commandCreated event.
 class AIDECreatedHandler(adsk.core.CommandCreatedEventHandler):
     def __init__(self):
         super().__init__()
@@ -159,14 +160,7 @@ class AIDECreatedHandler(adsk.core.CommandCreatedEventHandler):
             cmd.isExecutedWhenPreEmpted = False
             inputs = cmd.commandInputs
             
-            global _standard, _pressureAngle, _pressureAngleCustom, _diaPitch, _pitch, _module, _numTeeth, _rootFilletRad, _thickness, _holeDiam, _pitchDiam, _backlash, _imgInputEnglish, _imgInputMetric, _errMessage
-
-            # Define the command dialog.
-            _imgInputEnglish = inputs.addImageCommandInput('gearImageEnglish', '', 'Resources/GearEnglish.png')
-            _imgInputEnglish.isFullWidth = True
-
-            _imgInputMetric = inputs.addImageCommandInput('gearImageMetric', '', 'Resources/GearMetric.png')
-            _imgInputMetric.isFullWidth = True
+            global _standard, _plantFlowRate, _flocHeadLoss, _flocBlanketDepth, _flocSlabThickness, _flocOuterWall, _flocDividingWall, _imgInputEnglish, _imgInputMetric, _errMessage
 
             _standard = inputs.addDropDownCommandInput('standard', 'Standard', adsk.core.DropDownStyles.TextListDropDownStyle)
             if standard == "English":
@@ -177,66 +171,29 @@ class AIDECreatedHandler(adsk.core.CommandCreatedEventHandler):
                 _standard.listItems.add('English', False)
                 _standard.listItems.add('Metric', True)
                 _imgInputEnglish.isVisible = False            
-            
-            _pressureAngle = inputs.addDropDownCommandInput('pressureAngle', 'Pressure Angle', adsk.core.DropDownStyles.TextListDropDownStyle)
-            if pressureAngle == '14.5 deg':
-                _pressureAngle.listItems.add('14.5 deg', True)
-            else:
-                _pressureAngle.listItems.add('14.5 deg', False)
+                                  
+            _plantFlowRate = inputs.addValueInput('plantFlowRate', 'Plant Flow Rate', '', adsk.core.ValueInput.createByReal(plantFlowRate))   
 
-            if pressureAngle == '20 deg':
-                _pressureAngle.listItems.add('20 deg', True)
-            else:
-                _pressureAngle.listItems.add('20 deg', False)
-
-            if pressureAngle == '25 deg':
-                _pressureAngle.listItems.add('25 deg', True)
-            else:
-                _pressureAngle.listItems.add('25 deg', False)
-
-            if pressureAngle == 'Custom':
-                _pressureAngle.listItems.add('Custom', True)
-            else:
-                _pressureAngle.listItems.add('Custom', False)
-
-            _pressureAngleCustom = inputs.addValueInput('pressureAngleCustom', 'Custom Angle', 'deg', adsk.core.ValueInput.createByReal(pressureAngleCustom))
-            if pressureAngle != 'Custom':
-                _pressureAngleCustom.isVisible = False
-                        
-            _diaPitch = inputs.addValueInput('diaPitch', 'Diametral Pitch', '', adsk.core.ValueInput.createByString(diaPitch))   
-
-            _module = inputs.addValueInput('module', 'Module', '', adsk.core.ValueInput.createByReal(metricModule))   
-            
-            if standard == 'English':
-                _module.isVisible = False
-            elif standard == 'Metric':
-                _diaPitch.isVisible = False
+            _flocHeadLoss = inputs.addValueInput('flocHeadLoss', 'Floc Head Loss', '', adsk.core.ValueInput.createByReal(flocHeadLoss))   
                 
-            _numTeeth = inputs.addStringValueInput('numTeeth', 'Number of Teeth', numTeeth)        
+            _flocBlanketDepth = inputs.addStringValueInput('flocBlanketDepth', 'Floc Blanket Depth', adks.core.ValueInput.createByReal(flocBlanketDepth))        
 
-            _backlash = inputs.addValueInput('backlash', 'Backlash', _units, adsk.core.ValueInput.createByReal(float(backlash)))
+            _flocSlabThickness = inputs.addValueInput('flocSlabThickness', 'Floc Slab Thickness', _units, adsk.core.ValueInput.createByReal(float(flocSlabThickness)))
 
-            _rootFilletRad = inputs.addValueInput('rootFilletRad', 'Root Fillet Radius', _units, adsk.core.ValueInput.createByReal(float(rootFilletRad)))
+            _flocOuterWall = inputs.addValueInput('flocOuterWall', 'Floc Outer Wall', _units, adsk.core.ValueInput.createByReal(float(flocOuterWall)))
 
-            _thickness = inputs.addValueInput('thickness', 'Gear Thickness', _units, adsk.core.ValueInput.createByReal(float(thickness)))
-
-            _holeDiam = inputs.addValueInput('holeDiam', 'Hole Diameter', _units, adsk.core.ValueInput.createByReal(float(holeDiam)))
-
-            _pitchDiam = inputs.addTextBoxCommandInput('pitchDiam', 'Pitch Diameter', '', 1, True)
-            
-            _errMessage = inputs.addTextBoxCommandInput('errMessage', '', '', 2, True)
-            _errMessage.isFullWidth = True
+            _flocDividingWall = inputs.addValueInput('flocDividingWall', 'Floc Dividing Wall Thickness', _units, adsk.core.ValueInput.createByReal(float(flocDividingWall)))
             
             # Connect to the command related events.
-            onExecute = GearCommandExecuteHandler()
+            onExecute = AIDECommandExecuteHandler()
             cmd.execute.add(onExecute)
             _handlers.append(onExecute)        
             
-            onInputChanged = GearCommandInputChangedHandler()
+            onInputChanged = AIDEInputChangedHandler()
             cmd.inputChanged.add(onInputChanged)
             _handlers.append(onInputChanged)     
             
-            onValidateInputs = GearCommandValidateInputsHandler()
+            onValidateInputs = AIDEValidateInputsHandler()
             cmd.validateInputs.add(onValidateInputs)
             _handlers.append(onValidateInputs)        
         except:
@@ -245,67 +202,51 @@ class AIDECreatedHandler(adsk.core.CommandCreatedEventHandler):
 
 
 # Event handler for the execute event.
-class GearCommandExecuteHandler(adsk.core.CommandEventHandler):
+class AIDECommandExecuteHandler(adsk.core.CommandEventHandler):
     def __init__(self):
         super().__init__()
     def notify(self, args):
         try:
             eventArgs = adsk.core.CommandEventArgs.cast(args)
-
-            if _standard.selectedItem.name == 'English':
-                diaPitch = _diaPitch.value            
-            elif _standard.selectedItem.name == 'Metric':
-                diaPitch = 25.4 / _module.value
             
             # Save the current values as attributes.
             des = adsk.fusion.Design.cast(_app.activeProduct)
             attribs = des.attributes
-            attribs.add('SpurGear', 'standard', _standard.selectedItem.name)
-            attribs.add('SpurGear', 'pressureAngle', _pressureAngle.selectedItem.name)
-            attribs.add('SpurGear', 'pressureAngleCustom', str(_pressureAngleCustom.value))
-            attribs.add('SpurGear', 'diaPitch', str(diaPitch))
-            attribs.add('SpurGear', 'numTeeth', str(_numTeeth.value))
-            attribs.add('SpurGear', 'rootFilletRad', str(_rootFilletRad.value))
-            attribs.add('SpurGear', 'thickness', str(_thickness.value))
-            attribs.add('SpurGear', 'holeDiam', str(_holeDiam.value))
-            attribs.add('SpurGear', 'backlash', str(_backlash.value))
+            attribs.add('Floc', 'standard', _standard.selectedItem.name)
+            attribs.add('Floc', 'plantFlowRate', str(_plantFlowRate.value))
+            attribs.add('Floc', 'flocHeadLoss', str(_flocHeadLoss))
+            attribs.add('Floc', 'flocBlanketDepth', str(_flocBlanketDepth.value))
+            attribs.add('Floc', 'flocSlabThickness', str(_flocSlabThickness.value))
+            attribs.add('Floc', 'flocOuterWall', str(_flocOuterWall.value))
+            attribs.add('Floc', 'flocDividingWall', str(_flocDividingWall.value))
 
-            # Get the current values.
-            if _pressureAngle.selectedItem.name == 'Custom':
-                pressureAngle = _pressureAngleCustom.value
-            else:
-                if _pressureAngle.selectedItem.name == '14.5 deg':
-                    pressureAngle = 14.5 * (math.pi/180)
-                elif _pressureAngle.selectedItem.name == '20 deg':
-                    pressureAngle = 20.0 * (math.pi/180)
-                elif _pressureAngle.selectedItem.name == '25 deg':
-                    pressureAngle = 25.0 * (math.pi/180)
 
-            numTeeth = int(_numTeeth.value)
-            rootFilletRad = _rootFilletRad.value
-            thickness = _thickness.value
-            holeDiam = _holeDiam.value
-            backlash = _backlash.value
-
-            # Create the gear.
-            gearComp = drawGear(des, diaPitch, numTeeth, thickness, rootFilletRad, pressureAngle, backlash, holeDiam)
+            # Get the current values
             
-            if gearComp:
-                if _standard.selectedItem.name == 'English':
-                    desc = 'Spur Gear; Diametrial Pitch: ' + str(diaPitch) + '; '            
-                elif _standard.selectedItem.name == 'Metric':
-                    desc = 'Spur Gear; Module: ' +  str(25.4 / diaPitch) + '; '
+            plantFlowRate = _plantFlowRate.value
+            flocHeadLoss = _flocHeadloss.value
+            flocBlanketDepth = _flocBlanketDepth.value
+            flocSlabThickness = _flocSlabThickness.value
+            flocOuterWall = _flocOuterWall.value
+            flocDividingWall = _flocDividingWall.value
+
+            # Create the gear using AIDE_draw.
+            '''AIDEComp = AIDE_draw(put aide draw parameters in here)'''
+            
+            if AIDEComp:
                 
-                desc += 'Num Teeth: ' + str(numTeeth) + '; '
-                desc += 'Pressure Angle: ' + str(pressureAngle * (180/math.pi)) + '; '
+                desc += 'Plant Flow Rate: ' + str(plantFlowRate) + '; '
+                desc += 'Floc Head Loss: ' + str(flocHeadLoss) + '; '
+                desc += 'Floc Blanket Depth: ' + str(flocBlanketDepth, + '; '
+                desc += 'Floc Slab Thickness: ' + str(flocSlabThickness) + '; '
+                desc += 'Floc Outer Wall: ' + str(flocOuterWall) + '; '
+                desc += 'Floc Dividing Wall: ' + str(flocDividingWall) + '; '
                 
-                desc += 'Backlash: ' + des.unitsManager.formatInternalValue(backlash, _units, True)
-                gearComp.description = desc
+                AIDEComp.description = desc
         except:
             if _ui:
                 _ui.messageBox('Failed:\n{}'.format(traceback.format_exc()))
-
-
+"""
         
 # Event handler for the inputChanged event.
 class GearCommandInputChangedHandler(adsk.core.InputChangedEventHandler):
@@ -473,4 +414,4 @@ class GearCommandValidateInputsHandler(adsk.core.ValidateInputsEventHandler):
         except:
             if _ui:
                 _ui.messageBox('Failed:\n{}'.format(traceback.format_exc()))"""
-
+"""
