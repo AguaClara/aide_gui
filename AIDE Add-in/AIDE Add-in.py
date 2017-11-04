@@ -50,14 +50,13 @@ def run(context):
 def stop(context):
     ui = None
     try:
-    createPanel = _ui.allToolbarPanels.itemById('SolidCreatePanel')
-    AIDEButton = createPanel.controls.itemById('adskAIDEPythonAddIn')       
-    if AIDEButton:
-        AIDEButton.deleteMe()
-        
-    cmdDef = _ui.commandDefinitions.itemById('adskAIDEPythonAddIn')
-    if cmdDef:
-        cmdDef.deleteMe()
+        createPanel = _ui.allToolbarPanels.itemById('SolidCreatePanel')
+        AIDEButton = createPanel.controls.itemById('adskAIDEPythonAddIn')       
+        if AIDEButton:
+            AIDEButton.deleteMe()       
+            cmdDef = _ui.commandDefinitions.itemById('adskAIDEPythonAddIn')
+        if cmdDef:
+            cmdDef.deleteMe()
 
     except:
         if ui:
@@ -237,7 +236,7 @@ class AIDECommandExecuteHandler(adsk.core.CommandEventHandler):
                 
                 desc += 'Plant Flow Rate: ' + str(plantFlowRate) + '; '
                 desc += 'Floc Head Loss: ' + str(flocHeadLoss) + '; '
-                desc += 'Floc Blanket Depth: ' + str(flocBlanketDepth, + '; '
+                desc += 'Floc Blanket Depth: ' + str(flocBlanketDepth) + '; '
                 desc += 'Floc Slab Thickness: ' + str(flocSlabThickness) + '; '
                 desc += 'Floc Outer Wall: ' + str(flocOuterWall) + '; '
                 desc += 'Floc Dividing Wall: ' + str(flocDividingWall) + '; '
