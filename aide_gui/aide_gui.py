@@ -2,11 +2,14 @@
 #Description-
 import adsk.core, adsk.fusion, adsk.cam, traceback
 import json
-#import tkinter as tk
 
 # Command inputs
 _imgInputEnglish = adsk.core.ImageCommandInput.cast(None)
 _imgInputMetric = adsk.core.ImageCommandInput.cast(None)
+
+# Global list to keep all event handlers in scope.
+# This is only needed with Python.
+handlers = []
 
 #parse JSON from aide_design
 def parseJsonObject(parameterJson):
@@ -25,14 +28,23 @@ def run(context):
         s = json.dumps(["p1", "p2"])
         obj = parseJsonObject(s)
         #ui.messageBox('Hello addin')
+    
+        # Get the CommandDefinitions collection.
+        cmdDefs = ui.commandDefinitions
         
-        # Create a command definition and add a button to the CREATE panel.
-        cmdDef = ui.commandDefinitions.addButtonDefinition('adskAIDEPythonAddIn', 'AIDE', 'Creates Unit Process Designs', 'resources/aide_gui')        
+        # Create a command definition
+        cmdDef = cmdDefs.addButtonDefinition('adskaide_guiPythonAddIn', 'aide_gui', 'Creates Water Treatment Plant', './resources/AIDE')        
+        
+        # Get the Create Panel in the model workspace
         createPanel = ui.allToolbarPanels.itemById('SolidCreatePanel')
+        
+        # Add the button to the bottom of the Create Panel
         AIDE_Button = createPanel.controls.addCommand(cmdDef)
         
-        if context['IsApplicationStartup'] == False:
-            ui.messageBox('The "Spur Gear" command has been added\nto the CREATE panel of the MODEL workspace.')
+        # Connect to the command created event.. functions to be written
+        #onCommandCreated = CommandCreatedEventHandler()
+        #AIDE_Button.commandCreated.add(onCommandCreated)
+        #handlers.append(CommandCreated)
         
     except:
         if ui:
@@ -43,11 +55,20 @@ def stop(context):
     try:
         app = adsk.core.Application.get()
         ui  = app.userInterface
-        ui.messageBox('Stop addin')
+        #ui.messageBox('Stop addin')
+        
+        # Cleans up the UI once add-in stopped        
+        cmdDef = ui.commandDefinitions.itemById('adskaide_guiPythonAddIn')
+        if cmdDef:
+            cmdDef.deleteMe()
+            
+        createPanel = ui.allToolbarPanels.itemById('SolidCreatePanel')
+        AIDE_Button = createPanel.controls.itemById('adskaide_guiPythonAddIn')       
+        if AIDE_Button:
+            AIDE_Button.deleteMe()
 
     except:
         if ui:
             ui.messageBox('Failed:\n{}'.format(traceback.format_exc()))
             
-#def getCommandInputValue(commandInput, unitType):
-
+            
