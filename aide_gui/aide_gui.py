@@ -17,13 +17,6 @@ def parseJsonObject(parameterJson):
         print("Decoding Json has failed")
     return list
 
-def createParameters(list):
-    parameters = {}
-    for x in range(list):
-        parameters["{0}".format(list)] = 0
-        # trying to initialize parameters with different names to 0 
-        # based on design parameters from aide_design
-        
 def run(context):
     ui = None
     try:
