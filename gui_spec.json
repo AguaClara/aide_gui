@@ -1,0 +1,8 @@
+{"design_name" : "flocculator",
+"tabs" : [
+  {"parameters":{
+    "title":"Plant flow rate (L/s): 7-100",
+    "description":"expected flow rate, see more here: http://somesite.com",
+    "gui":"TabCommandInput"
+    }}
+  ]}
