@@ -1,0 +1,21 @@
+{
+	"some_design_name" : {
+		"parameters" : {
+			"p1_name" : {
+				"type" : "textfield",
+				"default_value" : 3.00,
+				"unit" : "mm",
+				"miscellaneous" : "blabla"
+			},
+			"p2_name" : {
+				"type" : "dropdown",
+				"default_value" : 3,
+				"input" : [1,2,3,4,5],
+				"unit" : "ft",
+				"miscellaneous" : "blabla"
+			}
+		}
+	},
+	"some_other_design_name" : "...",
+	...
+}
