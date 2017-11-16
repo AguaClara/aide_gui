@@ -18,8 +18,9 @@
 			}
 		}
 	},
-	"some_other_design_name" : "...",
+	"some_other_design_name" : { "...", 
 	...
 	
-	]}
+	} ]
+}
 }
