@@ -1,4 +1,4 @@
-{
+{  "tabs" : [ {
 	"some_design_name" : {
 		"parameters" : {
 			"p1_name" : {
@@ -20,4 +20,6 @@
 	},
 	"some_other_design_name" : "...",
 	...
+	
+	]}
 }
