@@ -14,6 +14,8 @@ _units = ''
 _imgInputEnglish = adsk.core.ImageCommandInput.cast(None)
 _imgInputMetric = adsk.core.ImageCommandInput.cast(None)
 _standard = adsk.core.DropDownCommandInput.cast(None)
+_errMessage = adsk.core.TextBoxCommandInput.cast(None)
+
 _pressureAngle = adsk.core.DropDownCommandInput.cast(None)
 _pressureAngleCustom = adsk.core.ValueCommandInput.cast(None)
 _backlash = adsk.core.ValueCommandInput.cast(None)
@@ -24,7 +26,13 @@ _rootFilletRad = adsk.core.ValueCommandInput.cast(None)
 _thickness = adsk.core.ValueCommandInput.cast(None)
 _holeDiam = adsk.core.ValueCommandInput.cast(None)
 _pitchDiam = adsk.core.TextBoxCommandInput.cast(None)
-_errMessage = adsk.core.TextBoxCommandInput.cast(None)
+
+#
+#_json = '';
+#for design in _json:
+#    for i in design: 
+#        for parameters in i:
+#            
 
 _handlers = []
 
@@ -58,7 +66,7 @@ def run(context):
         AIDE_Button = createPanel.controls.addCommand(cmdDef)
         
         # Connect to the command created event.. functions to be written
-        onCommandCreated = GearCommandCreatedHandler()
+        onCommandCreated = CommandCreatedHandler()
         cmdDef.commandCreated.add(onCommandCreated)
         _handlers.append(onCommandCreated)
         
@@ -82,7 +90,18 @@ def stop(context):
         if _ui:
             _ui.messageBox('Failed:\n{}'.format(traceback.format_exc()))
             
-class GearCommandCreatedHandler(adsk.core.CommandCreatedEventHandler):
+class MyCommandDestroyHandler(adsk.core.CommandEventHandler):
+    def __init__(self):
+        super().__init__()
+    def notify(self, args):
+        try:
+            # When the command is done, terminate the script
+            # This will release all globals which will remove all event handlers
+            adsk.terminate()
+        except:
+            _ui.messageBox('Failed:\n{}'.format(traceback.format_exc()))
+
+class CommandCreatedHandler(adsk.core.CommandCreatedEventHandler):
     def __init__(self):
         super().__init__()
     def notify(self, args):
@@ -109,7 +128,7 @@ class GearCommandCreatedHandler(adsk.core.CommandCreatedEventHandler):
                 standard = 'English'
             else:
                 standard = 'Metric'
-            standardAttrib = des.attributes.itemByName('SpurGear', 'standard')
+            standardAttrib = des.attributes.itemByName('SpurGear', 'standard') # design name, standard
             if standardAttrib:
                 standard = standardAttrib.value
                 
@@ -117,9 +136,41 @@ class GearCommandCreatedHandler(adsk.core.CommandCreatedEventHandler):
                 _units = 'in'
             else:
                 _units = 'mm'
+             
+             
+             # Get the command that was created.
+            cmd = adsk.core.Command.cast(args.command)
+
+            # Connect to the command destroyed event.
+            onDestroy = MyCommandDestroyHandler()
+            cmd.destroy.add(onDestroy)
+            _handlers.append(onDestroy)
+
+#            # Connect to the input changed event.           
+#            onInputChanged = MyCommandInputChangedHandler()
+#            cmd.inputChanged.add(onInputChanged)
+#            _handlers.append(onInputChanged)    
             
+            # Get the CommandInputs collection associated with the command.
+            inputs = cmd.commandInputs
+
+            # Create a tab input.
+            tabCmdInput1 = inputs.addTabCommandInput('tab_1', 'Tab 1')
+            tab1ChildInputs = tabCmdInput1.children
+            
+            # Create value input.
+            tab1ChildInputs.addValueInput('value', 'Value', 'cm', adsk.core.ValueInput.createByReal(0.0))
+            
+            # Create tab input 2
+            tabCmdInput2 = inputs.addTabCommandInput('tab_2', 'Tab 2')
+            tab2ChildInputs = tabCmdInput2.children
+            
+             # Create value input.
+            tab2ChildInputs.addValueInput('value', 'Value', 'cm', adsk.core.ValueInput.createByReal(0.0))
+            
+            # Hard coded inputs
             pressureAngle = '20 deg'
-            pressureAngleAttrib = des.attributes.itemByName('SpurGear', 'pressureAngle')
+            pressureAngleAttrib = des.attributes.itemByName('SpurGear', 'pressureAngle') # design name, parameter
             if pressureAngleAttrib:
                 pressureAngle = pressureAngleAttrib.value
             
@@ -247,6 +298,3 @@ class GearCommandCreatedHandler(adsk.core.CommandCreatedEventHandler):
         except:
             if _ui:
                 _ui.messageBox('Failed:\n{}'.format(traceback.format_exc()))
-
-            
-            
