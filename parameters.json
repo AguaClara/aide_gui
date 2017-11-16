@@ -2,17 +2,19 @@
 	"some_design_name" : {
 		"parameters" : {
 			"p1_name" : {
-				"type" : "textfield",
+				"input_type" : "textfield",
+				"data_type" : ,
 				"default_value" : 3.00,
 				"unit" : "mm",
-				"miscellaneous" : "blabla"
+				"description" : "blabla"
 			},
 			"p2_name" : {
-				"type" : "dropdown",
+				"input_type" : "dropdown",
+				"data_type" : ,
 				"default_value" : 3,
 				"input" : [1,2,3,4,5],
 				"unit" : "ft",
-				"miscellaneous" : "blabla"
+				"description" : "blabla"
 			}
 		}
 	},
