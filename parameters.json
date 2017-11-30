@@ -23,3 +23,7 @@
 	} }]
 }
 
+// you can print and access the information in the JSON with the following syntax:
+// call the JSON some arbitrary name, f = { ... }
+// to access the parameters in the JSON:
+// print(f["tabs"][0]["some_design_name"]["parameters"])
