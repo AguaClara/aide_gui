@@ -1,26 +1,31 @@
 {  "tabs" : [ {
-	"some_design_name" : {
-		"parameters" : {
-			"p1_name" : {
-				"input_type" : "textfield",
-				"data_type" : "",
-				"default_value" : 3.00,
-				"unit" : "mm",
-				"description" : "blabla"
-			},
-			"p2_name" : {
-				"input_type" : "dropdown",
-				"data_type" : "",
-				"default_value" : 3,
-				"input" : [1,2,3,4,5],
-				"unit" : "ft",
-				"description" : "blabla"
-			}
-		}
-	},
-	"some_other_design_name" : { "..."
-	
-	} }]
+				"some_design_name" : {
+
+							"parameters" : {
+
+												"p1_name" : {
+														"input_type" : "textfield",
+														"data_type" : "",
+														"default_value" : 3.00,
+														"input" : [1,2,3,4,5],
+														"unit" : "mm",
+														"description" : "blabla"
+												},
+
+												"p2_name" : {
+														"input_type" : "dropdown",
+														"data_type" : "",
+														"default_value" : 3,
+														"input" : [1,2,3,4,5],
+														"unit" : "ft",
+														"description" : "blabla"
+												}
+									}
+					},
+
+					"some_other_design_name" : { "..."
+					}
+			}]
 }
 
 // you can print and access the information in the JSON with the following syntax:
