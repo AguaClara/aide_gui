@@ -1,12 +1,13 @@
-#Author-AIDE GUI
+# Author-AIDE GUI
 
 import adsk.core, adsk.fusion, adsk.cam, traceback
 import json
+# import yaml
 import math
 
 # Globals
 _app = adsk.core.Application.cast(None)
-_ui = adsk.core.UserInterface.cast(None)
+_ui = adsk.core.UserInterface.cast(None)  =
 _units = ''
 
 # Global list to keep all event handlers in scope (Currently hard-coded)
@@ -30,7 +31,7 @@ _pitchDiam = adsk.core.TextBoxCommandInput.cast(None)
 # Event handlers
 _handlers = []
 
-#parse JSON from aide_design
+# parse JSON from aide_design
 def parseJsonObject(parameterJson):
     list = []
     try:
@@ -44,44 +45,44 @@ def run(context):
         global _app, _ui
         _app = adsk.core.Application.get()
         _ui  = _app.userInterface
-            
+
         # Get the CommandDefinitions collection.
         cmdDefs = _ui.commandDefinitions
-        
+
         # Create a command definition
-        cmdDef = cmdDefs.addButtonDefinition('adskaide_guiPythonAddIn', 'aide_gui', 'Creates Water Treatment Plant', './resources/AIDE')        
-        
+        cmdDef = cmdDefs.addButtonDefinition('adskaide_guiPythonAddIn', 'aide_gui', 'Creates Water Treatment Plant', './resources/AIDE')
+
         # Get the Create Panel in the model workspace
         createPanel = _ui.allToolbarPanels.itemById('SolidCreatePanel')
-        
+
         # Add the button to the bottom of the Create Panel
         AIDE_Button = createPanel.controls.addCommand(cmdDef)
-        
+
         # Connect to the command created event (functions to be written)
         onCommandCreated = CommandCreatedHandler()
         cmdDef.commandCreated.add(onCommandCreated)
         _handlers.append(onCommandCreated)
-        
+
     except:
         if _ui:
             _ui.messageBox('Failed:\n{}'.format(traceback.format_exc()))
 
 def stop(context):
-    try:        
+    try:
         # Cleans up the UI once add-in stopped
         createPanel = _ui.allToolbarPanels.itemById('SolidCreatePanel')
-        AIDE_Button = createPanel.controls.itemById('adskaide_guiPythonAddIn')       
+        AIDE_Button = createPanel.controls.itemById('adskaide_guiPythonAddIn')
         if AIDE_Button:
             AIDE_Button.deleteMe()
-        
+
         cmdDef = _ui.commandDefinitions.itemById('adskaide_guiPythonAddIn')
         if cmdDef:
             cmdDef.deleteMe()
-    
+
     except:
         if _ui:
             _ui.messageBox('Failed:\n{}'.format(traceback.format_exc()))
-            
+
 class MyCommandDestroyHandler(adsk.core.CommandEventHandler):
     def __init__(self):
         super().__init__()
@@ -99,22 +100,22 @@ class CommandCreatedHandler(adsk.core.CommandCreatedEventHandler):
     def notify(self, args):
         try:
             eventArgs = adsk.core.CommandCreatedEventArgs.cast(args)
-            
+
             # Verify that a Fusion design is active.
             des = adsk.fusion.Design.cast(_app.activeProduct)
             if not des:
                 _ui.messageBox('A Fusion design must be active when invoking this command.')
                 return()
-                
+
             defaultUnits = des.unitsManager.defaultLengthUnits
-                
+
             # Determine whether to use inches or millimeters as the default unit
             global _units
             if defaultUnits == 'in' or defaultUnits == 'ft':
                 _units = 'in'
             else:
                 _units = 'mm'
-                        
+
             # Define the default values and get the previous values from the attributes.
             if _units == 'in':
                 standard = 'English'
@@ -123,13 +124,13 @@ class CommandCreatedHandler(adsk.core.CommandCreatedEventHandler):
             standardAttrib = des.attributes.itemByName('unit_design', 'standard') # design name, attribute
             if standardAttrib:
                 standard = standardAttrib.value
-                
+
             if standard == 'English':
                 _units = 'in'
             else:
                 _units = 'mm'
-             
-             
+
+
              # Get the command that was created.
             cmd = adsk.core.Command.cast(args.command)
 
@@ -138,11 +139,11 @@ class CommandCreatedHandler(adsk.core.CommandCreatedEventHandler):
             cmd.destroy.add(onDestroy)
             _handlers.append(onDestroy)
 
-#            # Connect to the input changed event.  (Needed when more input event handlers created later)         
+#            # Connect to the input changed event.  (Needed when more input event handlers created later)
 #            onInputChanged = MyCommandInputChangedHandler()
 #            cmd.inputChanged.add(onInputChanged)
-#            _handlers.append(onInputChanged)    
-            
+#            _handlers.append(onInputChanged)
+
 #            # Get the CommandInputs collection associated with the command.
 #            inputs = cmd.commandInputs
 #
@@ -150,28 +151,28 @@ class CommandCreatedHandler(adsk.core.CommandCreatedEventHandler):
 #            # Create a tab input.
 #            tabCmdInput1 = inputs.addTabCommandInput('tab_1', 'Tab 1')
 #            tab1ChildInputs = tabCmdInput1.children
-#            
+#
 #            # Create value input.
 #            tab1ChildInputs.addValueInput('value', 'Value', 'cm', adsk.core.ValueInput.createByReal(0.0))
-#            
+#
 #            # Create tab input 2
 #            tabCmdInput2 = inputs.addTabCommandInput('tab_2', 'Tab 2')
 #            tab2ChildInputs = tabCmdInput2.children
-#            
+#
 #             # Create value input.
 #            tab2ChildInputs.addValueInput('value', 'Value', 'cm', adsk.core.ValueInput.createByReal(0.0))
-            
+
             # Hard coded inputs, text input
-            
+
             pressureAngle = '20 deg'
             pressureAngleAttrib = des.attributes.itemByName('unit_design', 'pressureAngle') # design name, parameter
             if pressureAngleAttrib:
                 pressureAngle = pressureAngleAttrib.value
-            
+
             pressureAngleCustom = 20 * (math.pi/180.0)
             pressureAngleCustomAttrib = des.attributes.itemByName('unit_design', 'pressureAngleCustom')
             if pressureAngleCustomAttrib:
-                pressureAngleCustom = float(pressureAngleCustomAttrib.value)            
+                pressureAngleCustom = float(pressureAngleCustomAttrib.value)
 
             diaPitch = '2'
             diaPitchAttrib = des.attributes.itemByName('unit_design', 'diaPitch')
@@ -184,7 +185,7 @@ class CommandCreatedHandler(adsk.core.CommandCreatedEventHandler):
             if backlashAttrib:
                 backlash = backlashAttrib.value
 
-            numTeeth = '24'            
+            numTeeth = '24'
             numTeethAttrib = des.attributes.itemByName('unit_design', 'numTeeth')
             if numTeethAttrib:
                 numTeeth = numTeethAttrib.value
@@ -198,7 +199,7 @@ class CommandCreatedHandler(adsk.core.CommandCreatedEventHandler):
             thicknessAttrib = des.attributes.itemByName('unit_design', 'thickness')
             if thicknessAttrib:
                 thickness = thicknessAttrib.value
-            
+
             holeDiam = str(0.5 * 2.54)
             holeDiamAttrib = des.attributes.itemByName('unit_design', 'holeDiam')
             if holeDiamAttrib:
@@ -208,8 +209,8 @@ class CommandCreatedHandler(adsk.core.CommandCreatedEventHandler):
             cmd.isExecutedWhenPreEmpted = False
             inputs = cmd.commandInputs
 
-            # Defining global parameters            
-            
+            # Defining global parameters
+
             global _standard, _pressureAngle, _pressureAngleCustom, _diaPitch, _pitch, _module, _numTeeth, _rootFilletRad, _thickness, _holeDiam, _pitchDiam, _backlash, _imgInputEnglish, _imgInputMetric, _errMessage
 
             # Drop-down inputs, optional for some parameters with fixed range of values
@@ -218,11 +219,11 @@ class CommandCreatedHandler(adsk.core.CommandCreatedEventHandler):
             if standard == "English":
                 _standard.listItems.add('English', True)
                 _standard.listItems.add('Metric', False)
-                
+
             else:
                 _standard.listItems.add('English', False)
-                _standard.listItems.add('Metric', True)        
-            
+                _standard.listItems.add('Metric', True)
+
             _pressureAngle = inputs.addDropDownCommandInput('pressureAngle', 'Pressure Angle', adsk.core.DropDownStyles.TextListDropDownStyle)
             if pressureAngle == '14.5 deg':
                 _pressureAngle.listItems.add('14.5 deg', True)
@@ -247,19 +248,19 @@ class CommandCreatedHandler(adsk.core.CommandCreatedEventHandler):
             _pressureAngleCustom = inputs.addValueInput('pressureAngleCustom', 'Custom Angle', 'deg', adsk.core.ValueInput.createByReal(pressureAngleCustom))
             if pressureAngle != 'Custom':
                 _pressureAngleCustom.isVisible = False
-                        
-            _diaPitch = inputs.addValueInput('diaPitch', 'Diametral Pitch', '', adsk.core.ValueInput.createByString(diaPitch))   
 
-            _module = inputs.addValueInput('module', 'Module', '', adsk.core.ValueInput.createByReal(metricModule))   
-            
+            _diaPitch = inputs.addValueInput('diaPitch', 'Diametral Pitch', '', adsk.core.ValueInput.createByString(diaPitch))
+
+            _module = inputs.addValueInput('module', 'Module', '', adsk.core.ValueInput.createByReal(metricModule))
+
             if standard == 'English':
                 _module.isVisible = False
             elif standard == 'Metric':
                 _diaPitch.isVisible = False
-                
-            # The initial values of the inputs as shown in the dialog    
-                
-            _numTeeth = inputs.addStringValueInput('numTeeth', 'Number of Teeth', numTeeth)        
+
+            # The initial values of the inputs as shown in the dialog
+
+            _numTeeth = inputs.addStringValueInput('numTeeth', 'Number of Teeth', numTeeth)
 
             _backlash = inputs.addValueInput('backlash', 'Backlash', _units, adsk.core.ValueInput.createByReal(float(backlash)))
 
@@ -270,25 +271,25 @@ class CommandCreatedHandler(adsk.core.CommandCreatedEventHandler):
             _holeDiam = inputs.addValueInput('holeDiam', 'Hole Diameter', _units, adsk.core.ValueInput.createByReal(float(holeDiam)))
 
             _pitchDiam = inputs.addTextBoxCommandInput('pitchDiam', 'Pitch Diameter', '', 1, True)
-            
+
             _errMessage = inputs.addTextBoxCommandInput('errMessage', '', '', 2, True)
             _errMessage.isFullWidth = True
-            
+
             '''
             # Connect to the command related events. (Not used yet)
             onExecute = GearCommandExecuteHandler()
             cmd.execute.add(onExecute)
-            _handlers.append(onExecute)        
-            
+            _handlers.append(onExecute)
+
             onInputChanged = GearCommandInputChangedHandler()
             cmd.inputChanged.add(onInputChanged)
-            _handlers.append(onInputChanged)     
-            
+            _handlers.append(onInputChanged)
+
             onValidateInputs = GearCommandValidateInputsHandler()
             cmd.validateInputs.add(onValidateInputs)
-            _handlers.append(onValidateInputs)  
+            _handlers.append(onValidateInputs)
             '''
-            
+
         except:
             if _ui:
                 _ui.messageBox('Failed:\n{}'.format(traceback.format_exc()))
