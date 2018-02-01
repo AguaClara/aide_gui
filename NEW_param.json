@@ -1,18 +1,17 @@
 {  "tabs" : [ {
-				"some_design_name" : {
+				"some_design_name" : [
 
-							"parameters" : {
-
-												"p1_name" : {
+												{ "p1_name" : {
 														"input_type" : "textfield",
 														"data_type" : "",
 														"default_value" : 3.00,
 														"input" : [1,2,3,4,5],
 														"unit" : "mm",
 														"description" : "blabla"
-												},
+												    }
+                        },
 
-												"p2_name" : {
+												{ "p2_name" : {
 														"input_type" : "dropdown",
 														"data_type" : "",
 														"default_value" : 3,
@@ -20,15 +19,12 @@
 														"unit" : "ft",
 														"description" : "blabla"
 												}
-									}
-					},
+                      },
 
-					"some_other_design_name" : { "..."
-					}
-			}]
+
+									]
+                },
+
+
+			]
 }
-
-// you can print and access the information in the JSON with the following syntax:
-// call the JSON some arbitrary name, f = { ... }
-// to access the parameters in the JSON:
-// print(f["tabs"][0]["some_design_name"]["parameters"])
