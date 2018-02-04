@@ -1,4 +1,4 @@
-#Author-AIDE GUI
+# Author-AIDE GUI
 
 import adsk.core, adsk.fusion, adsk.cam, traceback
 import json
@@ -30,7 +30,8 @@ _pitchDiam = adsk.core.TextBoxCommandInput.cast(None)
 # Event handlers
 _handlers = []
 
-#parse JSON from aide_design
+
+# parse JSON from aide_design
 def parseJsonObject(parameterJson):
     list = []
     try:
@@ -39,11 +40,12 @@ def parseJsonObject(parameterJson):
         print("Decoding JSON has failed")
     return list
 
+
 def run(context):
     try:
         global _app, _ui
         _app = adsk.core.Application.get()
-        _ui  = _app.userInterface
+        _ui = _app.userInterface
 
         # Get the CommandDefinitions collection.
         cmdDefs = _ui.commandDefinitions
@@ -66,6 +68,7 @@ def run(context):
         if _ui:
             _ui.messageBox('Failed:\n{}'.format(traceback.format_exc()))
 
+
 def stop(context):
     try:
         # Cleans up the UI once add-in stopped
@@ -82,9 +85,11 @@ def stop(context):
         if _ui:
             _ui.messageBox('Failed:\n{}'.format(traceback.format_exc()))
 
+
 class MyCommandDestroyHandler(adsk.core.CommandEventHandler):
     def __init__(self):
         super().__init__()
+
     def notify(self, args):
         try:
             # When the command is done, terminate the add-in
@@ -93,9 +98,11 @@ class MyCommandDestroyHandler(adsk.core.CommandEventHandler):
         except:
             _ui.messageBox('Failed:\n{}'.format(traceback.format_exc()))
 
+
 class CommandCreatedHandler(adsk.core.CommandCreatedEventHandler):
     def __init__(self):
         super().__init__()
+
     def notify(self, args):
         try:
             eventArgs = adsk.core.CommandCreatedEventArgs.cast(args)
@@ -129,8 +136,7 @@ class CommandCreatedHandler(adsk.core.CommandCreatedEventHandler):
             else:
                 _units = 'mm'
 
-
-             # Get the command that was created.
+            # Get the command that was created.
             cmd = adsk.core.Command.cast(args.command)
 
             # Connect to the command destroyed event.
@@ -138,7 +144,7 @@ class CommandCreatedHandler(adsk.core.CommandCreatedEventHandler):
             cmd.destroy.add(onDestroy)
             _handlers.append(onDestroy)
 
-#            # Connect to the input changed event.  (Needed when more input event handlers created later)
+#            Connect to the input changed event.  (Needed when more input event handlers created later)
 #            onInputChanged = MyCommandInputChangedHandler()
 #            cmd.inputChanged.add(onInputChanged)
 #            _handlers.append(onInputChanged)
