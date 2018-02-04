@@ -19,12 +19,12 @@
 														"unit" : "ft",
 														"description" : "blabla"
 														}
-                      	},
-												/* add more parameters */
+                      	}
+
 
 									]
-                },
-								/* add more designs */
+                }
+
 
 							]
 }
