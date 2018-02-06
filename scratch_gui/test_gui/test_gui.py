@@ -6,6 +6,11 @@ import adsk.fusion
 import adsk.cam
 import traceback
 
+# Globals
+_app = adsk.core.Application.cast(None)
+_ui = adsk.core.UserInterface.cast(None)
+_units = ''
+
 
 def run(context):
     ui = None
