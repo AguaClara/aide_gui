@@ -2,11 +2,12 @@
 
 import adsk.core, adsk.fusion, adsk.cam, traceback
 import json
+# import yaml
 import math
 
 # Globals
 _app = adsk.core.Application.cast(None)
-_ui = adsk.core.UserInterface.cast(None)
+_ui = adsk.core.UserInterface.cast(None)  =
 _units = ''
 
 # Global list to keep all event handlers in scope (Currently hard-coded)
@@ -30,7 +31,10 @@ _pitchDiam = adsk.core.TextBoxCommandInput.cast(None)
 # Event handlers
 _handlers = []
 
+<<<<<<< HEAD
+=======
 
+>>>>>>> 804ab9e4fc40912b08bae952e8bbe525bac636dd
 # parse JSON from aide_design
 def parseJsonObject(parameterJson):
     list = []
