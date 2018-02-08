@@ -18,13 +18,13 @@
 														"input" : [1,2,3,4,5],
 														"unit" : "ft",
 														"description" : "blabla"
-												}
-                      },
+														}
+                      	}
 
 
 									]
-                },
+                }
 
 
-			]
+							]
 }
