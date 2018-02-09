@@ -7,7 +7,7 @@ import math
 
 # Globals
 _app = adsk.core.Application.cast(None)
-_ui = adsk.core.UserInterface.cast(None)  =
+_ui = adsk.core.UserInterface.cast(None)
 _units = ''
 
 # Global list to keep all event handlers in scope (Currently hard-coded)
