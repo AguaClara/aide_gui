@@ -284,6 +284,7 @@ class CommandCreatedHandler(adsk.core.CommandCreatedEventHandler):
             _errMessage = inputs.addTextBoxCommandInput('errMessage', '', '', 2, True)
             _errMessage.isFullWidth = True
 
+            
             '''
             # Connect to the command related events. (Not used yet)
             onExecute = GearCommandExecuteHandler()

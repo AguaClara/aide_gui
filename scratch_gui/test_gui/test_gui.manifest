@@ -1,12 +1,12 @@
 {
 	"autodeskProduct":	"Fusion360",
 	"type":	"addin",
-	"id":	"5dd3fd90-336e-49ec-832c-888b0471b627",
-	"author":	"Eldor",
+	"id":	"a65d5df1-92a7-456f-9ba7-dbd04526d99f",
+	"author":	"",
 	"description":	{
-		"":	"For learning purposes of Eldor only! Please do not modify!"
+		"":	""
 	},
-	"version":	"1.0",
+	"version":	"",
 	"runOnStartup":	false,
 	"supportedOS":	"windows|mac",
 	"editEnabled":	true
