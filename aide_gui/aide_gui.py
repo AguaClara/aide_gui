@@ -31,10 +31,7 @@ _pitchDiam = adsk.core.TextBoxCommandInput.cast(None)
 # Event handlers
 _handlers = []
 
-<<<<<<< HEAD
-=======
 
->>>>>>> 804ab9e4fc40912b08bae952e8bbe525bac636dd
 # parse JSON from aide_design
 def parseJsonObject(parameterJson):
     list = []
@@ -284,7 +281,7 @@ class CommandCreatedHandler(adsk.core.CommandCreatedEventHandler):
             _errMessage = inputs.addTextBoxCommandInput('errMessage', '', '', 2, True)
             _errMessage.isFullWidth = True
 
-            
+
             '''
             # Connect to the command related events. (Not used yet)
             onExecute = GearCommandExecuteHandler()
