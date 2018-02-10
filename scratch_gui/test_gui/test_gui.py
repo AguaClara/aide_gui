@@ -12,7 +12,6 @@ _units = ''
 
 # Global list to keep all event handlers in scope (Currently hard-coded)
 # This is only needed with Python.
-
 _imgInputEnglish = adsk.core.ImageCommandInput.cast(None)
 _imgInputMetric = adsk.core.ImageCommandInput.cast(None)
 _standard = adsk.core.DropDownCommandInput.cast(None)
@@ -33,19 +32,24 @@ _pitchDiam = adsk.core.TextBoxCommandInput.cast(None)
 _handlers = []
 
 
-# parse JSON from aide_design
-def parseJsonObject(parameterJson):
-    list = []
-    try:
-        list = json.loads(parameterJson)
-    except ValueError:
-        print("Decoding JSON has failed")
-    return list
+# parses json and for each key; creates a global in format: _[pName]
+def createGLOBAL():
+    # with open('new_form.json', 'r') as json_file:
+        # data = json.load(json_file)
+        # for param in data:
+        #     pName = list(param.keys())[0]
+        #     globals()['_%s' % pName] =  adsk.core.StringValueCommandInput.cast(None)
 
+    jstring='[{"flow_rate": [{"name": "Flow Rate (L/s)"}]}, {"sed_tank_length": [{"name": "Sed tank length (m)"}]}, {"blablabla": [{"name": "Hi There!"}]}]'
+    data = json.loads(jstring)
+    for param in data:
+        pName = list(param.keys())[0]
+        globals()['_%s' % pName] =  "something"
 
 def run(context):
     try:
         global _app, _ui
+        createGLOBAL()
         _app = adsk.core.Application.get()
         _ui = _app.userInterface
 
@@ -192,7 +196,7 @@ class CommandCreatedHandler(adsk.core.CommandCreatedEventHandler):
             if backlashAttrib:
                 backlash = backlashAttrib.value
 
-            numTeeth = '24'
+            numTeeth = str(_flow_rate)
             numTeethAttrib = des.attributes.itemByName('unit_design', 'numTeeth')
             if numTeethAttrib:
                 numTeeth = numTeethAttrib.value

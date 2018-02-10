@@ -41,6 +41,13 @@ def parseJsonObject(parameterJson):
         print("Decoding JSON has failed")
     return list
 
+# parses json and for each key; creates a global in format: _[pName]
+def createGLOBAL():
+    with open('new_form.json') as json_file:
+        data = json.load(json_file)
+    for param in x:
+        pName = list(param.keys())[0]
+        globals()['_%s' % pName] = adsk.core.StringValueCommandInput.cast(None)
 
 def run(context):
     try:
