@@ -12,6 +12,7 @@ _units = ''
 
 # Global list to keep all event handlers in scope (Currently hard-coded)
 # This is only needed with Python.
+
 _imgInputEnglish = adsk.core.ImageCommandInput.cast(None)
 _imgInputMetric = adsk.core.ImageCommandInput.cast(None)
 _standard = adsk.core.DropDownCommandInput.cast(None)

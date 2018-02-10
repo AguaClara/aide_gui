@@ -24,7 +24,23 @@
 
 									]
                 }
-
-
 							]
 }
+
+[
+	{
+		'flow_rate':
+		[{'name': 'Flow Rate (L/s)'}]
+		},
+
+	{
+		'sed_tank_length': [
+			{'name': 'Sed tank length (m)'}
+			]
+		},
+
+	{ 'blablabla': [
+		{'name': 'Hi There!'}
+		]
+	}
+]
