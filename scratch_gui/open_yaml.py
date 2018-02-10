@@ -1,7 +1,10 @@
 import yaml
 import json
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> e5b3cc62d1f0d88cb3be879461edbc1955b4b560
 def outsidefunc():
     print(flow_rate)
 
