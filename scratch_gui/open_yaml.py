@@ -1,7 +1,5 @@
 import yaml
 
-prameters={}
-
 def outsidefunc():
     print(flow_rate)
 
