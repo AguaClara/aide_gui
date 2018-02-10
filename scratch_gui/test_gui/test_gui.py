@@ -34,17 +34,18 @@ _handlers = []
 
 # parses json and for each key; creates a global in format: _[pName]
 def createGLOBAL():
-    # with open('new_form.json', 'r') as json_file:
-        # data = json.load(json_file)
+    with open('new_form.json', 'r') as json_file:
+        pass
+        # data = json.loads(json_file)
         # for param in data:
         #     pName = list(param.keys())[0]
-        #     globals()['_%s' % pName] =  adsk.core.StringValueCommandInput.cast(None)
+        #     globals()['_%s' % pName] = "something"
 
-    jstring='[{"flow_rate": [{"name": "Flow Rate (L/s)"}]}, {"sed_tank_length": [{"name": "Sed tank length (m)"}]}, {"blablabla": [{"name": "Hi There!"}]}]'
-    data = json.loads(jstring)
-    for param in data:
-        pName = list(param.keys())[0]
-        globals()['_%s' % pName] =  "something"
+    # jstring='[{"flow_rate": [{"name": "Flow Rate (L/s)"}]}, {"sed_tank_length": [{"name": "Sed tank length (m)"}]}, {"blablabla": [{"name": "Hi There!"}]}]'
+    # data = json.loads(jstring)
+    # for param in data:
+    #     pName = list(param.keys())[0]
+    #     globals()['_%s' % pName] =  "something"
 
 def run(context):
     try:
