@@ -4,6 +4,7 @@ import adsk.core, adsk.fusion, adsk.cam, traceback
 import json
 # import yaml
 import math
+import os
 
 # Globals
 _app = adsk.core.Application.cast(None)
@@ -33,13 +34,14 @@ _handlers = []
 
 
 # parses json and for each key; creates a global in format: _[pName]
+# always add absolute path to the json file
 def createGLOBAL():
-    with open('new_form.json', 'r') as json_file:
-        pass
-        # data = json.loads(json_file)
-        # for param in data:
-        #     pName = list(param.keys())[0]
-        #     globals()['_%s' % pName] = "something"
+    #./Users/eldorbekpualtov/Desktop/AguaClara/aide_gui/scratch_gui/test_gui/
+    with open('./resources/AIDE/new_form.json', 'r') as json_file:
+        data = json.loads(json_file)
+        for param in data:
+            pName = list(param.keys())[0]
+            globals()['_%s' % pName] = "something"
 
     # jstring='[{"flow_rate": [{"name": "Flow Rate (L/s)"}]}, {"sed_tank_length": [{"name": "Sed tank length (m)"}]}, {"blablabla": [{"name": "Hi There!"}]}]'
     # data = json.loads(jstring)
@@ -70,6 +72,8 @@ def run(context):
         onCommandCreated = CommandCreatedHandler()
         cmdDef.commandCreated.add(onCommandCreated)
         _handlers.append(onCommandCreated)
+
+        _ui.messageBox('Current working directory: \"{}\"'.format(os.getcwd()))
 
     except:
         if _ui:
