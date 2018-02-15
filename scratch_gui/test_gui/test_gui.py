@@ -2,12 +2,8 @@
 
 import adsk.core, adsk.fusion, adsk.cam, traceback
 import json
-# import yaml
+# import pyyaml
 import math
-import os
-import sys
-import os.path
-import inspect
 
 
 # Globals
@@ -37,30 +33,31 @@ _pitchDiam = adsk.core.TextBoxCommandInput.cast(None)
 _handlers = []
 
 
-file_path= "/Users/eldorbekpualtov/Desktop/AguaClara/aide_gui/scratch_gui/test_gui/new_form.json"
-
+# file_path= "/Users/eldorbekpualtov/Desktop/AguaClara/aide_gui/scratch_gui/test_gui/new_form.json"
+# sys.path.append("/Users/eldorbekpualtov/anaconda3/lib/python3.6/site-packages")
 #
 
 # returns a correct abs path for a file
-def abs_path(file_path):
-    return os.path.join(os.path.dirname(inspect.getfile(sys._getframe(1))), file_path)
+# def abs_path(file_path):
+#     return os.path.join(os.path.dirname(inspect.getfile(sys._getframe(1))), file_path)
 
 # parses json and for each key; creates a global in format: _[pName]
 # always add absolute path to the json file
 def createGLOBAL():
-    with open(file_path, 'r') as json_file:
-        data = json.loads(json_file)
-        for param in data:
-            pName = list(param.keys())[0]
-            globals()['_%s' % pName] = "something"
-    return data
+    # with open(file_path, 'r') as json_file:
 
+    d='[{"flow_rate": [{"name": "Flow Rate (L/s)"}]}, {"sed_tank_length": [{"name": "Sed tank length (m)"}]}, {"blablabla": [{"name": "Hi There!"}]}]'
+    data= json.loads(d)
+    for param in data:
+        pName = list(param.keys())[0]
+        globals()['_%s' % pName] = adsk.core.StringValueCommandInput.cast(None)
+    return data
 
 
 def run(context):
     try:
         global _app, _ui
-
+        createGLOBAL()
         _app = adsk.core.Application.get()
         _ui = _app.userInterface
 
@@ -207,7 +204,7 @@ class CommandCreatedHandler(adsk.core.CommandCreatedEventHandler):
             if backlashAttrib:
                 backlash = backlashAttrib.value
 
-            numTeeth = '_flow_rate'
+            numTeeth = str(_flow_rate)
             numTeethAttrib = des.attributes.itemByName('unit_design', 'numTeeth')
             if numTeethAttrib:
                 numTeeth = numTeethAttrib.value
