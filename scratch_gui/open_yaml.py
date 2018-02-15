@@ -1,7 +1,7 @@
 import yaml
 import json
 
-
+hello="hi"
 def outsidefunc():
     print(flow_rate)
 
@@ -24,3 +24,6 @@ with open("new_form.yaml", 'r') as stream:
     except yaml.YAMLError as exc:
         # print(exc)
         print("YAML isn't formatted correctly.")
+
+hey= globals()
+print(hey["hello"])

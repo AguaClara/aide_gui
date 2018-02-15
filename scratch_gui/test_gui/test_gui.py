@@ -43,7 +43,7 @@ def run(context):
     try:
         global _app, _ui
         # creates globals based on json
-        createGLOBAL()
+        # createGLOBAL()
 
         _app = adsk.core.Application.get()
         _ui = _app.userInterface
@@ -128,12 +128,19 @@ class CommandCreatedHandler(adsk.core.CommandCreatedEventHandler):
 
 ############################
             flowRate = "24"
-            flowRateAttrib = des.attributes.itemByName('unit_design', 'flowRate')
-            if flowRateAttrib:
-                flowRate = flowRateAttrib.value
+            # flowRateAttrib = des.attributes.itemByName('unit_design', 'flowRate')
+            # if flowRateAttrib:
+            #     flowRate = flowRateAttrib.value
+            # d='[{"flow_rate": [{"name": "Flow Rate (L/s)"}]}, {"sed_tank_length": [{"name": "Sed tank length (m)"}]}, {"blablabla": [{"name": "Hi There!"}]}]'
+            # data= json.loads(d)
+            # for param in data:
+            #     pName = list(param.keys())[0]
+            #     globals()['_%s' % pName] = adsk.core.StringValueCommandInput.cast(None)
+            # gl=globals()
 
             # Defining global parameters
-            global _flow_rate
+            # global _flow_rate
+            _flow_rate=adsk.core.StringValueCommandInput.cast(None)
             _flow_rate= inputs.addStringValueInput('flowRate', 'Flow Rate (L/s)', flowRate)
 ##############################
 
