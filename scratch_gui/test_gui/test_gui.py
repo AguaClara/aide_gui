@@ -114,8 +114,6 @@ class CommandCreatedHandler(adsk.core.CommandCreatedEventHandler):
                 _ui.messageBox('A Fusion design must be active when invoking this command.')
                 return()
 
-            defaultUnits = des.unitsManager.defaultLengthUnits
-
             # Get the command that was created.
             cmd = adsk.core.Command.cast(args.command)
 
@@ -124,20 +122,20 @@ class CommandCreatedHandler(adsk.core.CommandCreatedEventHandler):
             cmd.destroy.add(onDestroy)
             _handlers.append(onDestroy)
 
+            cmd = eventArgs.command
+            cmd.isExecutedWhenPreEmpted = False
+            inputs = cmd.commandInputs
 
+############################
             flowRate = "24"
             flowRateAttrib = des.attributes.itemByName('unit_design', 'flowRate')
             if flowRateAttrib:
                 flowRate = flowRateAttrib.value
 
-
-            cmd = eventArgs.command
-            cmd.isExecutedWhenPreEmpted = False
-            inputs = cmd.commandInputs
-
             # Defining global parameters
             global _flow_rate
             _flow_rate= inputs.addStringValueInput('flowRate', 'Flow Rate (L/s)', flowRate)
+##############################
 
             _errMessage = inputs.addTextBoxCommandInput('errMessage', '', '', 2, True)
             _errMessage.isFullWidth = True
