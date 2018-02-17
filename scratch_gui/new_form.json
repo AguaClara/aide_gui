@@ -1,1 +1,1 @@
-[{"flow_rate": {"name": "Flow Rate (L/s)"}}, {"sed_tank_length": {"name": "Sed tank length (m)"}}, {"blablabla": {"name": "Hi There!"}}]
+[{"flow_rate": {"name": "Flow Rate (L/s)", "default": 34, "type": "string"}}, {"sed_tank_length": {"name": "Sed tank length (m)", "default": 4, "type": "dropdown", "options": [2, 4, 5]}}, {"blablabla": {"name": "Hi There!", "default": 56, "type": "both"}}]
