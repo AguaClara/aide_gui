@@ -1,11 +1,25 @@
 ---
 - flow_rate:
-  - name : Flow Rate (L/s)
+    name : Flow Rate (L/s)
 - sed_tank_length:
-  - name : Sed tank length (m)
+    name : Sed tank length (m)
 - blablabla:
-  - name : Hi There!
+    name : Hi There!
 ...
 
-
-# [{'flow_rate': [{'name': 'Flow Rate (L/s)'}]}, {'sed_tank_length': [{'name': 'Sed tank length (m)'}]}, {'blablabla': [{'name': 'Hi There!'}]}]
+# [
+#   {'flow_rate':
+#
+#         {'name': 'Flow Rate (L/s)',
+#           "some attr": "text field"
+#          }
+#   },
+#   {'sed_tank_length':
+#
+#          {'name': 'Sed tank length (m)'}
+#           },
+#   {'blablabla':
+#
+#            {'name': 'Hi There!'}
+#   }
+#]
