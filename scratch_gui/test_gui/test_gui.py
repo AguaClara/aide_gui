@@ -1,6 +1,9 @@
 # Author-AIDE GUI
 
-import adsk.core, adsk.fusion, adsk.cam, traceback
+import adsk.core
+import adsk.fusion
+import adsk.cam
+import traceback
 import json
 import math
 
