@@ -16,6 +16,22 @@ _errMessage = adsk.core.TextBoxCommandInput.cast(None)
 _handlers = []
 
 
+def parse():
+    d = '[{"flow_rate": {"name": "Flow Rate (L/s)", "default": 34, "type": "string"}}, {"sed_tank_length": {"name": "Sed tank length (m)", "default": 4, "type": "dropdown", "options": [2, 4, 5]}}, {"blablabla": {"name": "Hi There!", "default": 56, "type": "both"}}]'
+    data = json.loads(d)
+    for param in data:
+        pName = list(param.keys())[0]
+        pAttr = param[pName]
+        if pAttr["type"] == "string":
+            globals()['_%s' % pName] = inputs.addStringValueInput(str(pName), pAttr["name"], str(pAttr["default"]))
+        elif pAttr["type"] == "dropdown":
+            globals()['_%s' % pName] = inputs.addDropDownCommandInput(str(pName), pAttr["name"], adsk.core.DropDownStyles.TextListDropDownStyle)
+            for option in pAttr["options"]:
+                globals()['_%s' % pName].listItems.add(str(option), True)
+        elif pAttr["type"] == "both":
+            globals()['_%s' % pName] = inputs.addValueInput(str(pName), pAttr["name"], '', adsk.core.ValueInput.createByReal(pAttr["default"]))
+
+
 def run(context):
     try:
         global _app, _ui
@@ -27,7 +43,7 @@ def run(context):
         cmdDefs = _ui.commandDefinitions
 
         # Create a command definition
-        cmdDef = cmdDefs.addButtonDefinition('adskaide_guiPythonAddIn', 'aide_gui', 'Creates Water Treatment Plant', './resources/AIDE')
+        cmdDef = cmdDefs.addButtonDefinition('adskaide_guiPythonAddIn', 'Scratch GUI', 'Creates Water Treatment Plant', './resources/AIDE')
 
         # Get the Create Panel in the model workspace
         createPanel = _ui.allToolbarPanels.itemById('SolidCreatePanel')
@@ -101,21 +117,9 @@ class CommandCreatedHandler(adsk.core.CommandCreatedEventHandler):
             cmd.isExecutedWhenPreEmpted = False
             inputs = cmd.commandInputs
 
-############################
-            d='[{"flow_rate": {"name": "Flow Rate (L/s)", "default": 34, "type": "string"}}, {"sed_tank_length": {"name": "Sed tank length (m)", "default": 4, "type": "dropdown", "options": [2, 4, 5]}}, {"blablabla": {"name": "Hi There!", "default": 56, "type": "both"}}]'
-            data= json.loads(d)
-            for param in data:
-                pName = list(param.keys())[0]
-                pAttr = param[pName]
-                if pAttr["type"] == "string":
-                    globals()['_%s' % pName] = inputs.addStringValueInput(str(pName), pAttr["name"], str(pAttr["default"]))
-                elif pAttr["type"] == "dropdown":
-                    globals()['_%s' % pName] = inputs.addDropDownCommandInput(str(pName), pAttr["name"], adsk.core.DropDownStyles.TextListDropDownStyle)
-                    for option in pAttr["options"]:
-                        globals()['_%s' % pName].listItems.add(str(option), True)
-                elif pAttr["type"] == "both":
-                    globals()['_%s' % pName] = inputs.addValueInput(str(pName), pAttr["name"], '', adsk.core.ValueInput.createByReal(pAttr["default"]))
-##############################
+            ##############################
+            parse()
+            ##############################
 
             _errMessage = inputs.addTextBoxCommandInput('errMessage', '', '', 2, True)
             _errMessage.isFullWidth = True

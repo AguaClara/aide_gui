@@ -3,6 +3,7 @@
     name : Flow Rate (L/s)
     default : 34
     type : string
+    options : null
 - sed_tank_length:
     name : Sed tank length (m)
     default : 4
@@ -12,21 +13,5 @@
     name : Hi There!
     default : 56
     type : both
+    options: null
 ...
-
-# [
-#   {'flow_rate':
-#
-#         {'name': 'Flow Rate (L/s)',
-#           "some attr": "text field"
-#          }
-#   },
-#   {'sed_tank_length':
-#
-#          {'name': 'Sed tank length (m)'}
-#           },
-#   {'blablabla':
-#
-#            {'name': 'Hi There!'}
-#   }
-#]
