@@ -16,22 +16,6 @@ _errMessage = adsk.core.TextBoxCommandInput.cast(None)
 _handlers = []
 
 
-def parse():
-    d = '[{"flow_rate": {"name": "Flow Rate (L/s)", "default": 34, "type": "string"}}, {"sed_tank_length": {"name": "Sed tank length (m)", "default": 4, "type": "dropdown", "options": [2, 4, 5]}}, {"blablabla": {"name": "Hi There!", "default": 56, "type": "both"}}]'
-    data = json.loads(d)
-    for param in data:
-        pName = list(param.keys())[0]
-        pAttr = param[pName]
-        if pAttr["type"] == "string":
-            globals()['_%s' % pName] = inputs.addStringValueInput(str(pName), pAttr["name"], str(pAttr["default"]))
-        elif pAttr["type"] == "dropdown":
-            globals()['_%s' % pName] = inputs.addDropDownCommandInput(str(pName), pAttr["name"], adsk.core.DropDownStyles.TextListDropDownStyle)
-            for option in pAttr["options"]:
-                globals()['_%s' % pName].listItems.add(str(option), True)
-        elif pAttr["type"] == "both":
-            globals()['_%s' % pName] = inputs.addValueInput(str(pName), pAttr["name"], '', adsk.core.ValueInput.createByReal(pAttr["default"]))
-
-
 def run(context):
     try:
         global _app, _ui
@@ -87,6 +71,7 @@ class MyCommandDestroyHandler(adsk.core.CommandEventHandler):
             # When the command is done, terminate the add-in
             # This will release all globals and remove all event handlers
             adsk.terminate()
+
         except:
             _ui.messageBox('Failed:\n{}'.format(traceback.format_exc()))
 
@@ -131,7 +116,6 @@ class CommandCreatedHandler(adsk.core.CommandCreatedEventHandler):
                         globals()['_%s' % pName].listItems.add(str(option), True)
                 elif pAttr["type"] == "both":
                     globals()['_%s' % pName] = inputs.addValueInput(str(pName), pAttr["name"], '', adsk.core.ValueInput.createByReal(pAttr["default"]))
-
             ##############################
 
             _errMessage = inputs.addTextBoxCommandInput('errMessage', '', '', 2, True)
