@@ -6,9 +6,11 @@ import adsk.cam
 import traceback
 import json
 import math
-from . import utilities
-import os, sys
+import os
+import sys
+import inspect
 from . import yaml
+from . import utilities
 
 
 # Globals
