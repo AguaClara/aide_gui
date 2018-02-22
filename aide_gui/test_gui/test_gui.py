@@ -106,7 +106,7 @@ class CommandCreatedHandler(adsk.core.CommandCreatedEventHandler):
             inputs = cmd.commandInputs
 
             ##############################
-            d = '[{"flow_rate": {"name": "Flow Rate (L/s)", "default": 34, "type": "string"}}, {"sed_tank_length": {"name": "Sed tank length (m)", "default": 4, "type": "dropdown", "options": [2, 4, 5]}}, {"blablabla": {"name": "Hi There!", "default": 56, "type": "both"}}]'
+            d = '[{"flow_rate": {"name": "Flow Rate (L/s)", "default": 34, "type": "string", "options": null}}, {"sed_tank_length": {"name": "Sed tank length (m)", "default": 4, "type": "dropdown", "options": [2, 4, 5]}}, {"blablabla": {"name": "Hi There!", "default": 56, "type": "both", "options": null}}, {"snow": {"name": "just inputs", "default": 34, "type": "dropdown", "options": [10, 20, 30]}}]'
             data = json.loads(d)
             for param in data:
                 pName = list(param.keys())[0]
