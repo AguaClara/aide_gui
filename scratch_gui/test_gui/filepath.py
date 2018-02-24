@@ -17,6 +17,11 @@ def abs_path(file_path):
 # always add absolute path to the json file
 def createGLOBAL():
     #./Users/eldorbekpualtov/Desktop/AguaClara/aide_gui/scratch_gui/test_gui/
+    #./Users/anishkasingh/github/aide_gui/scratch_gui/test_gui/  ---- many websites talked about spefific websites--
+    #- and things to download testFilepath --- get Json as string  fn getJsonFileAsString filePath=(
+    #os.getcwd() to find out whats currently working directory in both cases
+    #talked about absolute paths---
+#The best value to use is the '__file__' value that is set on the module's dictionary that is hosting your script.
     with open('./resources/AIDE/new_form.json', 'r') as json_file:
         data = json.loads(json_file)
         for param in data:
