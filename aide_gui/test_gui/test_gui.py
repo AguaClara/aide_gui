@@ -12,7 +12,9 @@ import inspect
 from . import yaml
 from . import utilities
 
-sys.dont_write_bytecode = True
+# sys.dont_write_bytecode = True
+# os.environ['PYTHONDONTWRITEBYTECODE'] = '1'
+
 
 # Globals
 _app = adsk.core.Application.cast(None)
