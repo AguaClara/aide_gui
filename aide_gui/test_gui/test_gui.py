@@ -12,7 +12,7 @@ import inspect
 from . import yaml
 from . import utilities
 
-
+sys.dont_write_bytecode = True
 # Globals
 _app = adsk.core.Application.cast(None)
 _ui = adsk.core.UserInterface.cast(None)
