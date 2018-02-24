@@ -122,7 +122,7 @@ class CommandCreatedHandler(adsk.core.CommandCreatedEventHandler):
             inputs = cmd.commandInputs
 
             ##############################
-            with open(utilities.abs_path("new_form.yaml")) as fp:
+            with open(abs_path("new_form.yaml")) as fp:
                 data = yaml.load(fp)
             for param in data:
                 pName = list(param.keys())[0]
