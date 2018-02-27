@@ -47,7 +47,8 @@ def run(context):
         cmdDefs = _ui.commandDefinitions
 
         # Create a command definition
-        cmdDef = cmdDefs.addButtonDefinition('adskaide_guiPythonAddIn', 'Scratch GUI', 'Creates Water Treatment Plant', './resources/AIDE')
+        cmdDef = cmdDefs.addButtonDefinition('adskaide_guiPythonAddIn',
+            'Scratch GUI', 'Creates Water Treatment Plant', './resources/AIDE')
 
         # Get the Create Panel in the model workspace
         createPanel = _ui.allToolbarPanels.itemById('SolidCreatePanel')
@@ -107,7 +108,7 @@ class CommandCreatedHandler(adsk.core.CommandCreatedEventHandler):
             # Verify that a Fusion design is active.
             des = adsk.fusion.Design.cast(_app.activeProduct)
             if not des:
-                _ui.messageBox('A Fusion design must be active when invoking this command.')
+                _ui.messageBox('A Fusion design must be active when invoked.')
                 return()
 
             # Get the command that was created.
@@ -125,36 +126,12 @@ class CommandCreatedHandler(adsk.core.CommandCreatedEventHandler):
             ##############################
             # create the globals based on attributes
             ##############################
-            globals()['plist'] = []
-            for param in data:
-                pName = list(param.keys())[0]
-                pAttr = param[pName]
-                # get the list of added globals
-                plist.append(pName)
-                if pAttr["type"] == "string":
-                    globals()[pName] = inputs.addStringValueInput(str(pName), pAttr["name"], str(pAttr["default"]))
-                elif pAttr["type"] == "dropdown":
-                    globals()[pName] = inputs.addDropDownCommandInput(str(pName), pAttr["name"], adsk.core.DropDownStyles.TextListDropDownStyle)
-                    for option in pAttr["options"]:
-                        globals()[pName].listItems.add(str(option), True)
-                elif pAttr["type"] == "spinnerInt":
-                    globals()[pName] = inputs.addIntegerSpinnerCommandInput(str(pName), pAttr["name"], pAttr["options"][0], pAttr["options"][2], pAttr["options"][1], pAttr["options"][0])
-                elif pAttr["type"] == "spinnerFloat":
-                    globals()[pName] = inputs.addFloatSpinnerCommandInput(str(pName), pAttr["name"], '', pAttr["options"][0], pAttr["options"][2], pAttr["options"][1], pAttr["options"][0])
+            createFields(inputs)
+
             ##############################
             # get the value of each global input and saves it in global list
             ##############################
-            globals()['parameters'] = []
-            for key in plist:
-                if isinstance(globals()[key], adsk.core.DropDownCommandInput):
-                    value= globals()[key].selectedItem.name
-                else:
-                    value = globals()[key].value
-                dictionary = {key: value}
-                parameters.append(dictionary)
-            _ui.messageBox(str(parameters))
-            ###############################
-
+            collectFields()
 
             _errMessage = inputs.addTextBoxCommandInput('errMessage', '', '', 2, True)
             _errMessage.isFullWidth = True
@@ -177,3 +154,34 @@ class CommandCreatedHandler(adsk.core.CommandCreatedEventHandler):
         except:
             if _ui:
                 _ui.messageBox('Failed:\n{}'.format(traceback.format_exc()))
+
+
+def createFields(inputs):
+    globals()['plist'] = []
+    for param in data:
+        pName = list(param.keys())[0]
+        pAttr = param[pName]
+        # get the list of added globals
+        plist.append(pName)
+        if pAttr["type"] == "string":
+            globals()[pName] = inputs.addStringValueInput(str(pName), pAttr["name"], str(pAttr["default"]))
+        elif pAttr["type"] == "dropdown":
+            globals()[pName] = inputs.addDropDownCommandInput(str(pName), pAttr["name"], adsk.core.DropDownStyles.TextListDropDownStyle)
+            for option in pAttr["options"]:
+                globals()[pName].listItems.add(str(option), True)
+        elif pAttr["type"] == "spinnerInt":
+            globals()[pName] = inputs.addIntegerSpinnerCommandInput(str(pName), pAttr["name"], pAttr["options"][0], pAttr["options"][2], pAttr["options"][1], pAttr["options"][0])
+        elif pAttr["type"] == "spinnerFloat":
+            globals()[pName] = inputs.addFloatSpinnerCommandInput(str(pName), pAttr["name"], '', pAttr["options"][0], pAttr["options"][2], pAttr["options"][1], pAttr["options"][0])
+
+
+def collectFields():
+    globals()['parameters'] = []
+    for key in plist:
+        if isinstance(globals()[key], adsk.core.DropDownCommandInput):
+            value= globals()[key].selectedItem.name
+        else:
+            value = globals()[key].value
+        dictionary = {key: value}
+        parameters.append(dictionary)
+    _ui.messageBox(str(parameters))
