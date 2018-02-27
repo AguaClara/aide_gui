@@ -145,8 +145,7 @@ class CommandCreatedHandler(adsk.core.CommandCreatedEventHandler):
             # get the value of each global input and saves it in global list
             ##############################
             globals()['parameters'] = []
-            for p in plist:
-                key = "_" + str(p)
+            for key in plist:
                 if isinstance(globals()[key], adsk.core.DropDownCommandInput):
                     value= globals()[key].selectedItem.name
                 else:
