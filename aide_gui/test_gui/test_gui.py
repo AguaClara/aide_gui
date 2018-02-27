@@ -12,9 +12,6 @@ import inspect
 from . import yaml
 
 
-# sys.dont_write_bytecode = True
-# os.environ['PYTHONDONTWRITEBYTECODE'] = '1'
-
 def abs_path(file_path):
     """
     Takes a relative file path to the calling file and returns the correct
@@ -28,6 +25,10 @@ def abs_path(file_path):
 _app = adsk.core.Application.cast(None)
 _ui = adsk.core.UserInterface.cast(None)
 _units = ''
+
+# create a yaml form structure in global called data
+with open(abs_path("new_form.yaml")) as fp:
+    data = yaml.load(fp)
 
 _errMessage = adsk.core.TextBoxCommandInput.cast(None)
 
@@ -122,24 +123,42 @@ class CommandCreatedHandler(adsk.core.CommandCreatedEventHandler):
             inputs = cmd.commandInputs
 
             ##############################
-            with open(abs_path("new_form.yaml")) as fp:
-                data = yaml.load(fp)
+            # create the globals based on attributes
+            ##############################
+            globals()['plist'] = []
             for param in data:
                 pName = list(param.keys())[0]
                 pAttr = param[pName]
+                # get the list of added globals
+                plist.append(pName)
                 if pAttr["type"] == "string":
-                    globals()['_%s' % pName] = inputs.addStringValueInput(str(pName), pAttr["name"], str(pAttr["default"]))
+                    globals()[pName] = inputs.addStringValueInput(str(pName), pAttr["name"], str(pAttr["default"]))
                 elif pAttr["type"] == "dropdown":
-                    globals()['_%s' % pName] = inputs.addDropDownCommandInput(str(pName), pAttr["name"], adsk.core.DropDownStyles.TextListDropDownStyle)
+                    globals()[pName] = inputs.addDropDownCommandInput(str(pName), pAttr["name"], adsk.core.DropDownStyles.TextListDropDownStyle)
                     for option in pAttr["options"]:
-                        globals()['_%s' % pName].listItems.add(str(option), True)
-                elif pAttr["type"] == "both":
-                    globals()['_%s' % pName] = inputs.addValueInput(str(pName), pAttr["name"], '', adsk.core.ValueInput.createByReal(pAttr["default"]))
+                        globals()[pName].listItems.add(str(option), True)
+                elif pAttr["type"] == "spinnerInt":
+                    globals()[pName] = inputs.addIntegerSpinnerCommandInput(str(pName), pAttr["name"], pAttr["options"][0], pAttr["options"][2], pAttr["options"][1], pAttr["options"][0])
+                elif pAttr["type"] == "spinnerFloat":
+                    globals()[pName] = inputs.addFloatSpinnerCommandInput(str(pName), pAttr["name"], '', pAttr["options"][0], pAttr["options"][2], pAttr["options"][1], pAttr["options"][0])
             ##############################
+            # get the value of each global input and saves it in global list
+            ##############################
+            globals()['parameters'] = []
+            for p in plist:
+                key = "_" + str(p)
+                if isinstance(globals()[key], adsk.core.DropDownCommandInput):
+                    value= globals()[key].selectedItem.name
+                else:
+                    value = globals()[key].value
+                dictionary = {key: value}
+                parameters.append(dictionary)
+            _ui.messageBox(str(parameters))
+            ###############################
+
 
             _errMessage = inputs.addTextBoxCommandInput('errMessage', '', '', 2, True)
             _errMessage.isFullWidth = True
-
 
             '''
             # Connect to the command related events. (Not used yet)
