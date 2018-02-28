@@ -16,7 +16,6 @@ def abs_path(file_path):
     # absolute path.
     # Needed because the Fusion 360 environment doesn't resolve relative paths
     # well.
-
     return os.path.join(os.path.dirname(inspect.getfile(sys._getframe(1))), file_path)
 
 # Globals
