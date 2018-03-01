@@ -2,9 +2,9 @@
 
 
 ## Members:
-* Ashley He  
-* Anishka Singh  
-* Eldor Bekpulatov
+* Ashley He (ach238)
+* Anishka Singh (as2643)
+* Eldor Bekpulatov (eb654)
 
 
 Working on creating a GUI within Fusion 360 to allow users to design their own AguaClara water treatment plant.  
