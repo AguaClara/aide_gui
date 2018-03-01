@@ -1,14 +1,17 @@
-aide_gui
+# AIDE GUI
 
 
-Members:
+## Members:
 * Ashley He  
 * Anishka Singh  
 * Eldor Bekpulatov
 
 
-Working on creating a GUI within Fusion 360 allowing users to design their own AguaClara plant.  
+Working on creating a GUI within Fusion 360 to allow users to design their own AguaClara water treatment plant.  
 
 
-Goals:
-* (Eldor): Gainzz!
+## Goals:
+* Create a minimum viable product by the end of Spring 2018
+
+
+## Links to Reports and Presentations
