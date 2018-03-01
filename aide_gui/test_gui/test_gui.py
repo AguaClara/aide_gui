@@ -44,7 +44,7 @@ def run(context):
 
         # Create a command definition
         cmdDef = cmdDefs.addButtonDefinition('adskaide_guiPythonAddIn',
-            'Scratch GUI', 'Creates Water Treatment Plant', './resources/AIDE')
+            'AIDE GUI', 'Creates Water Treatment Plant', './resources/AIDE')
 
         # Get the Create Panel in the model workspace in Fusion
         createPanel = _ui.allToolbarPanels.itemById('SolidCreatePanel')
