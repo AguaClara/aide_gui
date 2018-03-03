@@ -1,5 +1,23 @@
 import adsk.core, adsk.fusion, adsk.cam, traceback
 import json
+from . import yaml
+import os
+import sys
+import inspect
+
+
+def abs_path(file_path):
+    # Takes a relative file path to the calling file and returns the correct
+    # absolute path.
+    # Needed because the Fusion 360 environment doesn't resolve relative paths
+    # well.
+    return os.path.join(os.path.dirname(inspect.getfile(sys._getframe(1))), file_path)
+
+
+# Create a yaml form structure in global called data
+with open(abs_path("new_form.yaml")) as fp:
+    data = yaml.load(fp)
+
 
 # global set of event handlers to keep them referenced for the duration of the command
 handlers = []
@@ -63,7 +81,9 @@ class SendInfoCommandExecuteHandler(adsk.core.CommandEventHandler):
             if palette:
                 global num
                 num += 1
-                palette.sendInfoToHTML('send', 'This is a message sent to the palette from Fusion. It has been sent {} times.'.format(num))
+                # This is a message sent to the palette from Fusion. It has been sent {} times.'.format(num)
+
+                palette.sendInfoToHTML('send', str(data))  #######possible error
         except:
             _ui.messageBox('Command executed failed: {}'.format(traceback.format_exc()))
 

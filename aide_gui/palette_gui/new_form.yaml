@@ -1,0 +1,27 @@
+---
+- flow_rate:
+    name : Flow Rate (L/s)
+    default : 34
+    type : string
+    options : null
+- sed_tank_length:
+    name : Sed tank length (m)
+    default : null
+    type : dropdown
+    options : [2, 4, 5]
+- blablabla:
+    name : Hi There!
+    default : 56
+    type : spinnerFloat
+    options: [1, 1, 10]
+- snow:
+    name: just inputs
+    default: 34
+    type: dropdown
+    options: [10, 20, 30]
+...
+# Types can be: "string", "dropdown", "spinnerInt", "spinnerFloat"
+# For name: "Parameter_Name ({unit})"
+# if type: "spinnerInt" or "spinnerFloat" ==> options: [start, step, stop]
+# if type: "dropdown" ==> options: [op1, op2, ...] and default: null
+# if type: "string" ==> options: null, depends completely on user input
