@@ -153,7 +153,7 @@ class CommandExecuteHandler(adsk.core.CommandEventHandler):
 def createFields(inputs):
     # Create a global list called plist to keep track of created fields
     globals()['plist'] = []
-    # For each parameter {dictionary} in design list
+    # For each parameter {dictionary} in design param list
     for param in data:
         # Save the key of the first element as pName
         pName = list(param.keys())[0]
@@ -175,11 +175,11 @@ def createFields(inputs):
                 globals()[pName].listItems.add(str(option), True)
         # For fields specified by attr type: "spinnerInt"
         elif pAttr["type"] == "spinnerInt":
-            # param _format(id, Name, min, max, step, default value)
+            # param _format(id, Name, min, max, step, default)
             globals()[pName] = inputs.addIntegerSpinnerCommandInput(str(pName), pAttr["name"], pAttr["options"][0], pAttr["options"][2], pAttr["options"][1], pAttr["options"][0])
         # For fields specified by attr type: "spinnerFloat"
         elif pAttr["type"] == "spinnerFloat":
-            # param _format(id, Name, min, max, step, default value)
+            # param _format(id, Name, min, max, step, default)
             globals()[pName] = inputs.addFloatSpinnerCommandInput(str(pName), pAttr["name"], '', pAttr["options"][0], pAttr["options"][2], pAttr["options"][1], pAttr["options"][0])
 
 # Collect inputted values from the user and adds information to a list of
