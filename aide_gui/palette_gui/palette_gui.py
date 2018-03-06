@@ -83,7 +83,7 @@ class SendInfoCommandExecuteHandler(adsk.core.CommandEventHandler):
                 num += 1
                 # This is a message sent to the palette from Fusion. It has been sent {} times.'.format(num)
 
-                palette.sendInfoToHTML('send', str(data))  #######possible error
+                palette.sendInfoToHTML('send', str(data).replace("'", '"').replace("None", 'null'))
         except:
             _ui.messageBox('Command executed failed: {}'.format(traceback.format_exc()))
 
