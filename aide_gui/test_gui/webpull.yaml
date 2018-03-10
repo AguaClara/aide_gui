@@ -1,9 +1,5 @@
-'b''---\n- flow_rate:\n    name : Flow Rate (L/s)\n    default : 34\n    type : string\n    options
+'---\n- flow_rate:\n    name : Flow Rate (L/s)\n    default : 34\n    type : string\n    options
   : null\n- sed_tank_length:\n    name : Sed tank length (m)\n    default : null\n    type
   : dropdown\n    options : [2, 4, 5]\n- blablabla:\n    name : Hi There!\n    default
   : 56\n    type : spinnerFloat\n    options: [1, 1, 10]\n- snow:\n    name: just
-  inputs\n    default: 34\n    type: dropdown\n    options: [10, 20, 30]\n...\n# Types
-  can be: "string", "dropdown", "spinnerInt", "spinnerFloat"\n# For name: "Parameter_Name
-  ({unit})" \n# if type: "spinnerInt" or "spinnerFloat" ==> options: [start, step,
-  stop]\n# if type: "dropdown" ==> options: [op1, op2, ...] and default: null\n# if
-  type: "string" ==> options: null, depends completely on user input\n'''
+  inputs\n    default: 34\n    type: dropdown\n    options: [10, 20, 30]\n...'
