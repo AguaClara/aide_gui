@@ -20,8 +20,8 @@
     type: dropdown
     options: [10, 20, 30]
 ...
-# Types can be: "string", "dropdown", "spinnerInt", "spinnerFloat"
-# For name: "Parameter_Name ({unit})" 
+# Types can be: "string", "dropdown", "spinnerInt", "spinnerFloat", "both"
+# For name: "Parameter_Name ({unit})"
 # if type: "spinnerInt" or "spinnerFloat" ==> options: [start, step, stop]
 # if type: "dropdown" ==> options: [op1, op2, ...] and default: null
 # if type: "string" ==> options: null, depends completely on user input
