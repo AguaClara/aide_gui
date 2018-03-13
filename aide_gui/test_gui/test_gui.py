@@ -1,5 +1,4 @@
 # Author-AIDE GUI
-
 import adsk.core
 import adsk.fusion
 import adsk.cam
@@ -10,6 +9,7 @@ import os
 import sys
 import inspect
 from . import yaml
+from . import urllib3
 
 def abs_path(file_path):
     # Takes a relative file path to the calling file and returns the correct
@@ -22,9 +22,34 @@ def abs_path(file_path):
 _app = adsk.core.Application.cast(None)
 _ui = adsk.core.UserInterface.cast(None)
 
+
+
 # Create a yaml form structure in global called data
-with open(abs_path("new_form.yaml")) as fp:
-    data = yaml.load(fp)
+# with open(abs_path("new_form.yaml")) as fp:
+#     yaml_form = yaml.load(fp)
+# #
+def load_yaml():
+    try:
+        with open(abs_path("form.txt")) as fp:
+            unformatted = yaml.load(fp)
+            start = unform.find('---')
+            end = unform.find("...")
+            formatted = unform[start:end+3]
+            globals()['yaml_form'] = formatted
+    except:
+        try:
+            with open(abs_path("form.txt")) as url:
+                url = (url.read()).strip()
+                http = urllib3.PoolManager()
+                r = http.request('GET', url)
+                r.data.decode('utf-8')
+                globals()["yaml_form"] = yaml.load(r.data.decode('utf-8'))
+        except:
+            if _ui:
+                _ui.messageBox('Failed:\n{}'.format(traceback.format_exc()))
+
+
+load_yaml()
 
 # Error Message
 _errMessage = adsk.core.TextBoxCommandInput.cast(None)
@@ -154,7 +179,7 @@ def createFields(inputs):
     # Create a global list called plist to keep track of created fields
     globals()['plist'] = []
     # For each parameter {dictionary} in design param list
-    for param in data:
+    for param in yaml_form:
         # Save the key of the first element as pName
         pName = list(param.keys())[0]
         # Get the value [attributes of field] of the key from the dictionary
