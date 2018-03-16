@@ -170,7 +170,7 @@ def load_yaml():
                 return True
         except:
             if _ui:
-                _ui.messageBox('Not a YAML or URL')
+                _ui.messageBox('Not a YAML or URL \nPlease provide a correct form.')
             return False
 
 
