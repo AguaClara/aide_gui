@@ -1,57 +1,19 @@
 <!DOCTYPE html>
 <html>
     <head>
-      <script type="javascript" src="/Users/eldorbekpualtov/Desktop/AguaClara/aide_gui/aide_gui/palette_gui/palette.js"></script>
+      <!-- bootstrap -->
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+      <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     </head>
     <body>
-        <div id="demo"></div>
+        <div class="alert alert-warning alert-dismissible fade show" role="alert" id="demo"></div>
 
-
-
-
-        <p id='p1'>Click the button below or use the "Send info to HTML" command in the ADD-INS panel.</p>
         <button type='button' onclick='sendInfoToFusion()'>Click to send info to Fusion</button>
-        <br /><br />
 
         <script>
-        function sendInfoToFusion(){
-            var args = {
-                arg1 : "Sample argument 1",
-                arg2 : "Sample argument 2"
-            };
-            adsk.fusionSendData('send', JSON.stringify(args));
-        }
-
-        window.fusionJavaScriptHandler = {handle: function(action, data){
-            try {
-                if (action == 'send') {
-          // Update a paragraph with the data passed in.
-          // document.getElementById('p1').innerHTML = data;
-          // this is how were able to retrieve fusion data
-          createFields(data);
-        }
-        else if (action == 'debugger') {
-                    debugger;
-        }
-        else {
-          return 'Unexpected command type: ' + action;
-                }
-            } catch (e) {
-                console.log(e);
-                console.log('exception caught with command: ' + action + ', data: ' + data);
-            }
-            return 'OK';
-        }};
-
-
-        function createFields(json){
-          // console.log(json);
-          var list=JSON.parse(json);
-          document.getElementById('p1').innerHTML = list[0];
-          console.log(list[0]);
-          
-        };
-
+        
         </script>
 
     </body>
