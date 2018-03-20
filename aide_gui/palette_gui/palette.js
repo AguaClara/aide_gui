@@ -31,6 +31,6 @@ else {
 function createFields(json){
   // console.log(json);
   var list=JSON.parse(json);
-  // document.getElementById('demo').innerHTML = list[0];
+  document.getElementById('demo').innerHTML = list[0];
   console.log(list);
 };
