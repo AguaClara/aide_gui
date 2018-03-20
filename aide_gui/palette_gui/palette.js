@@ -14,7 +14,7 @@ window.fusionJavaScriptHandler = {handle: function(action, data){
   // this is how were able to retrieve fusion data
   createFields(data);
 }
-else if (action == 'debugger') {
+else if (action == 'debugger') { 
             debugger;
 }
 else {
