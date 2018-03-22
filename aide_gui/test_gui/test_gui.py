@@ -105,6 +105,7 @@ class CommandPathHandler(adsk.core.CommandCreatedEventHandler):
             # Get the command that was created.
             cmd = adsk.core.Command.cast(args.command)
 
+            # check if we need this
             # Connect to the command destroyed event.
             onDestroy = MyCommandDestroyHandler()
             cmd.destroy.add(onDestroy)
@@ -133,27 +134,25 @@ class PathLoadHandler(adsk.core.CommandEventHandler):
 
     def notify(self, args):
         try:
-            # Get the command that was created.
-            cmd = adsk.core.Command.cast(args.command)
-
-            # Connect to the command destroyed event.
-            onDestroy = MyCommandDestroyHandler()
-            cmd.destroy.add(onDestroy)
-            _handlers.append(onDestroy)
-
             # Get the list of parameters and values from collectFields
             fpath= globals()['file_path'].value
-            loaded=load_yaml(fpath)
 
-            if loaded !=None:
-                # load the template
+
+            if load_yaml(fpath):
+                # need to load the second template
+                # commandcreatehandler
+                # Get the CommandDefinitions collection.
+                cmdDefs = _ui.commandDefinitions
+
+                # Create a command definition
+                cmdDef = cmdDefs.addButtonDefinition('loadtemp2','', '', '')
+
+
+                # Connect to the command created event (functions to be written)
                 onCommandCreated = CommandCreatedHandler()
                 cmdDef.commandCreated.add(onCommandCreated)
                 _handlers.append(onCommandCreated)
 
-                # to validate if user has provided a correct path or Yaml
-                _errMessage = inputs.addTextBoxCommandInput('errMessage', '', '', 2, True)
-                _errMessage.isFullWidth = True
 
         except:
             if _ui:
@@ -186,20 +185,16 @@ class CommandCreatedHandler(adsk.core.CommandCreatedEventHandler):
             cmd.isExecutedWhenPreEmpted = False
             inputs = cmd.commandInputs
 
-            # Get the list of parameters and values from collectFields
-            fpath= globals()['file_path'].value
-            loaded=load_yaml(fpath)
 
-            if loaded !=None:
-                createFields(inputs, loaded)
-                # Connect to the command related events.
-                onExecute = CommandExecuteHandler()
-                cmd.execute.add(onExecute)
-                _handlers.append(onExecute)
+            createFields(inputs)
+            # Connect to the command related events.
+            onExecute = CommandExecuteHandler()
+            cmd.execute.add(onExecute)
+            _handlers.append(onExecute)
 
-                # to validate if user has provided a correct path or Yaml
-                _errMessage = inputs.addTextBoxCommandInput('errMessage', '', '', 2, True)
-                _errMessage.isFullWidth = True
+            # to validate if user has provided a correct path or Yaml
+            _errMessage = inputs.addTextBoxCommandInput('errMessage', '', '', 2, True)
+            _errMessage.isFullWidth = True
 
         except:
             if _ui:
@@ -213,8 +208,7 @@ class CommandExecuteHandler(adsk.core.CommandEventHandler):
         try:
             # Get the list of parameters and values from collectFields
             param_values = collectFields()
-            # Create a new YAML file with parameters and values solicited
-            # from the user
+
             with open(abs_path("collected.yaml"), 'w') as outfile:
                 yaml.dump(param_values, outfile)
 
@@ -224,25 +218,25 @@ class CommandExecuteHandler(adsk.core.CommandEventHandler):
 
 
 # Create a yaml form structure in global called data
-def load_yaml(path):
+def load_yaml(fpath):
     try:
-        with open(abs_path("form.txt")) as fp:
-            v = yaml.load(fp)
-            if (type(v) != list and type(v) != dict):
-                raise Exception('This is not a YAML')
-            yaml = v
-            return  yaml
+        raise Exception
+        # with open(abs_path("form.txt")) as fp:
+        #     v = yaml.load(fp)
+        #     if (type(v) != list and type(v) != dict):
+        #         raise Exception('This is not a YAML')
+        #     globals()['yaml_form'] = v
+        #     return  yaml
     except:
         try:
-            with open(abs_path(path)) as url:
-                url = (url.read()).strip()
-                http = urllib3.PoolManager()
-                r = http.request('GET', url)
-                status = r.status # check URL status
-                if (status != 200):
-                    raise Exception('This is not a URL')
-                yaml = yaml.load(r.data.decode('utf-8'))
-                return yaml
+            url = fpath.strip()
+            http = urllib3.PoolManager()
+            r = http.request('GET', url)
+            status = r.status # check URL status
+            if (status != 200):
+                raise Exception('This is not a URL')
+            globals()['yaml_form'] =  yaml.load(r.data.decode('utf-8'))
+            return yaml
         except:
             if _ui:
                 _ui.messageBox('Not a YAML or URL \nPlease provide a correct form.')
@@ -255,7 +249,7 @@ def createFields(inputs, yaml):
     # Create a global list called plist to keep track of created fields
     globals()['plist'] = []
     # For each parameter {dictionary} in design param list
-    for param in yaml:
+    for param in gloabals()['yaml_form']:
         # Save the key of the first element as pName
         pName = list(param.keys())[0]
         # Get the value [attributes of field] of the key from the dictionary
