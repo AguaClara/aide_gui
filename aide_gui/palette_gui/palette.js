@@ -14,7 +14,7 @@ window.fusionJavaScriptHandler = {handle: function(action, data){
   // this is how were able to retrieve fusion data
   createFields(data);
 }
-else if (action == 'debugger') { 
+else if (action == 'debugger') {
             debugger;
 }
 else {
@@ -31,6 +31,24 @@ else {
 function createFields(json){
   // console.log(json);
   var list=JSON.parse(json);
-  document.getElementById('demo').innerHTML = list[0];
   console.log(list);
+
+  // Container <div> where dynamic content will be placed
+  var container = document.getElementById("container");
+  // Clear previous contents of the container
+  while (container.hasChildNodes()) {
+      container.removeChild(container.lastChild);
+  }
+  for (i=0;i<number;i++){
+      // Append a node with a random text
+      container.appendChild(document.createTextNode("Member " + (i+1)));
+      // Create an <input> element, set its type and name attributes
+      var input = document.createElement("input");
+      input.type = "text";
+      input.name = "member" + i;
+      container.appendChild(input);
+      // Append a line break
+      container.appendChild(document.createElement("br"));
+  }
+
 };
