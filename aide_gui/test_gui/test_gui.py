@@ -122,20 +122,23 @@ class PathLoadHandler(adsk.core.CommandEventHandler):
             fpath= globals()['file_path'].value
 
             if load_yaml(fpath)!= None:
-                # eventArgs = adsk.core.CommandCreatedEventArgs.cast(args)
                 # Get the CommandDefinitions collection.
                 cmdDefs = _ui.commandDefinitions
 
                 # Create a command definition
-                cmdDef = cmdDefs.addButtonDefinition('adskaide_guiPythonAddIn',
-                    'AIDE GUI', 'Creates Water Treatment Plant', './resources/AIDE')
-                # cmd = eventArgs.command
-                # cmd.isExecutedWhenPreEmpted = True
-                # inputs = cmd.commandInputs
+                loadButton = cmdDefs.addButtonDefinition('SampleScriptButtonId', 
+                                                   'Python Sample Button',
+                                                   'Sample button tooltip')
 
+                # Connect to the command created event.
                 onCommandCreated = CommandCreatedHandler()
-                cmdDef.commandCreated.add(onCommandCreated)
+                loadButton.commandCreated.add(onCommandCreated)
                 _handlers.append(onCommandCreated)
+
+                # Execute the command.
+                loadButton.execute()
+
+
                 # _ui.messageBox(str(globals()['yaml_form']))
 
 
