@@ -96,22 +96,6 @@ class CommandPathHandler(adsk.core.CommandCreatedEventHandler):
         try:
             eventArgs = adsk.core.CommandCreatedEventArgs.cast(args)
 
-            # Verify that a Fusion design is active.
-            des = adsk.fusion.Design.cast(_app.activeProduct)
-            if not des:
-                _ui.messageBox('A Fusion design must be active when invoked.')
-                return()
-
-            # Get the command that was created.
-            cmd = adsk.core.Command.cast(args.command)
-
-            # check if we need this
-            # Connect to the command destroyed event.
-            onDestroy = MyCommandDestroyHandler()
-            cmd.destroy.add(onDestroy)
-            _handlers.append(onDestroy)
-
-            # Create the globals based on attributes
             cmd = eventArgs.command
             cmd.isExecutedWhenPreEmpted = False
             inputs = cmd.commandInputs
@@ -137,21 +121,22 @@ class PathLoadHandler(adsk.core.CommandEventHandler):
             # Get the list of parameters and values from collectFields
             fpath= globals()['file_path'].value
 
-
-            if load_yaml(fpath):
-                # need to load the second template
-                # commandcreatehandler
+            if load_yaml(fpath)!= None:
+                # eventArgs = adsk.core.CommandCreatedEventArgs.cast(args)
                 # Get the CommandDefinitions collection.
                 cmdDefs = _ui.commandDefinitions
 
                 # Create a command definition
-                cmdDef = cmdDefs.addButtonDefinition('loadtemp2','', '', '')
+                cmdDef = cmdDefs.addButtonDefinition('adskaide_guiPythonAddIn',
+                    'AIDE GUI', 'Creates Water Treatment Plant', './resources/AIDE')
+                # cmd = eventArgs.command
+                # cmd.isExecutedWhenPreEmpted = True
+                # inputs = cmd.commandInputs
 
-
-                # Connect to the command created event (functions to be written)
                 onCommandCreated = CommandCreatedHandler()
                 cmdDef.commandCreated.add(onCommandCreated)
                 _handlers.append(onCommandCreated)
+                # _ui.messageBox(str(globals()['yaml_form']))
 
 
         except:
@@ -245,11 +230,11 @@ def load_yaml(fpath):
 
 # Creates fields to be displayed in a new window on Fusion 360 based on
 # parameter list in input YAML to solicit parameter values from a user
-def createFields(inputs, yaml):
+def createFields(inputs):
     # Create a global list called plist to keep track of created fields
     globals()['plist'] = []
     # For each parameter {dictionary} in design param list
-    for param in gloabals()['yaml_form']:
+    for param in globals()['yaml_form']:
         # Save the key of the first element as pName
         pName = list(param.keys())[0]
         # Get the value [attributes of field] of the key from the dictionary
