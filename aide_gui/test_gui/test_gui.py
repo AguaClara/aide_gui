@@ -64,12 +64,15 @@ def stop(context):
         # Cleans up the UI once the add-in is stopped
         createPanel = _ui.allToolbarPanels.itemById('SolidCreatePanel')
         AIDE_Button = createPanel.controls.itemById('adskaide_guiPythonAddIn')
+        cmdDef = _ui.commandDefinitions.itemById('adskaide_guiPythonAddIn')
+        cmdDef1 = _ui.commandDefinitions.itemById('loadFormat')
+
         if AIDE_Button:
             AIDE_Button.deleteMe()
-
-        cmdDef = _ui.commandDefinitions.itemById('adskaide_guiPythonAddIn')
         if cmdDef:
             cmdDef.deleteMe()
+        if cmdDef1:
+            cmdDef1.deleteMe()
 
     except:
         if _ui:
@@ -88,6 +91,7 @@ class MyCommandDestroyHandler(adsk.core.CommandEventHandler):
         except:
             _ui.messageBox('Failed:\n{}'.format(traceback.format_exc()))
 
+# Creates a window to request yaml local path or url from user
 class CommandPathHandler(adsk.core.CommandCreatedEventHandler):
     def __init__(self):
         super().__init__()
@@ -95,11 +99,12 @@ class CommandPathHandler(adsk.core.CommandCreatedEventHandler):
     def notify(self, args):
         try:
             eventArgs = adsk.core.CommandCreatedEventArgs.cast(args)
-
             cmd = eventArgs.command
             cmd.isExecutedWhenPreEmpted = False
             inputs = cmd.commandInputs
-            globals()['file_path'] = inputs.addStringValueInput('path', "File Path C://", '')
+
+            # Ask for user to specify filepath
+            globals()['file_path'] = inputs.addStringValueInput('path', "File Path/URL", '')
 
             # Connect to the command related events.
             onPathLoad = PathLoadHandler()
@@ -111,26 +116,24 @@ class CommandPathHandler(adsk.core.CommandCreatedEventHandler):
             if _ui:
                 _ui.messageBox('Failed:\n{}'.format(traceback.format_exc()))
 
-
 class PathLoadHandler(adsk.core.CommandEventHandler):
     def __init__(self):
         super().__init__()
 
     def notify(self, args):
         try:
-            # Get the list of parameters and values from collectFields
-            fpath= globals()['file_path'].value
+            # Get the file path from user
+            fpath = globals()['file_path'].value
 
-            if load_yaml(fpath)!= None:
+            if load_yaml(fpath) != None:
                 # Get the CommandDefinitions collection.
                 cmdDefs = _ui.commandDefinitions
 
-                # Create a command definition
-                loadButton = cmdDefs.addButtonDefinition('SampleScriptButtonId', 
-                                                   'Python Sample Button',
-                                                   'Sample button tooltip')
+                # Create a button command definition
+                loadButton = cmdDefs.addButtonDefinition('loadFormat',
+                        'Template','Creates template to collect user parameters')
 
-                # Connect to the command created event.
+                # Connect to the command created event to create the window
                 onCommandCreated = CommandCreatedHandler()
                 loadButton.commandCreated.add(onCommandCreated)
                 _handlers.append(onCommandCreated)
@@ -138,14 +141,11 @@ class PathLoadHandler(adsk.core.CommandEventHandler):
                 # Execute the command.
                 loadButton.execute()
 
-
-                # _ui.messageBox(str(globals()['yaml_form']))
-
-
         except:
             if _ui:
                 _ui.messageBox('Failed:\n{}'.format(traceback.format_exc()))
 
+# Creates the second window after retrieving parameters from inputted yaml
 class CommandCreatedHandler(adsk.core.CommandCreatedEventHandler):
     def __init__(self):
         super().__init__()
@@ -153,41 +153,27 @@ class CommandCreatedHandler(adsk.core.CommandCreatedEventHandler):
     def notify(self, args):
         try:
             eventArgs = adsk.core.CommandCreatedEventArgs.cast(args)
-
-            # Verify that a Fusion design is active.
-            des = adsk.fusion.Design.cast(_app.activeProduct)
-            if not des:
-                _ui.messageBox('A Fusion design must be active when invoked.')
-                return()
-
-            # Get the command that was created.
-            cmd = adsk.core.Command.cast(args.command)
-
+            # Create the globals based on attributes
+            cmd = eventArgs.command
+            cmd.isExecutedWhenPreEmpted = False
+            inputs = cmd.commandInputs
             # Connect to the command destroyed event.
             onDestroy = MyCommandDestroyHandler()
             cmd.destroy.add(onDestroy)
             _handlers.append(onDestroy)
 
-            # Create the globals based on attributes
-            cmd = eventArgs.command
-            cmd.isExecutedWhenPreEmpted = False
-            inputs = cmd.commandInputs
-
-
+            # this creates the fields given that format file has succesfully loaded
             createFields(inputs)
             # Connect to the command related events.
             onExecute = CommandExecuteHandler()
             cmd.execute.add(onExecute)
             _handlers.append(onExecute)
 
-            # to validate if user has provided a correct path or Yaml
-            _errMessage = inputs.addTextBoxCommandInput('errMessage', '', '', 2, True)
-            _errMessage.isFullWidth = True
-
         except:
             if _ui:
                 _ui.messageBox('Failed:\n{}'.format(traceback.format_exc()))
 
+# Create a new window with parameters from loaded YAML
 class CommandExecuteHandler(adsk.core.CommandEventHandler):
     def __init__(self):
         super().__init__()
@@ -197,6 +183,7 @@ class CommandExecuteHandler(adsk.core.CommandEventHandler):
             # Get the list of parameters and values from collectFields
             param_values = collectFields()
 
+            # output a file with collected values
             with open(abs_path("collected.yaml"), 'w') as outfile:
                 yaml.dump(param_values, outfile)
 
@@ -207,15 +194,16 @@ class CommandExecuteHandler(adsk.core.CommandEventHandler):
 
 # Create a yaml form structure in global called data
 def load_yaml(fpath):
+    # If yaml is retrieved from user's local path
     try:
-        raise Exception
-        # with open(abs_path("form.txt")) as fp:
-        #     v = yaml.load(fp)
-        #     if (type(v) != list and type(v) != dict):
-        #         raise Exception('This is not a YAML')
-        #     globals()['yaml_form'] = v
-        #     return  yaml
+        with open(abs_path(fpath)) as fp:
+            v = yaml.load(fp)
+            if (type(v) != list and type(v) != dict):
+                raise Exception('This is not a YAML')
+            globals()['yaml_form'] = v
+            return  yaml
     except:
+        # If yaml is retrieved from a given url
         try:
             url = fpath.strip()
             http = urllib3.PoolManager()
