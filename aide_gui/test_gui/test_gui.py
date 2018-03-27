@@ -163,9 +163,10 @@ class CommandCreatedHandler(adsk.core.CommandCreatedEventHandler):
             _handlers.append(onDestroy)
 
             # this creates the fields given that format file has succesfully loaded
-            createFields(inputs)
+            fields = createFields(inputs)
+
             # Connect to the command related events.
-            onExecute = CommandExecuteHandler()
+            onExecute = CommandExecuteHandler(fields)
             cmd.execute.add(onExecute)
             _handlers.append(onExecute)
 
@@ -175,13 +176,14 @@ class CommandCreatedHandler(adsk.core.CommandCreatedEventHandler):
 
 # Create a new window with parameters from loaded YAML
 class CommandExecuteHandler(adsk.core.CommandEventHandler):
-    def __init__(self):
+    def __init__(self, fields):
         super().__init__()
+        self.fields = fields
 
     def notify(self, args):
         try:
             # Get the list of parameters and values from collectFields
-            param_values = collectFields()
+            param_values = collectFields(self.fields)
 
             # output a file with collected values
             with open(abs_path("collected.yaml"), 'w') as outfile:
@@ -223,49 +225,49 @@ def load_yaml(fpath):
 # parameter list in input YAML to solicit parameter values from a user
 def createFields(inputs):
     # Create a global list called plist to keep track of created fields
-    globals()['plist'] = []
+
+    fields = {}
     # For each parameter {dictionary} in design param list
     for param in globals()['yaml_form']:
         # Save the key of the first element as pName
         pName = list(param.keys())[0]
         # Get the value [attributes of field] of the key from the dictionary
         pAttr = param[pName]
-        # Append the created global field to the plist (parameter list)
-        plist.append(pName)
+
         # For fields specified by attr type: "string"
         if pAttr["type"] == "string":
             # param_format(id, name, default)
-            globals()[pName] = inputs.addStringValueInput(str(pName), pAttr["name"], str(pAttr["default"]))
+            fields[pName]= inputs.addStringValueInput(str(pName), pAttr["name"], str(pAttr["default"]))
         # For fields specified by attr type: "dropdown"
         elif pAttr["type"] == "dropdown":
             # param_format(id, name, Dropdown)
-            globals()[pName] = inputs.addDropDownCommandInput(str(pName), pAttr["name"], adsk.core.DropDownStyles.TextListDropDownStyle)
+            fields[pName]= inputs.addDropDownCommandInput(str(pName), pAttr["name"], adsk.core.DropDownStyles.TextListDropDownStyle)
             # For each element in the list of options
             for option in pAttr["options"]:
                 # Append the dropdown option values from input YAML
-                globals()[pName].listItems.add(str(option), True)
+                fields[pName].listItems.add(str(option), True)
         # For fields specified by attr type: "spinnerInt"
         elif pAttr["type"] == "spinnerInt":
             # param _format(id, Name, min, max, step, default)
-            globals()[pName] = inputs.addIntegerSpinnerCommandInput(str(pName), pAttr["name"], pAttr["options"][0], pAttr["options"][2], pAttr["options"][1], pAttr["options"][0])
+            fields[pName] = inputs.addIntegerSpinnerCommandInput(str(pName), pAttr["name"], pAttr["options"][0], pAttr["options"][2], pAttr["options"][1], pAttr["options"][0])
         # For fields specified by attr type: "spinnerFloat"
         elif pAttr["type"] == "spinnerFloat":
             # param _format(id, Name, min, max, step, default)
-            globals()[pName] = inputs.addFloatSpinnerCommandInput(str(pName), pAttr["name"], '', pAttr["options"][0], pAttr["options"][2], pAttr["options"][1], pAttr["options"][0])
+            fields[pName] = inputs.addFloatSpinnerCommandInput(str(pName), pAttr["name"], '', pAttr["options"][0], pAttr["options"][2], pAttr["options"][1], pAttr["options"][0])
 
+    # returns the list of created field ids
+    return fields
 
 # Collect inputted values from the user and adds information to a list of
 # dictionaries, each containing a parameter name and value
-def collectFields():
-    # Create a list of parameters from the parameter list
-    parameters = []
-    for key in plist:
+def collectFields(fields):
+    params = {}
+    for key, kval in fields.items():
         # If the parameter has a drop down type, the value is the selectedItem
-        if isinstance(globals()[key], adsk.core.DropDownCommandInput):
-            value = globals()[key].selectedItem.name
+        if isinstance(kval, adsk.core.DropDownCommandInput):
+            value = kval.selectedItem.name
         # Otherwise it is simply the value the user enters
         else:
-            value = globals()[key].value
-        dictionary = {key: value}
-        parameters.append(dictionary)
-    return parameters
+            value = kval.value
+        params[key]=value
+    return params

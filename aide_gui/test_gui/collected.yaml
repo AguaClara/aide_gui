@@ -1,4 +1,1 @@
-- {flow_rate: '34'}
-- {sed_tank_length: '5'}
-- {blablabla: 1.0}
-- {snow: '30'}
+{blablabla: 1.0, flow_rate: hey, sed_tank_length: '4', snow: '10'}
