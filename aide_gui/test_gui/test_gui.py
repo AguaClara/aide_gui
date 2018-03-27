@@ -64,6 +64,7 @@ def stop(context):
         # Cleans up the UI once the add-in is stopped
         createPanel = _ui.allToolbarPanels.itemById('SolidCreatePanel')
         AIDE_Button = createPanel.controls.itemById('adskaide_guiPythonAddIn')
+
         cmdDef = _ui.commandDefinitions.itemById('adskaide_guiPythonAddIn')
         cmdDef1 = _ui.commandDefinitions.itemById('loadFormat')
 
@@ -122,10 +123,8 @@ class PathLoadHandler(adsk.core.CommandEventHandler):
 
     def notify(self, args):
         try:
-            # Get the file path from user
-            fpath = globals()['file_path'].value
-
-            if load_yaml(fpath) != None:
+            yam = load_yaml(globals()["file_path"].value)
+            if  yam != None:
                 # Get the CommandDefinitions collection.
                 cmdDefs = _ui.commandDefinitions
 
@@ -134,7 +133,7 @@ class PathLoadHandler(adsk.core.CommandEventHandler):
                         'Template','Creates template to collect user parameters')
 
                 # Connect to the command created event to create the window
-                onCommandCreated = CommandCreatedHandler()
+                onCommandCreated = CommandCreatedHandler(yam)
                 loadButton.commandCreated.add(onCommandCreated)
                 _handlers.append(onCommandCreated)
 
@@ -147,8 +146,9 @@ class PathLoadHandler(adsk.core.CommandEventHandler):
 
 # Creates the second window after retrieving parameters from inputted yaml
 class CommandCreatedHandler(adsk.core.CommandCreatedEventHandler):
-    def __init__(self):
+    def __init__(self, yaml_form):
         super().__init__()
+        self.yaml_form = yaml_form
 
     def notify(self, args):
         try:
@@ -163,7 +163,7 @@ class CommandCreatedHandler(adsk.core.CommandCreatedEventHandler):
             _handlers.append(onDestroy)
 
             # this creates the fields given that format file has succesfully loaded
-            fields = createFields(inputs)
+            fields = createFields(inputs, self.yaml_form)
 
             # Connect to the command related events.
             onExecute = CommandExecuteHandler(fields)
@@ -199,11 +199,10 @@ def load_yaml(fpath):
     # If yaml is retrieved from user's local path
     try:
         with open(abs_path(fpath)) as fp:
-            v = yaml.load(fp)
-            if (type(v) != list and type(v) != dict):
+            yam = yaml.load(fp)
+            if (type(yam) != list and type(yam) != dict):
                 raise Exception('This is not a YAML')
-            globals()['yaml_form'] = v
-            return  yaml
+            return  yam
     except:
         # If yaml is retrieved from a given url
         try:
@@ -213,8 +212,8 @@ def load_yaml(fpath):
             status = r.status # check URL status
             if (status != 200):
                 raise Exception('This is not a URL')
-            globals()['yaml_form'] =  yaml.load(r.data.decode('utf-8'))
-            return yaml
+            yam =  yaml.load(r.data.decode('utf-8'))
+            return yam
         except:
             if _ui:
                 _ui.messageBox('Not a YAML or URL \nPlease provide a correct form.')
@@ -223,12 +222,11 @@ def load_yaml(fpath):
 
 # Creates fields to be displayed in a new window on Fusion 360 based on
 # parameter list in input YAML to solicit parameter values from a user
-def createFields(inputs):
-    # Create a global list called plist to keep track of created fields
-
+def createFields(inputs, yaml_form):
+    # Create a dict called fields to keep track of created fields
     fields = {}
     # For each parameter {dictionary} in design param list
-    for param in globals()['yaml_form']:
+    for param in yaml_form:
         # Save the key of the first element as pName
         pName = list(param.keys())[0]
         # Get the value [attributes of field] of the key from the dictionary
@@ -254,7 +252,6 @@ def createFields(inputs):
         elif pAttr["type"] == "spinnerFloat":
             # param _format(id, Name, min, max, step, default)
             fields[pName] = inputs.addFloatSpinnerCommandInput(str(pName), pAttr["name"], '', pAttr["options"][0], pAttr["options"][2], pAttr["options"][1], pAttr["options"][0])
-
     # returns the list of created field ids
     return fields
 
