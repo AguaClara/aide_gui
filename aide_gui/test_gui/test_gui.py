@@ -54,7 +54,6 @@ def run(context):
         cmdDef.commandCreated.add(onCommandPath)
         _handlers.append(onCommandPath)
 
-
     except:
         if _ui:
             _ui.messageBox('Failed:\n{}'.format(traceback.format_exc()))
@@ -112,7 +111,6 @@ class CommandPathHandler(adsk.core.CommandCreatedEventHandler):
             cmd.execute.add(onPathLoad)
             _handlers.append(onPathLoad)
 
-
         except:
             if _ui:
                 _ui.messageBox('Failed:\n{}'.format(traceback.format_exc()))
@@ -139,6 +137,10 @@ class PathLoadHandler(adsk.core.CommandEventHandler):
 
                 # Execute the command.
                 loadButton.execute()
+            else:
+                # if the user specified bad path: notify then repress the button automatically
+                cmdDef = _ui.commandDefinitions.itemById('adskaide_guiPythonAddIn')
+                cmdDef.execute()
 
         except:
             if _ui:
