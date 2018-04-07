@@ -3,16 +3,11 @@ import json
 import os
 import sys
 import inspect
-from . import jinja2
 from . import yaml
 
 
-
+# returns absolute path
 def abs_path(file_path):
-    # Takes a relative file path to the calling file and returns the correct
-    # absolute path.
-    # Needed because the Fusion 360 environment doesn't resolve relative paths
-    # well.
     return os.path.join(os.path.dirname(inspect.getfile(sys._getframe(1))), file_path)
 
 
@@ -25,8 +20,20 @@ with open(abs_path("new_form.yaml")) as fp:
 handlers = []
 _app = adsk.core.Application.cast(None)
 _ui = adsk.core.UserInterface.cast(None)
-num = 0
 
+
+# Event handler for the commandCreated event.
+class ShowPaletteCommandCreatedHandler(adsk.core.CommandCreatedEventHandler):
+    def __init__(self):
+        super().__init__()
+    def notify(self, args):
+        try:
+            command = args.command
+            onExecute = ShowPaletteCommandExecuteHandler()
+            command.execute.add(onExecute)
+            handlers.append(onExecute)
+        except:
+            _ui.messageBox('Failed:\n{}'.format(traceback.format_exc()))
 
 # Event handler for the commandExecuted event.
 class ShowPaletteCommandExecuteHandler(adsk.core.CommandEventHandler):
@@ -47,47 +54,24 @@ class ShowPaletteCommandExecuteHandler(adsk.core.CommandEventHandler):
                 palette.incomingFromHTML.add(onHTMLEvent)
                 handlers.append(onHTMLEvent)
 
-                # Add handler to CloseEvent of the palette.
-                onClosed = MyCloseEventHandler()
-                palette.closed.add(onClosed)
-                handlers.append(onClosed)
             else:
                 palette.isVisible = True
         except:
             _ui.messageBox('Command executed failed: {}'.format(traceback.format_exc()))
 
-
-# Event handler for the commandCreated event.
-class ShowPaletteCommandCreatedHandler(adsk.core.CommandCreatedEventHandler):
+# Event handler for the palette HTML event.
+class MyHTMLEventHandler(adsk.core.HTMLEventHandler):
     def __init__(self):
         super().__init__()
     def notify(self, args):
         try:
-            command = args.command
-            onExecute = ShowPaletteCommandExecuteHandler()
-            command.execute.add(onExecute)
-            handlers.append(onExecute)
+            htmlArgs = adsk.core.HTMLEventArgs.cast(args)
+            data = json.loads(htmlArgs.data)
+            # data is what is being sent from pallete in json form
+
         except:
             _ui.messageBox('Failed:\n{}'.format(traceback.format_exc()))
 
-
-# Event handler for the commandExecuted event.
-class SendInfoCommandExecuteHandler(adsk.core.CommandEventHandler):
-    def __init__(self):
-        super().__init__()
-    def notify(self, args):
-        try:
-            # Send information to the palette. This will trigger an event in the javascript
-            # within the html so that it can be handled.
-            palette = _ui.palettes.itemById('myPalette')
-            if palette:
-                global num
-                num += 1
-                # This is a message sent to the palette from Fusion. It has been sent {} times.'.format(num)
-
-                palette.sendInfoToHTML('send', str(data).replace("'", '"').replace("None", 'null'))
-        except:
-            _ui.messageBox('Command executed failed: {}'.format(traceback.format_exc()))
 
 
 # Event handler for the commandCreated event.
@@ -103,31 +87,20 @@ class SendInfoCommandCreatedHandler(adsk.core.CommandCreatedEventHandler):
         except:
             _ui.messageBox('Failed:\n{}'.format(traceback.format_exc()))
 
-
-# Event handler for the palette close event.
-class MyCloseEventHandler(adsk.core.UserInterfaceGeneralEventHandler):
+# Event handler for the commandExecuted event.
+class SendInfoCommandExecuteHandler(adsk.core.CommandEventHandler):
     def __init__(self):
         super().__init__()
     def notify(self, args):
         try:
-            _ui.messageBox('Close button is clicked.')
+            # Send information to the palette.
+            palette = _ui.palettes.itemById('myPalette')
+            if palette:
+                # we need to figure out how incorporate jinja2 here
+                palette.sendInfoToHTML('send', str(data).replace("'", '"').replace("None", 'null'))
         except:
-            _ui.messageBox('Failed:\n{}'.format(traceback.format_exc()))
+            _ui.messageBox('Command executed failed: {}'.format(traceback.format_exc()))
 
-
-# Event handler for the palette HTML event.
-class MyHTMLEventHandler(adsk.core.HTMLEventHandler):
-    def __init__(self):
-        super().__init__()
-    def notify(self, args):
-        try:
-            htmlArgs = adsk.core.HTMLEventArgs.cast(args)
-            data = json.loads(htmlArgs.data)
-            msg = "An event has been fired from the html to Fusion with the following data:\n"
-            msg += '    Command: {}\n    arg1: {}\n    arg2: {}'.format(htmlArgs.action, data['arg1'], data['arg2'])
-            _ui.messageBox(msg)
-        except:
-            _ui.messageBox('Failed:\n{}'.format(traceback.format_exc()))
 
 
 def run(context):
@@ -157,15 +130,16 @@ def run(context):
             sendInfoCmdDef.commandCreated.add(onCommandCreated)
             handlers.append(onCommandCreated)
 
-        # Add the command to the toolbar.
-        panel = _ui.allToolbarPanels.itemById('SolidScriptsAddinsPanel')
-        cntrl = panel.controls.itemById('showPalette')
-        if not cntrl:
-            panel.controls.addCommand(showPaletteCmdDef)
 
-        cntrl = panel.controls.itemById('sendInfoToHTML')
-        if not cntrl:
-            panel.controls.addCommand(sendInfoCmdDef)
+        # Get the Create Panel in the model workspace in Fusion
+        createPanel = _ui.allToolbarPanels.itemById('SolidCreatePanel')
+        # Add the button to the bottom of the Create Panel in Fusion
+        showPaletteButton= createPanel.controls.addCommand(showPaletteCmdDef)
+        sendInfoButton= createPanel.controls.addCommand(sendInfoCmdDef)
+
+        # Testlines
+        showPaletteCmdDef.execute()
+
     except:
         if _ui:
             _ui.messageBox('Failed:\n{}'.format(traceback.format_exc()))
@@ -178,23 +152,26 @@ def stop(context):
         if palette:
             palette.deleteMe()
 
+        # Delete the created buttons under SolidCreatePanel
+        createPanel = _ui.allToolbarPanels.itemById('SolidCreatePanel')
+
+        showPaletteButton = createPanel.controls.itemById('showPalette')
+        if showPaletteButton:
+            showPaletteButton.deleteMe()
+
+        sendInfoButton = createPanel.controls.itemById('sendInfoToHTML')
+        if sendInfoButton:
+            sendInfoButton.deleteMe()
+
         # Delete controls and associated command definitions created by this add-ins
-        panel = _ui.allToolbarPanels.itemById('SolidScriptsAddinsPanel')
-        cmd = panel.controls.itemById('showPalette')
-        if cmd:
-            cmd.deleteMe()
         cmdDef = _ui.commandDefinitions.itemById('showPalette')
         if cmdDef:
             cmdDef.deleteMe()
 
-        cmd = panel.controls.itemById('sendInfoToHTML')
-        if cmd:
-            cmd.deleteMe()
         cmdDef = _ui.commandDefinitions.itemById('sendInfoToHTML')
         if cmdDef:
             cmdDef.deleteMe()
 
-        _ui.messageBox('Stop addin')
     except:
         if _ui:
             _ui.messageBox('Failed:\n{}'.format(traceback.format_exc()))
