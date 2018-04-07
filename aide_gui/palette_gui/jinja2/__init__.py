@@ -27,7 +27,7 @@
     :license: BSD, see LICENSE for more details.
 """
 __docformat__ = 'restructuredtext en'
-__version__ = '2.11.dev'
+__version__ = '2.9.6'
 
 # high level interface
 from jinja2.environment import Environment, Template
@@ -48,7 +48,7 @@ from jinja2.runtime import Undefined, DebugUndefined, StrictUndefined, \
 # exceptions
 from jinja2.exceptions import TemplateError, UndefinedError, \
      TemplateNotFound, TemplatesNotFound, TemplateSyntaxError, \
-     TemplateAssertionError, TemplateRuntimeError
+     TemplateAssertionError
 
 # decorators and public utilities
 from jinja2.filters import environmentfilter, contextfilter, \
@@ -64,9 +64,19 @@ __all__ = [
     'MemcachedBytecodeCache', 'Undefined', 'DebugUndefined',
     'StrictUndefined', 'TemplateError', 'UndefinedError', 'TemplateNotFound',
     'TemplatesNotFound', 'TemplateSyntaxError', 'TemplateAssertionError',
-    'TemplateRuntimeError',
     'ModuleLoader', 'environmentfilter', 'contextfilter', 'Markup', 'escape',
     'environmentfunction', 'contextfunction', 'clear_caches', 'is_undefined',
     'evalcontextfilter', 'evalcontextfunction', 'make_logging_undefined',
     'select_autoescape',
 ]
+
+
+def _patch_async():
+    from jinja2.utils import have_async_gen
+    if have_async_gen:
+        from jinja2.asyncsupport import patch_all
+        patch_all()
+
+
+_patch_async()
+del _patch_async
