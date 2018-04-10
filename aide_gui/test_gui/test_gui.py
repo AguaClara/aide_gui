@@ -10,6 +10,7 @@ import sys
 import inspect
 from . import yaml
 from . import urllib3
+import datetime
 
 def abs_path(file_path):
     # Takes a relative file path to the calling file and returns the correct
@@ -187,9 +188,12 @@ class CommandExecuteHandler(adsk.core.CommandEventHandler):
             # Get the list of parameters and values from collectFields
             param_values = collectFields(self.fields)
 
+            current_time = str(datetime.datetime.now())
             # output a file with collected values
-            with open(abs_path("collected.yaml"), 'w') as outfile:
+            with open(abs_path("user_inputs_"+ current_time + ".yaml"), 'w') as outfile:
                 yaml.dump(param_values, outfile)
+
+            # Execute onfinish code here (call aide_design/aide_templates)
 
         except:
             if _ui:

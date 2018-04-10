@@ -17,6 +17,18 @@ def abs_path(file_path):
 with open(abs_path("new_form.yaml")) as fp:
     data = yaml.load(fp)
 
+def render(template_path, context):
+    path, filename = os.path.split(template_path)
+    return Environment(
+        loader=FileSystemLoader(path or './')
+    ).get_template(filename).render(context)
+
+context = {
+    'name': 'John',
+}
+
+result = render('palette.html', context)
+
 
 # global set of event handlers to keep them referenced for the duration of the command
 handlers = []
