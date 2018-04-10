@@ -4,6 +4,8 @@ import os
 import sys
 import inspect
 from . import yaml
+from .jinja2 import Template, Environment, FileSystemLoader
+
 
 
 # returns absolute path
