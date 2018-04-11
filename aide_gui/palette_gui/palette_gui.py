@@ -1,11 +1,7 @@
+import os, sys, inspect, json
 import adsk.core, adsk.fusion, adsk.cam, traceback
-import json
-import os
-import sys
-import inspect
 from . import yaml
 from .jinja2 import Template, Environment, FileSystemLoader
-
 
 
 # returns absolute path
@@ -17,17 +13,13 @@ def abs_path(file_path):
 with open(abs_path("new_form.yaml")) as fp:
     data = yaml.load(fp)
 
+# jinjafy given the path to the template
 def render(template_path, context):
-    path, filename = os.path.split(template_path)
+    path, filename = os.path.split(abs_path(template_path))
     return Environment(
         loader=FileSystemLoader(path or './')
     ).get_template(filename).render(context)
 
-context = {
-    'name': 'John',
-}
-
-result = render('palette.html', context)
 
 
 # global set of event handlers to keep them referenced for the duration of the command
@@ -58,7 +50,20 @@ class ShowPaletteCommandExecuteHandler(adsk.core.CommandEventHandler):
             # Create and display the palette.
             palette = _ui.palettes.itemById('myPalette')
             if not palette:
-                palette = _ui.palettes.add('myPalette', 'My Palette', 'palette.html', True, True, True, 300, 200)
+
+                # before palette is created make a dictionary to pass onto HTML
+                context = {
+                    'fields': data
+                }
+                # render the dictionary values onto the html file
+                result = render('palette.html', context)
+
+                # create a local html file, with jinjafied values
+                with open(abs_path("jinjafied.html"), 'w') as jinjafied:
+                    jinjafied.write(result)
+
+                # let palette open the jinjafied.html
+                palette = _ui.palettes.add('myPalette', 'My Palette', 'jinjafied.html', True, True, True, 300, 200)
 
                 # Dock the palette to the right side of Fusion window.
                 palette.dockingState = adsk.core.PaletteDockingStates.PaletteDockStateRight
