@@ -236,12 +236,17 @@ class CommandExecuteHandler(adsk.core.CommandEventHandler):
 
 def load_yaml(fpath):
     """
-    Creates a yaml form structure in global called data
+    Returns a yaml form structure or None, if error occurred
 
     Parameters
     ----------
     fpath: str
         The local file path/URL for the yaml to be retrieved from
+
+    Return
+    --------
+    yam: dict
+        A dictionary thats extrapolated from yaml format
     """
     # If yaml is retrieved from user's local path
     try:
