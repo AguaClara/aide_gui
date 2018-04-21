@@ -13,14 +13,24 @@
 
     </head>
     <body>
-
         <!-- <button type='button' onclick='sendInfoToFusion()'>Click to send info to Fusion</button> -->
+        <h1>Welcome to my awesome homepage.</h1>
+                        <html>
 
+               <head>
+                  <title>HTML Frames</title>
+               </head>
 
-            <h1>Index</h1>
-            <p class="important">
-              Welcome to my awesome homepage.
-            </p>
+               <frameset rows = "10%,80%">
+                  <frame name = "top" src = "top_frame.htm" />
+                  <frame name = "main" src = "" />
+
+                  <noframes>
+                     <body>Your browser does not support frames.</body>
+                  </noframes>
+
+               </frameset>
+            </html>
 
 
         {% block content %}
