@@ -24,3 +24,8 @@ window.fusionJavaScriptHandler = {handle: function(action, data){
     }
     return 'OK';
 }};
+
+// activate the datatable when ready
+$(document).ready( function () {
+    $('#myTable').DataTable();
+} );

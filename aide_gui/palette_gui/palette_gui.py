@@ -57,7 +57,7 @@ class ShowPaletteCommandExecuteHandler(adsk.core.CommandEventHandler):
                     'fields': data
                 }
                 # render the dictionary values onto the html file
-                result = render('palette.html.j2', context)
+                result = render('base.html.j2', context)
 
                 # create a local html file, with jinjafied values
                 with open(abs_path("palette.html"), 'w') as jinjafied:

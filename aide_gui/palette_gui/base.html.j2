@@ -6,36 +6,26 @@
       <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
       <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+      <!-- dataTables -->
+      <link rel='stylesheet' href="cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css">\
+      <script src='cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js'></script>
+
     </head>
     <body>
 
         <!-- <button type='button' onclick='sendInfoToFusion()'>Click to send info to Fusion</button> -->
 
-        {% for field in fields  %}
-          {% for key, value in field.items() %}
-            {% if value.type == 'string' %}
-              <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                  <span class="input-group-text" id='{{ key }}'>{{ value.name }}</span>
-                </div>
-                <input type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" value='{{ value.default }}'>
-              </div>
-              {% endif %}
-              {% if value.type == 'dropdown' %}
-              <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                  <label class="input-group-text" for="{{ key }}">{{ value.name }}</label>
-                </div>
-                <select class="custom-select" id="{{ key }}">
-                  {% for option in value.options %}
-                  <option value='{{ option }}'>{{ option }}</option>
-                  {% endfor %}
-                </select>
-              </div>
-            {% endif %}
-          {% endfor %}
-        {% endfor %}
-      
+
+            <h1>Index</h1>
+            <p class="important">
+              Welcome to my awesome homepage.
+            </p>
+
+
+        {% block content %}
+
+        {% endblock %}
 
         <!-- using cdn to load js. easier than loading from locally if changes made -->
         <script type="text/javascript"src="https://cdn.rawgit.com/AguaClara/aide_gui/spring-2018/aide_gui/palette_gui/palette.js"></script>

@@ -1,0 +1,30 @@
+{% extends "base.html.j2"}
+
+{% block content %}
+
+  {% for field in fields  %}
+    {% for key, value in field.items() %}
+      {% if value.type == 'string' %}
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text" id='{{ key }}'>{{ value.name }}</span>
+          </div>
+          <input type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" value='{{ value.default }}'>
+        </div>
+        {% endif %}
+        {% if value.type == 'dropdown' %}
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <label class="input-group-text" for="{{ key }}">{{ value.name }}</label>
+          </div>
+          <select class="custom-select" id="{{ key }}">
+            {% for option in value.options %}
+            <option value='{{ option }}'>{{ option }}</option>
+            {% endfor %}
+          </select>
+        </div>
+      {% endif %}
+    {% endfor %}
+  {% endfor %}
+
+{% endblock content %}
