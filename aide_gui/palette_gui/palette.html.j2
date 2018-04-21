@@ -11,39 +11,31 @@
 
         <!-- <button type='button' onclick='sendInfoToFusion()'>Click to send info to Fusion</button> -->
 
-        
-          
-            
+        {% for field in fields  %}
+          {% for key, value in field.items() %}
+            {% if value.type == 'string' %}
               <div class="input-group mb-3">
                 <div class="input-group-prepend">
-                  <span class="input-group-text" id='flow_rate'>Flow Rate (L/s)</span>
+                  <span class="input-group-text" id='{{ key }}'>{{ value.name }}</span>
                 </div>
-                <input type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" value='34'>
+                <input type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" value='{{ value.default }}'>
               </div>
-              
-              
-          
-        
-          
-            
-              
+              {% endif %}
+              {% if value.type == 'dropdown' %}
               <div class="input-group mb-3">
                 <div class="input-group-prepend">
-                  <label class="input-group-text" for="sed_tank_length">Sed tank length (m)</label>
+                  <label class="input-group-text" for="{{ key }}">{{ value.name }}</label>
                 </div>
-                <select class="custom-select" id="sed_tank_length">
-                  
-                  <option value='2'>2</option>
-                  
-                  <option value='4'>4</option>
-                  
-                  <option value='5'>5</option>
-                  
+                <select class="custom-select" id="{{ key }}">
+                  {% for option in value.options %}
+                  <option value='{{ option }}'>{{ option }}</option>
+                  {% endfor %}
                 </select>
               </div>
-            
-          
-        
+            {% endif %}
+          {% endfor %}
+        {% endfor %}
+      
 
         <!-- using cdn to load js. easier than loading from locally if changes made -->
         <script type="text/javascript"src="https://cdn.rawgit.com/AguaClara/aide_gui/spring-2018/aide_gui/palette_gui/palette.js"></script>

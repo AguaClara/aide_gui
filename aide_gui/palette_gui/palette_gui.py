@@ -1,8 +1,9 @@
 import os, sys, inspect, json
 import adsk.core, adsk.fusion, adsk.cam, traceback
-from . import yaml
-from .jinja2 import Template, Environment, FileSystemLoader
-
+# add the path to local library
+sys.path.append("/Users/eldorbekpualtov/Desktop/AguaClara/aide_gui/aide_gui/palette_gui")
+from jinja2 import Template, Environment, FileSystemLoader
+import yaml
 
 # returns absolute path
 def abs_path(file_path):
@@ -56,14 +57,14 @@ class ShowPaletteCommandExecuteHandler(adsk.core.CommandEventHandler):
                     'fields': data
                 }
                 # render the dictionary values onto the html file
-                result = render('palette.html', context)
+                result = render('palette.html.j2', context)
 
                 # create a local html file, with jinjafied values
-                with open(abs_path("jinjafied.html"), 'w') as jinjafied:
+                with open(abs_path("palette.html"), 'w') as jinjafied:
                     jinjafied.write(result)
 
                 # let palette open the jinjafied.html
-                palette = _ui.palettes.add('myPalette', 'My Palette', 'jinjafied.html', True, True, True, 300, 200)
+                palette = _ui.palettes.add('myPalette', 'My Palette', 'palette.html', True, True, True, 300, 200)
 
                 # Dock the palette to the right side of Fusion window.
                 palette.dockingState = adsk.core.PaletteDockingStates.PaletteDockStateRight
