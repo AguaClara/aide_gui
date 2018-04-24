@@ -57,11 +57,11 @@ class ShowPaletteCommandExecuteHandler(adsk.core.CommandEventHandler):
                     'fields': data
                 }
                 # render the dictionary values onto the html file
-                result = render('base.html', context)
+                # result = render('base.html', context)
 
-                # create a local html file, with jinjafied values
-                with open(abs_path("palette.html"), 'w') as jinjafied:
-                    jinjafied.write(result)
+                # # create a local html file, with jinjafied values
+                # with open(abs_path("palette.html"), 'w') as jinjafied:
+                #     jinjafied.write(result)
 
                 # let palette open the jinjafied.html
                 palette = _ui.palettes.add('myPalette', 'My Palette', 'palette.html', True, True, True, 300, 200)
