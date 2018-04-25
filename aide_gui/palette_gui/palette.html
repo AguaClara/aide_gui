@@ -11,12 +11,14 @@
       <link rel='stylesheet' href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css">
       <script src='https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js'></script>
 
+      <!-- font-awesome icons -->
+      <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
     </head>
     <body>
 
 
         <!-- <button type='button' onclick='sendInfoToFusion()'>Click to send info to Fusion</button> -->
-        <div class='col-lg-12 col-md-12 col-sm-12 col-xs-12' style='padding:0; font-weight: 200; font-size: 0.7rem;'>
+        <div class='col-lg-12 col-md-12 col-sm-12 col-xs-12' style='padding:0; font-weight: 200; font-size: 0.7rem; padding-bottom: 0.5rem;'>
           <nav class="navbar navbar-default"  style='padding:0;'>
             <div class="container-fluid">
               <div class="navbar-header">
@@ -26,10 +28,9 @@
                 <li class="dropdown">
                   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
                   <ul class="dropdown-menu dropdown-menu-right" style="position:absolute; font-size: 0.7rem; min-width: 4.5rem; max-width:5rem; padding-left:0.15rem;">
-                    <li><a href="#">Action</a></li>
+                    <li><a href="#">Home</a></li>
                     <li><a href="#">Another </a></li>
                     <li><a href="#">Something</a></li>
-                    <li role="separator" class="divider"></li>
                     <li><a href="#">Separated</a></li>
                   </ul>
                 </li>
@@ -38,12 +39,109 @@
           </nav>
       </div>
 
-        <div class="container">
-          <h3>Basic Navbar Example</h3>
-          <p>A navigation bar is a navigation header that is placed at the top of the page.</p>
-        </div>
 
 
+
+      <div class="container-fluid" style="font-size: 0.5rem;">
+
+          <!-- this is here to test samples -->
+          <div class='card'>
+            <div class="card-header">
+              Table of {{blank}}s
+            </div>
+            <div class="card-body" style='padding:0.75rem 0.25rem'>
+              <table id="design_tab" class="hover row-border order-column">
+
+                <tbody>
+                  <tr>
+                    <td></td>
+                    <td>Tiger Nixon</td>
+                    <td style="float:right">
+                      <button class='btn nohover' style="height:24px; width:30px; padding:0; cursor:pointer">
+                        <i class="fa fa-cloud-download" style="color:grey; font-size:18px"></i>
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- test style -->
+          <style>
+          td.details-control {
+            background: url('https://datatables.net/examples/resources/details_open.png') no-repeat center center;
+            cursor: pointer;
+          }
+          tr.shown td.details-control {
+            background: url('https://datatables.net/examples/resources/details_close.png') no-repeat center center;
+          }
+          button:active {
+            border: 1px solid lightgreen;
+          }
+          </style>
+
+
+
+        <!-- test script -->
+        <script>
+          $(document).ready(function() {
+              var table = $('#design_tab').DataTable( {
+                  "lengthChange": false,
+                  "ordering": false,
+                  "info":     false,
+                  "columns": [ {
+                                  "className":      'details-control',
+                                  "orderable":      false,
+                                  "data":           null,
+                                  "defaultContent": ''},
+                                { "data": "name" },
+                                { "data": "link" },
+                                ],
+                  "order": [[ 1, 'asc' ]]
+              } );
+
+
+              // Add event listener for opening and closing details
+              $('#design_tab tbody').on('click', 'td.details-control', function () {
+                  var tr = $(this).closest('tr');
+                  var row = table.row( tr );
+
+                  if ( row.child.isShown() ) {
+                      // This row is already open - close it
+                      row.child.hide();
+                      tr.removeClass('shown');
+                  }
+                  else {
+                      // Open this row
+                      row.child( format(row.data()) ).show();
+                      tr.addClass('shown');
+                  }
+              } );
+          } );
+
+          /* Formatting function for row details - modify as you need */
+          function format ( ) {
+            // `d` is the original data object for the row
+            return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">'+
+                '<tr>'+
+                    '<td>Full name:</td>'+
+                    '<td>'+'{{something}}'+'</td>'+
+                '</tr>'+
+                '<tr>'+
+                    '<td>Extension number:</td>'+
+                    '<td>'+'{{someExtn}}'+'</td>'+
+                '</tr>'+
+                '<tr>'+
+                    '<td>Extra info:</td>'+
+                    '<td>And any further details here (images etc)...</td>'+
+                '</tr>'+
+            '</table>';
+          }
+
+        </script>
+
+      </div>
 
 
         <!-- using cdn to load js. easier than loading from locally if changes made -->
