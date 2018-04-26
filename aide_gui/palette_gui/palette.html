@@ -51,7 +51,13 @@
             </div>
             <div class="card-body" style='padding:0.75rem 0.25rem'>
               <table id="design_tab" class="hover row-border order-column">
-
+                <thead style='padding:0px'>
+                  <tr>
+                     <th></th>
+                     <th style='text-align:left; padding-left: 10px;'>Name</th>
+                     <th style='text-align:right; padding-right: 14px;'>Load</th>
+                  </tr>
+                </thead>
                 <tbody>
                   <tr>
                     <td></td>
@@ -69,6 +75,9 @@
 
           <!-- test style -->
           <style>
+          table.dataTable thead th, table.dataTable thead td{
+            padding:0;
+          }
           td.details-control {
             background: url('https://datatables.net/examples/resources/details_open.png') no-repeat center center;
             cursor: pointer;
