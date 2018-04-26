@@ -51,7 +51,7 @@ def load_yaml(fpath):
 # https://raw.githubusercontent.com/AguaClara/aide_gui/spring-2018/aide_gui/palette_docs/home/base.yaml
 with urllib.urlopen('https://raw.githubusercontent.com/AguaClara/aide_gui/spring-2018/aide_gui/palette_docs/home/base.yaml') as fp:
     yam = yaml.load(fp)
-    if (yam != None )
+    if yam != None
         data = yam
 
 # jinjafy given the path to the template
