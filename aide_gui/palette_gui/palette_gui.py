@@ -104,11 +104,9 @@ class ShowPaletteCommandExecuteHandler(adsk.core.CommandEventHandler):
                     jinjafied.write(result)
 
                 # let palette open the jinjafied.html
-<<<<<<< HEAD
-                palette = _ui.palettes.add('myPalette', 'My Palette', 'palette.html', True, True, True, 300, 200)
-=======
+
                 palette = _ui.palettes.add('myPalette', 'My Palette', 'jinjafied.html', True, True, True, 300, 200)
->>>>>>> 4dfceeaaa47348134a29c2e7007f71c8986e69a3
+
 
                 # Dock the palette to the right side of Fusion window.
                 palette.dockingState = adsk.core.PaletteDockingStates.PaletteDockStateRight
