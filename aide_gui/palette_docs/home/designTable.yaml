@@ -13,8 +13,18 @@ dropdown:
 
 table:
   # this will be a long list of this form below for each design
-  - name: Some-design-name
-    description: some-desing-description
+  - name: Some-design-1
+    description: some-desing-description1
+    image: some-link-for-design-image
+    src: some-link-to-template-yaml
+    action: template
+  - name: Some-design-2
+    description: some-desing-description2
+    image: some-link-for-design-image
+    src: some-link-to-template-yaml
+    action: template
+  - name: Some-design-3
+    description: some-design-description3
     image: some-link-for-design-image
     src: some-link-to-template-yaml
     action: template

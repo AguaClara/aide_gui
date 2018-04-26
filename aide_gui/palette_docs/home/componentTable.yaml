@@ -13,8 +13,18 @@ dropdown:
 
 table:
   # this will be a long list of this form below for each design
-  - name: Some-Component-name
-    description: some-component-description
+  - name: Some-Component-1
+    description: some-component-description1
+    image: some-link-for-component-image
+    src: some-link-to-template-yaml
+    action: template
+  - name: Some-Component-2
+    description: some-component-description2
+    image: some-link-for-component-image
+    src: some-link-to-template-yaml
+    action: template
+  - name: Some-Component-3
+    description: some-component-description3
     image: some-link-for-component-image
     src: some-link-to-template-yaml
     action: template
