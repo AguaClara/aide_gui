@@ -35,64 +35,39 @@
               </ul>
             </div>
           </nav>
+       </div>
+
+      <div class="container" style='font-size: 1rem; max-width: 18rem;'>
+
+
+      {% for field in fields  %}
+        {% for key, value in field.items() %}
+          {% if value.type == 'string' %}
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id='{{ key }}'>{{ value.name }}</span>
+              </div>
+              <input type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" value='{{ value.default }}'>
+            </div>
+            {% endif %}
+            {% if value.type == 'dropdown' %}
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <label class="input-group-text" for="{{ key }}">{{ value.name }}</label>
+              </div>
+              <select class="custom-select" id="{{ key }}">
+                {% for option in value.options %}
+                <option value='{{ option }}'>{{ option }}</option>
+                {% endfor %}
+              </select>
+            </div>
+          {% endif %}
+        {% endfor %}
+      {% endfor %}
+
       </div>
 
-        <div class="container" style='font-size: 1rem; max-width: 18rem;'>
-
-
-        <!-- Cards to be displayed -->
-          <div class="row">
-            <div class="col-lg-6 col-md-6 col-sm-6">
-              <div class="card border-dark mb-3">
-                <!-- <img class="card-img-top" src="..." alt="Card image cap"> -->
-                <div class="card-body">
-                  <h5 class="card-title">Plant Designs</h5>
-                  <p class="card-text">Designs for AguaClara Treatment Plants</p>
-                  <a href="#" class="btn btn-primary">Go to Designs</a>
-                </div>
-              </div>
-            </div>
-
-            <div class="col-lg-6 col-md-6 col-sm-6">
-              <div class="card border-dark mb-3">
-              <!-- <img class="card-img-top" src="..." alt="Card image cap"> -->
-                <div class="card-body">
-                  <h5 class="card-title">Plant Components</h5>
-                  <p class="card-text">Components</p>
-                  <a href="#" class="btn btn-primary">Go to Components</a>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="col-lg-6 col-md-6 col-sm-6">
-              <div class="card border-dark mb-3">
-              <!-- <img class="card-img-top" src="..." alt="Card image cap"> -->
-                <div class="card-body">
-                  <h5 class="card-title">AguaClara Website</h5>
-                  <p class="card-text">Website.</p>
-                  <a href="#" class="btn btn-primary">Go to Website</a>
-                </div>
-              </div>
-            </div>
-
-            <div class="col-lg-6 col-md-6 col-sm-6">
-              <div class="card border-dark mb-3">
-              <!-- <img class="card-img-top" src="..." alt="Card image cap"> -->
-                <div class="card-body">
-                  <h5 class="card-title">Github</h5>
-                  <p class="card-text">Github.</p>
-                  <a href="#" class="btn btn-primary">Go to Github</a>
-                </div>
-              </div>
-            </div>
-          </div>
-
-        </div>
-
-
-        <!-- using cdn to load js. easier than loading from locally if changes made -->
-        <script type="text/javascript"src="https://cdn.rawgit.com/AguaClara/aide_gui/spring-2018/aide_gui/palette_gui/palette.js"></script>
-    </body>
+      <!-- using cdn to load js. easier than loading from locally if changes made -->
+      <script type="text/javascript"src="https://cdn.rawgit.com/AguaClara/aide_gui/spring-2018/aide_gui/palette_gui/palette.js"></script>
+  </body>
 </html>
