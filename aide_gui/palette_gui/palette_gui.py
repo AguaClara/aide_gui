@@ -9,16 +9,56 @@ import yaml
 def abs_path(file_path):
     return os.path.join(os.path.dirname(inspect.getfile(sys._getframe(1))), file_path)
 
+def load_yaml(fpath):
+    """
+    Returns a yaml form structure or None, if error occurred
+
+    Parameters
+    ----------
+    fpath: str
+        The local file path/URL for the yaml to be retrieved from
+
+    Return
+    --------
+    yam: dict
+        A dictionary thats extrapolated from yaml format
+    """
+    # If yaml is retrieved from user's local path
+    try:
+        with open(abs_path(fpath)) as fp:
+            yam = yaml.load(fp)
+            if (type(yam) != list and type(yam) != dict):
+                raise Exception('This is not a YAML')
+            return  yam
+    except:
+        # If yaml is retrieved from a given url
+        try:
+            url = fpath.strip()
+            http = urllib3.PoolManager()
+            r = http.request('GET', url)
+            status = r.status # check URL status
+            if (status != 200):
+                raise Exception('This is not a URL')
+            yam =  yaml.load(r.data.decode('utf-8'))
+            return yam
+        except:
+            if _ui:
+                _ui.messageBox('Not a YAML or URL \nPlease provide a correct form.')
+            return None
+
 
 # Create a yaml form structure in global called data
-with open(abs_path("new_form.yaml")) as fp:
-    data = yaml.load(fp)
+# https://raw.githubusercontent.com/AguaClara/aide_gui/spring-2018/aide_gui/palette_docs/home/base.yaml
+with urllib.urlopen('https://raw.githubusercontent.com/AguaClara/aide_gui/spring-2018/aide_gui/palette_docs/home/base.yaml') as fp:
+    yam = yaml.load(fp)
+    if (yam != None )
+        data = yam
 
 # jinjafy given the path to the template
 def render(template_path, context):
     path, filename = os.path.split(abs_path(template_path))
     return Environment(
-        loader=FileSystemLoader(path or './')
+        loader = FileSystemLoader(path or './')
     ).get_template(filename).render(context)
 
 
@@ -57,14 +97,14 @@ class ShowPaletteCommandExecuteHandler(adsk.core.CommandEventHandler):
                     'fields': data
                 }
                 # render the dictionary values onto the html file
-                # result = render('base.html', context)
+                result = render('base.html', context)
 
-                # # create a local html file, with jinjafied values
-                # with open(abs_path("palette.html"), 'w') as jinjafied:
-                #     jinjafied.write(result)
+                # create a local html file, with jinjafied values
+                with open(abs_path("jinjafied.html"), 'w') as jinjafied:
+                    jinjafied.write(result)
 
                 # let palette open the jinjafied.html
-                palette = _ui.palettes.add('myPalette', 'My Palette', 'base.html', True, True, True, 300, 200)
+                palette = _ui.palettes.add('myPalette', 'My Palette', 'jinjafied.html', True, True, True, 300, 200)
 
                 # Dock the palette to the right side of Fusion window.
                 palette.dockingState = adsk.core.PaletteDockingStates.PaletteDockStateRight
