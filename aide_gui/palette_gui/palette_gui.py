@@ -47,9 +47,10 @@ def load_yaml(fpath):
                 _ui.messageBox('Not a YAML or URL \nPlease provide a correct form.')
             return None
 
-link= 'https://raw.githubusercontent.com/AguaClara/aide_gui/spring-2018/aide_gui/palette_docs/home/base.yaml'
-
-data=load_yaml(link)
+link_base= 'https://raw.githubusercontent.com/AguaClara/aide_gui/spring-2018/aide_gui/palette_docs/home/base.yaml'
+link_design='https://raw.githubusercontent.com/AguaClara/aide_gui/spring-2018/aide_gui/palette_docs/home/designTable.yaml'
+link_comp='https://raw.githubusercontent.com/AguaClara/aide_gui/spring-2018/aide_gui/palette_docs/home/componentTable.yaml'
+data=load_yaml(link_design)
 
 
 
@@ -92,7 +93,7 @@ class ShowPaletteCommandExecuteHandler(adsk.core.CommandEventHandler):
             if not palette:
                 context = {'fields': data}
                 # render the dictionary values onto the html file
-                result = render('base.html', context)
+                result = render('table.html', context)
 
                 # create a local html file, with jinjafied values
                 with open(abs_path("jinjafied.html"), 'w') as jinjafied:

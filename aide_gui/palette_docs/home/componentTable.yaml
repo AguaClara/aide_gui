@@ -10,7 +10,7 @@ dropdown:
     src: some-link-to-another-yaml-raw-file
     action: table
 # this section above will be in every yaml
-
+template: Component
 table:
   # this will be a long list of this form below for each design
   - name: Some-Component-1
