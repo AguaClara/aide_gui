@@ -3,7 +3,8 @@ import adsk.core, adsk.fusion, adsk.cam, traceback
 # add the path to local library
 sys.path.append("/Users/eldorbekpualtov/Desktop/AguaClara/aide_gui/aide_gui/palette_gui")
 from jinja2 import Template, Environment, FileSystemLoader
-import yaml
+from . import yaml
+from . import urllib3
 
 # returns absolute path
 def abs_path(file_path):
@@ -46,13 +47,11 @@ def load_yaml(fpath):
                 _ui.messageBox('Not a YAML or URL \nPlease provide a correct form.')
             return None
 
+link= 'https://raw.githubusercontent.com/AguaClara/aide_gui/spring-2018/aide_gui/palette_docs/home/base.yaml'
 
-# Create a yaml form structure in global called data
-# https://raw.githubusercontent.com/AguaClara/aide_gui/spring-2018/aide_gui/palette_docs/home/base.yaml
-with urllib.urlopen('https://raw.githubusercontent.com/AguaClara/aide_gui/spring-2018/aide_gui/palette_docs/home/base.yaml') as fp:
-    yam = yaml.load(fp)
-    if yam != None:
-        data = yam
+data=load_yaml(link)
+
+
 
 # jinjafy given the path to the template
 def render(template_path, context):
@@ -91,11 +90,7 @@ class ShowPaletteCommandExecuteHandler(adsk.core.CommandEventHandler):
             # Create and display the palette.
             palette = _ui.palettes.itemById('myPalette')
             if not palette:
-
-                # before palette is created make a dictionary to pass onto HTML
-                context = {
-                    'fields': data
-                }
+                context = {'fields': data}
                 # render the dictionary values onto the html file
                 result = render('base.html', context)
 

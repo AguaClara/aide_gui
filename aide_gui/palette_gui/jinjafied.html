@@ -30,9 +30,13 @@
                   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
                   <ul class="dropdown-menu dropdown-menu-right" style="position:absolute; font-size: 0.7rem; min-width: 4.5rem; max-width:5rem; padding-left:0.15rem;">
 
-                    {% for drop in fields.dropdown %}
-                      <li><a href="{{drop.src}}">{{drop.name}}</a></li>
-                    {% endfor %}
+                    
+                      <li><a href="some-link-to-another-yaml-raw-file">Home</a></li>
+                    
+                      <li><a href="some-link-to-another-yaml-raw-file">Designs</a></li>
+                    
+                      <li><a href="some-link-to-another-yaml-raw-file">Components</a></li>
+                    
 
                   </ul>
                 </li>
@@ -43,21 +47,63 @@
 
         <div class="container" style='font-size: 1rem; max-width: 18rem;'>
 
-        {% for card in fields.card %}
+        
         <!-- Cards to be displayed -->
           <div class="row">
             <div class="col-lg-6 col-md-6 col-sm-6">
               <div class="card border-dark mb-3">
                 <!-- <img class="card-img-top" src="..." alt="Card image cap"> -->
                 <div class="card-body">
-                  <h5 class="card-title">{{card.name}}</h5>
-                  <p class="card-text">{{card.description}}</p>
-                  <a href="{{card.src}}" class="btn btn-primary">Go to {{card.name}}</a>
+                  <h5 class="card-title">Designs</h5>
+                  <p class="card-text">some-description-about-designs</p>
+                  <a href="some-link-to-another-yaml-raw-file" class="btn btn-primary">Go to Designs</a>
                 </div>
               </div>
             </div>
           </div>
-          {% endfor %}
+          
+        <!-- Cards to be displayed -->
+          <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-6">
+              <div class="card border-dark mb-3">
+                <!-- <img class="card-img-top" src="..." alt="Card image cap"> -->
+                <div class="card-body">
+                  <h5 class="card-title">Components</h5>
+                  <p class="card-text">Some-description-about-components</p>
+                  <a href="some-link-to-another-yaml-raw-file" class="btn btn-primary">Go to Components</a>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+        <!-- Cards to be displayed -->
+          <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-6">
+              <div class="card border-dark mb-3">
+                <!-- <img class="card-img-top" src="..." alt="Card image cap"> -->
+                <div class="card-body">
+                  <h5 class="card-title">GitHub</h5>
+                  <p class="card-text">Some-description-about-gitpage</p>
+                  <a href="some-link-to-another-yaml-raw-file" class="btn btn-primary">Go to GitHub</a>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+        <!-- Cards to be displayed -->
+          <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-6">
+              <div class="card border-dark mb-3">
+                <!-- <img class="card-img-top" src="..." alt="Card image cap"> -->
+                <div class="card-body">
+                  <h5 class="card-title">AguaClara Website</h5>
+                  <p class="card-text">Some-description-about-aguasite</p>
+                  <a href="some-link-to-another-yaml-raw-file" class="btn btn-primary">Go to AguaClara Website</a>
+                </div>
+              </div>
+            </div>
+          </div>
+          
 
         </div>
 
