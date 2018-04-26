@@ -1,0 +1,22 @@
+---
+dropdown:
+  - name: Home
+    src: some-link-to-another-yaml-raw-file
+    action: home
+  - name: Designs
+    src: some-link-to-another-yaml-raw-file
+    action: table
+  - name: Components
+    src: some-link-to-another-yaml-raw-file
+    action: table
+# this section above will be in every yaml
+
+table:
+  # this will be a long list of this form below for each design
+  - name: Some-Component-name
+    description: some-component-description
+    image: some-link-for-component-image
+    src: some-link-to-template-yaml
+    action: template
+
+...
