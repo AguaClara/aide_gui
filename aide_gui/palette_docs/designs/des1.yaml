@@ -16,7 +16,7 @@ template:
   name: Some-design-name
   description: some-description
   image: some-image-raw-link
-  fields:
+  params:
     - flow_rate:
         name : Flow Rate (L/s)
         default : 34

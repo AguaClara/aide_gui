@@ -43,7 +43,7 @@
 
 
 
-    <div class="container-fluid" style="font-size: 0.5rem;">
+    <div class="container-fluid" style="font-size: 0.6rem;">
 
         <!-- this is here to test samples -->
         <div class='card'>
@@ -60,15 +60,17 @@
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td></td>
-                  <td>Tiger Nixon</td>
-                  <td style="float:right">
-                    <button class='btn nohover' style="height:24px; width:30px; padding:0; cursor:pointer">
-                      <i class="fa fa-cloud-download" style="color:grey; font-size:18px"></i>
-                    </button>
-                  </td>
-                </tr>
+                {% for design in fields.table %}
+                  <tr data="{{design}}">
+                    <td></td>
+                    <td>{{design.name}}</td>
+                    <td style='text-align: right;'>
+                      <button class='btn nohover' style="height:24px; width:30px; padding:0; cursor:pointer">
+                        <i class="fa fa-cloud-download" style="color:grey; font-size:18px"></i>
+                      </button>
+                    </td>
+                  </tr>
+                {% endfor %}
               </tbody>
             </table>
           </div>
@@ -100,13 +102,14 @@
                 "lengthChange": false,
                 "ordering": false,
                 "info":     false,
-                "columns": [ {
-                                "className":      'details-control',
-                                "orderable":      false,
-                                "data":           null,
-                                "defaultContent": ''},
-                              { "data": "name" },
-                              { "data": "link" },
+                "columns": [
+                              {"className"      :   'details-control',
+                                "orderable"     :   true,
+                                "defaultContent":   ''  },
+
+                              { "className"     :   "name" },
+
+                              { "className"     :   "load" },
                               ],
                 "order": [[ 1, 'asc' ]]
             } );
@@ -116,6 +119,9 @@
             $('#design_tab tbody').on('click', 'td.details-control', function () {
                 var tr = $(this).closest('tr');
                 var row = table.row( tr );
+                var data = JSON.parse(tr[0].getAttribute("data").replace(/'/g, '"'));
+
+                // console.log(data);
 
                 if ( row.child.isShown() ) {
                     // This row is already open - close it
@@ -124,27 +130,27 @@
                 }
                 else {
                     // Open this row
-                    row.child( format(row.data()) ).show();
+                    row.child( format(data) ).show();
                     tr.addClass('shown');
                 }
             } );
         } );
 
         /* Formatting function for row details - modify as you need */
-        function format ( ) {
-          // `d` is the original data object for the row
-          return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">'+
+        function format (data) {
+          console.log(data);
+          return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px; width:100%;">'+
               '<tr>'+
-                  '<td>Full name:</td>'+
-                  '<td>'+'{{something}}'+'</td>'+
+                  '<td>Name:</td>'+
+                  '<td>'+data.name+'</td>'+
               '</tr>'+
               '<tr>'+
-                  '<td>Extension number:</td>'+
-                  '<td>'+'{{someExtn}}'+'</td>'+
+                  '<td>Detail:</td>'+
+                  '<td>'+data.description+'</td>'+
               '</tr>'+
               '<tr>'+
-                  '<td>Extra info:</td>'+
-                  '<td>And any further details here (images etc)...</td>'+
+                  '<td>Image:</td>'+
+                  '<td><img class="" src="'+data.src+'"></td>'+
               '</tr>'+
           '</table>';
         }

@@ -6,10 +6,26 @@ from jinja2 import Template, Environment, FileSystemLoader
 from . import yaml
 from . import urllib3
 
+
+# global set of event handlers to keep them referenced for the duration of the command
+handlers = []
+_app = adsk.core.Application.cast(None)
+_ui = adsk.core.UserInterface.cast(None)
+
+
+
 # returns absolute path
 def abs_path(file_path):
     return os.path.join(os.path.dirname(inspect.getfile(sys._getframe(1))), file_path)
 
+# jinjafy given the path to the template
+def render(template_path, context):
+    path, filename = os.path.split(abs_path(template_path))
+    return Environment(
+        loader = FileSystemLoader(path or './')
+    ).get_template(filename).render(context)
+
+# load yaml from online path
 def load_yaml(fpath):
     """
     Returns a yaml form structure or None, if error occurred
@@ -47,26 +63,13 @@ def load_yaml(fpath):
                 _ui.messageBox('Not a YAML or URL \nPlease provide a correct form.')
             return None
 
-link_base= 'https://raw.githubusercontent.com/AguaClara/aide_gui/spring-2018/aide_gui/palette_docs/home/base.yaml'
-link_design='https://raw.githubusercontent.com/AguaClara/aide_gui/spring-2018/aide_gui/palette_docs/home/designTable.yaml'
-link_comp='https://raw.githubusercontent.com/AguaClara/aide_gui/spring-2018/aide_gui/palette_docs/home/componentTable.yaml'
-data=load_yaml(link_design)
+link_base = 'https://raw.githubusercontent.com/AguaClara/aide_gui/spring-2018/aide_gui/palette_docs/home/base.yaml'
+link_design_tab = 'https://raw.githubusercontent.com/AguaClara/aide_gui/spring-2018/aide_gui/palette_docs/home/designTable.yaml'
+link_comp_tab = 'https://raw.githubusercontent.com/AguaClara/aide_gui/spring-2018/aide_gui/palette_docs/home/componentTable.yaml'
+link_design = 'https://raw.githubusercontent.com/AguaClara/aide_gui/spring-2018/aide_gui/palette_docs/designs/des1.yaml'
+link_comp = 'https://raw.githubusercontent.com/AguaClara/aide_gui/spring-2018/aide_gui/palette_docs/components/comp1.yaml'
+data=load_yaml(link_comp)
 
-
-
-# jinjafy given the path to the template
-def render(template_path, context):
-    path, filename = os.path.split(abs_path(template_path))
-    return Environment(
-        loader = FileSystemLoader(path or './')
-    ).get_template(filename).render(context)
-
-
-
-# global set of event handlers to keep them referenced for the duration of the command
-handlers = []
-_app = adsk.core.Application.cast(None)
-_ui = adsk.core.UserInterface.cast(None)
 
 
 # Event handler for the commandCreated event.
@@ -93,7 +96,7 @@ class ShowPaletteCommandExecuteHandler(adsk.core.CommandEventHandler):
             if not palette:
                 context = {'fields': data}
                 # render the dictionary values onto the html file
-                result = render('table.html', context)
+                result = render('template.html', context)
 
                 # create a local html file, with jinjafied values
                 with open(abs_path("jinjafied.html"), 'w') as jinjafied:
@@ -154,7 +157,7 @@ class SendInfoCommandExecuteHandler(adsk.core.CommandEventHandler):
             # Send information to the palette.
             palette = _ui.palettes.itemById('myPalette')
             if palette:
-                # we need to figure out how incorporate jinja2 here
+                # here we replaced some terms so JSON in js recognizes the form
                 palette.sendInfoToHTML('send', str(data).replace("'", '"').replace("None", 'null'))
         except:
             _ui.messageBox('Command executed failed: {}'.format(traceback.format_exc()))
