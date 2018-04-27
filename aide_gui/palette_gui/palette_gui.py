@@ -68,7 +68,7 @@ link_design_tab = 'https://raw.githubusercontent.com/AguaClara/aide_gui/spring-2
 link_comp_tab = 'https://raw.githubusercontent.com/AguaClara/aide_gui/spring-2018/aide_gui/palette_docs/home/componentTable.yaml'
 link_design = 'https://raw.githubusercontent.com/AguaClara/aide_gui/spring-2018/aide_gui/palette_docs/designs/des1.yaml'
 link_comp = 'https://raw.githubusercontent.com/AguaClara/aide_gui/spring-2018/aide_gui/palette_docs/components/comp1.yaml'
-data=load_yaml(link_comp)
+data=load_yaml(link_design)
 
 
 

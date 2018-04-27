@@ -43,10 +43,12 @@
 
       <div class="container" style='font-size: 1rem; max-width: 18rem;'>
         <div class='card'>
+          <img class="card-img-top" style='height:10rem; width: 100%;' src="{{fields.template.image}}" alt="Card image cap">
           <div class="card-header">
             {{fields.template.name}}
+            <div class='text-muted' style='font-size:0.6rem'>{{fields.template.description}}</div>
           </div>
-          <div class="card-body" style='padding:0.75rem 0.25rem'>
+          <div class="card-body" style='padding:0.75rem 0.75rem;'>
 
               {% for param in fields.template.params  %}
                 {% for key, value in param.items() %}
@@ -63,7 +65,7 @@
                       <div class="input-group-prepend">
                         <label class="input-group-text" for="{{ key }}">{{ value.name }}</label>
                       </div>
-                      <select class="custom-select" id="{{ key }}">
+                      <select class="custom-select" style="font-size:0.7rem;" id="{{ key }}">
                         {% for option in value.options %}
                         <option value='{{ option }}'>{{ option }}</option>
                         {% endfor %}
@@ -73,8 +75,16 @@
                 {% endfor %}
               {% endfor %}
 
+              <button type='button' class='btn btn-primary btn-lg btn-block' style='padding:0; font-size:1rem;' onclick='sendInfoToFusion()'>Collect</button>
+
             </div>
           </div>
+
+          <style>
+          .input-group-text, .form-control{
+            font-size: 0.7rem;
+          }
+          </style>
         </div>
 
 
