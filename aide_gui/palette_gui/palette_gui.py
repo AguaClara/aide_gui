@@ -68,7 +68,7 @@ link_design_tab = 'https://raw.githubusercontent.com/AguaClara/aide_gui/spring-2
 link_comp_tab = 'https://raw.githubusercontent.com/AguaClara/aide_gui/spring-2018/aide_gui/palette_docs/home/componentTable.yaml'
 link_design = 'https://raw.githubusercontent.com/AguaClara/aide_gui/spring-2018/aide_gui/palette_docs/designs/des1.yaml'
 link_comp = 'https://raw.githubusercontent.com/AguaClara/aide_gui/spring-2018/aide_gui/palette_docs/components/comp1.yaml'
-data=load_yaml(link_design)
+data=load_yaml(link_base)
 
 
 
@@ -96,7 +96,7 @@ class ShowPaletteCommandExecuteHandler(adsk.core.CommandEventHandler):
             if not palette:
                 context = {'fields': data}
                 # render the dictionary values onto the html file
-                result = render('template.html', context)
+                result = render('base.html', context)
 
                 # create a local html file, with jinjafied values
                 with open(abs_path("jinjafied.html"), 'w') as jinjafied:
