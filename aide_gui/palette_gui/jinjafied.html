@@ -30,6 +30,12 @@
                 <ul class="dropdown-menu dropdown-menu-right" style="position:absolute; font-size: 0.7rem; min-width: 4.5rem; max-width:5rem; padding-left:0.15rem;">
 
                   
+                    <li><a href='javascript:sendInfoToFusion("home","https://raw.githubusercontent.com/AguaClara/aide_gui/spring-2018/aide_gui/palette_docs/home/base.yaml")'>Home</a></li>
+                  
+                    <li><a href='javascript:sendInfoToFusion("table","https://raw.githubusercontent.com/AguaClara/aide_gui/spring-2018/aide_gui/palette_docs/home/designTable.yaml")'>Designs</a></li>
+                  
+                    <li><a href='javascript:sendInfoToFusion("table","https://raw.githubusercontent.com/AguaClara/aide_gui/spring-2018/aide_gui/palette_docs/home/componentTable.yaml")'>Components</a></li>
+                  
 
                 </ul>
               </li>
@@ -45,7 +51,7 @@
         <!-- this is here to test samples -->
         <div class='card'>
           <div class="card-header" style="font-size: 0.8rem;">
-            Table of s
+            Table of Designs
           </div>
           <div class="card-body" style='padding:0.75rem 0.25rem'>
             <table id="design_tab" class="hover row-border order-column">
@@ -57,6 +63,36 @@
                 </tr>
               </thead>
               <tbody>
+                
+                  <tr data="{'src': 'some-link-to-template-yaml', 'name': 'Some-design-1', 'action': 'template', 'description': 'some-desing-description1', 'image': 'some-link-for-design-image'}">
+                    <td></td>
+                    <td>Some-design-1</td>
+                    <td style='text-align: right;'>
+                      <button class='btn nohover' style="height:24px; width:30px; padding:0; cursor:pointer">
+                        <i class="fa fa-cloud-download" style="color:grey; font-size:18px"></i>
+                      </button>
+                    </td>
+                  </tr>
+                
+                  <tr data="{'src': 'some-link-to-template-yaml', 'name': 'Some-design-2', 'action': 'template', 'description': 'some-desing-description2', 'image': 'some-link-for-design-image'}">
+                    <td></td>
+                    <td>Some-design-2</td>
+                    <td style='text-align: right;'>
+                      <button class='btn nohover' style="height:24px; width:30px; padding:0; cursor:pointer">
+                        <i class="fa fa-cloud-download" style="color:grey; font-size:18px"></i>
+                      </button>
+                    </td>
+                  </tr>
+                
+                  <tr data="{'src': 'some-link-to-template-yaml', 'name': 'Some-design-3', 'action': 'template', 'description': 'some-design-description3', 'image': 'some-link-for-design-image'}">
+                    <td></td>
+                    <td>Some-design-3</td>
+                    <td style='text-align: right;'>
+                      <button class='btn nohover' style="height:24px; width:30px; padding:0; cursor:pointer">
+                        <i class="fa fa-cloud-download" style="color:grey; font-size:18px"></i>
+                      </button>
+                    </td>
+                  </tr>
                 
               </tbody>
             </table>

@@ -19,15 +19,5 @@ table:
     image: some-link-for-design-image
     src: some-link-to-template-yaml
     action: template
-  - name: Some-design-2
-    description: some-desing-description2
-    image: some-link-for-design-image
-    src: some-link-to-template-yaml
-    action: template
-  - name: Some-design-3
-    description: some-design-description3
-    image: some-link-for-design-image
-    src: some-link-to-template-yaml
-    action: template
 
 ...

@@ -19,15 +19,5 @@ table:
     image: some-link-for-component-image
     src: some-link-to-template-yaml
     action: template
-  - name: Some-Component-2
-    description: some-component-description2
-    image: some-link-for-component-image
-    src: some-link-to-template-yaml
-    action: template
-  - name: Some-Component-3
-    description: some-component-description3
-    image: some-link-for-component-image
-    src: some-link-to-template-yaml
-    action: template
 
 ...
