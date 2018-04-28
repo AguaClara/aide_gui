@@ -27,8 +27,8 @@ card:
     image: https://raw.githubusercontent.com/AguaClara/aide_gui/spring-2018/aide_gui/palette_docs/home/GitHub-Mark.jpg
     src: https://github.com/AguaClara
     action: web
-  - name: AguaClara Website
-    description: Visit our official website to see our vision. 
+  - name: Our Website
+    description: Visit our official website to see our vision.
     image: https://raw.githubusercontent.com/AguaClara/aide_gui/spring-2018/aide_gui/palette_docs/home/website.png
     src: http://aguaclara.cornell.edu
     action: web
