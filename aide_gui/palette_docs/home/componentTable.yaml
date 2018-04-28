@@ -14,10 +14,10 @@ dropdown:
 template: Component
 table:
   # this will be a long list of this form below for each design
-  - name: Some-Component-1
-    description: some-component-description1
-    image: some-link-for-component-image
-    src: some-link-to-template-yaml
+  - name: Sedimentation Tank
+    description: Sedimentation tank is part of the treatment plant. It is used to let the clay particles settle.
+    image: http://news.cornell.edu/sites/chronicle.cornell/files/water2.jpg
+    src: https://raw.githubusercontent.com/AguaClara/aide_gui/spring-2018/aide_gui/palette_docs/components/comp1.yaml
     action: template
 
 ...
