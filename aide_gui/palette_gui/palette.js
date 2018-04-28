@@ -3,7 +3,6 @@ function sendInfoToFusion(action, src){
         type: action,
         link: src
     };
-    console.log(command)
     adsk.fusionSendData('send', JSON.stringify(command));
 }
 

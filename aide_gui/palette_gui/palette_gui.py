@@ -63,12 +63,26 @@ def load_yaml(fpath):
                 _ui.messageBox('Not a YAML or URL \nPlease provide a correct form.')
             return None
 
-link_base = 'https://raw.githubusercontent.com/AguaClara/aide_gui/spring-2018/aide_gui/palette_docs/home/base.yaml'
-link_design_tab = 'https://raw.githubusercontent.com/AguaClara/aide_gui/spring-2018/aide_gui/palette_docs/home/designTable.yaml'
-link_comp_tab = 'https://raw.githubusercontent.com/AguaClara/aide_gui/spring-2018/aide_gui/palette_docs/home/componentTable.yaml'
-link_design = 'https://raw.githubusercontent.com/AguaClara/aide_gui/spring-2018/aide_gui/palette_docs/designs/des1.yaml'
-link_comp = 'https://raw.githubusercontent.com/AguaClara/aide_gui/spring-2018/aide_gui/palette_docs/components/comp1.yaml'
-data=load_yaml(link_base)
+
+def jinjafy(command):
+    data=load_yaml(command["link"])
+    context = {'fields': data}
+
+    htmlFile='error.html'
+
+    if command["type"] == 'home':
+        htmlFile='base.html'
+    elif command["type"] == 'table':
+        htmlFile='table.html'
+    elif command["type"] == 'template':
+        htmlFile='template.html'
+
+    # render the dictionary values onto the html file
+    result = render(htmlFile, context)
+
+    # create a local html file, with jinjafied values
+    with open(abs_path("jinjafied.html"), 'w') as jinjafied:
+        jinjafied.write(result)
 
 
 
@@ -91,21 +105,20 @@ class ShowPaletteCommandExecuteHandler(adsk.core.CommandEventHandler):
         super().__init__()
     def notify(self, args):
         try:
-            # Create and display the palette.
+            # Create or display the palette.
             palette = _ui.palettes.itemById('myPalette')
             if not palette:
-                context = {'fields': data}
-                # render the dictionary values onto the html file
-                result = render('base.html', context)
 
-                # create a local html file, with jinjafied values
-                with open(abs_path("jinjafied.html"), 'w') as jinjafied:
-                    jinjafied.write(result)
+                link_base = 'https://raw.githubusercontent.com/AguaClara/aide_gui/spring-2018/aide_gui/palette_docs/home/base.yaml'
+                command={
+                    'type' : 'home',
+                    'link' : link_base
+                }
+                # if there was no palette then open homepage
+                jinjafy(command)
 
                 # let palette open the jinjafied.html
-
                 palette = _ui.palettes.add('myPalette', 'My Palette', 'jinjafied.html', True, True, True, 300, 200)
-
 
                 # Dock the palette to the right side of Fusion window.
                 palette.dockingState = adsk.core.PaletteDockingStates.PaletteDockStateRight
@@ -129,8 +142,12 @@ class MyHTMLEventHandler(adsk.core.HTMLEventHandler):
             htmlArgs = adsk.core.HTMLEventArgs.cast(args)
             incoming = json.loads(htmlArgs.data)
             # data is what is being sent from pallete in json form
-            print(incoming)
-            
+
+            palette = _ui.palettes.itemById('myPalette')
+            jinjafy(incoming)
+            # Set the html of the property.
+            palette.htmlFileURL = 'jinjafied.html'
+
         except:
             _ui.messageBox('Failed:\n{}'.format(traceback.format_exc()))
 
