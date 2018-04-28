@@ -1,5 +1,5 @@
 ---
-dropdown: 
+dropdown:
   - name: Home
     src: https://raw.githubusercontent.com/AguaClara/aide_gui/spring-2018/aide_gui/palette_docs/home/base.yaml
     action: home
@@ -24,7 +24,7 @@ card:
     action: table
   - name: GitHub
     description: Some-description-about-gitpage
-    image: https://raw.githubusercontent.com/AguaClara/aide_gui/spring-2018/aide_gui/palette_docs/home/GitHub-Mark.png
+    image: https://raw.githubusercontent.com/AguaClara/aide_gui/spring-2018/aide_gui/palette_docs/home/GitHub-Mark.jpg
     src: https://github.com/AguaClara
     action: web
   - name: AguaClara Website
