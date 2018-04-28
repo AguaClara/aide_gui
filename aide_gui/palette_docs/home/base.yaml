@@ -13,22 +13,22 @@ dropdown:
 
 card:
   - name: Designs
-    description: some-description-about-designs
+    description: Get access to the latest water treatment designs deveoped in Cornell University.
     image: https://raw.githubusercontent.com/AguaClara/aide_gui/spring-2018/aide_gui/palette_docs/home/design.png
     src: https://raw.githubusercontent.com/AguaClara/aide_gui/spring-2018/aide_gui/palette_docs/home/designTable.yaml
     action: table
   - name: Components
-    description: Some-description-about-components
+    description: Get Access to the individual components of the water treatment Plant.
     image: https://raw.githubusercontent.com/AguaClara/aide_gui/spring-2018/aide_gui/palette_docs/home/component.png
     src: https://raw.githubusercontent.com/AguaClara/aide_gui/spring-2018/aide_gui/palette_docs/home/componentTable.yaml
     action: table
   - name: GitHub
-    description: Some-description-about-gitpage
+    description: Check out our GitHub page for the latest developments. Full access to all AguaClara resources.
     image: https://raw.githubusercontent.com/AguaClara/aide_gui/spring-2018/aide_gui/palette_docs/home/GitHub-Mark.jpg
     src: https://github.com/AguaClara
     action: web
   - name: AguaClara Website
-    description: Some-description-about-aguasite
+    description: Visit our official website to see our vision. 
     image: https://raw.githubusercontent.com/AguaClara/aide_gui/spring-2018/aide_gui/palette_docs/home/website.png
     src: http://aguaclara.cornell.edu
     action: web
