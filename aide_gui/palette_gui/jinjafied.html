@@ -17,172 +17,103 @@
     </head>
     <body>
 
+        <div class='col-lg-12 col-md-12 col-sm-12 col-xs-12' style='padding:0; font-weight: 200; font-size: 0.7rem; padding-bottom: 0.5rem;'>
+          <nav class="navbar navbar-default"  style='padding:0;'>
+            <div class="container-fluid">
+              <div class="navbar-header">
+                <a class="navbar-brand" href="#">AguaClara</a>
+              </div>
+              <ul class="nav navbar-nav navbar-left">
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
+                  <ul class="dropdown-menu dropdown-menu-right" style="position:absolute; font-size: 0.7rem; min-width: 4.5rem; max-width:5rem; padding-left:0.15rem;">
 
-      <div class='col-lg-12 col-md-12 col-sm-12 col-xs-12' style='padding:0; font-weight: 200; font-size: 0.7rem; padding-bottom: 0.5rem;'>
-        <nav class="navbar navbar-default"  style='padding:0;'>
-          <div class="container-fluid">
-            <div class="navbar-header">
-              <a class="navbar-brand" href="#">AguaClara</a>
+                    
+                      <li><a href='javascript:sendInfoToFusion("home","https://raw.githubusercontent.com/AguaClara/aide_gui/spring-2018/aide_gui/palette_docs/home/base.yaml")'>Home</a></li>
+                    
+                      <li><a href='javascript:sendInfoToFusion("table","https://raw.githubusercontent.com/AguaClara/aide_gui/spring-2018/aide_gui/palette_docs/home/designTable.yaml")'>Designs</a></li>
+                    
+                      <li><a href='javascript:sendInfoToFusion("table","https://raw.githubusercontent.com/AguaClara/aide_gui/spring-2018/aide_gui/palette_docs/home/componentTable.yaml")'>Components</a></li>
+                    
+
+                  </ul>
+                </li>
+              </ul>
             </div>
-            <ul class="nav navbar-nav navbar-left">
-              <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
-                <ul class="dropdown-menu dropdown-menu-right" style="position:absolute; font-size: 0.7rem; min-width: 4.5rem; max-width:5rem; padding-left:0.15rem;">
-
-                  
-                    <li><a href='javascript:sendInfoToFusion("home","https://raw.githubusercontent.com/AguaClara/aide_gui/spring-2018/aide_gui/palette_docs/home/base.yaml")'>Home</a></li>
-                  
-                    <li><a href='javascript:sendInfoToFusion("table","https://raw.githubusercontent.com/AguaClara/aide_gui/spring-2018/aide_gui/palette_docs/home/designTable.yaml")'>Designs</a></li>
-                  
-                    <li><a href='javascript:sendInfoToFusion("table","https://raw.githubusercontent.com/AguaClara/aide_gui/spring-2018/aide_gui/palette_docs/home/componentTable.yaml")'>Components</a></li>
-                  
-
-                </ul>
-              </li>
-            </ul>
-          </div>
-        </nav>
+          </nav>
       </div>
 
+        <div class="container" style='font-size: 1rem; max-width: 18rem;'>
 
-
-    <div class="container-fluid" style="font-size: 0.6rem;">
-
-        <!-- this is here to test samples -->
-        <div class='card'>
-          <div class="card-header" style="font-size: 0.8rem;">
-            Table of Designs
+        
+        <!-- Cards to be displayed -->
+          <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-6">
+              <div class="card border-dark mb-3">
+                <img class="card-img-top" src="https://raw.githubusercontent.com/AguaClara/aide_gui/spring-2018/aide_gui/palette_docs/home/design.png" style='height:9rem; width:100%;' alt="Card image cap">
+                <div class="card-body" style="padding:1rem;">
+                  <h5 class="card-title">Designs</h5>
+                  <p class="card-text text-muted" style="font-size:0.8rem;">some-description-about-designs</p>
+                  
+                    <button type='button' class="btn btn-primary" onclick='sendInfoToFusion("table", "https://raw.githubusercontent.com/AguaClara/aide_gui/spring-2018/aide_gui/palette_docs/home/designTable.yaml")'>Go to Designs</button>
+                  
+                </div>
+              </div>
+            </div>
           </div>
-          <div class="card-body" style='padding:0.75rem 0.25rem'>
-            <table id="design_tab" class="hover row-border order-column">
-              <thead style='padding:0px'>
-                <tr>
-                   <th></th>
-                   <th style='text-align:left; padding-left: 10px;'>Name</th>
-                   <th style='text-align:right; padding-right: 14px;'>Load</th>
-                </tr>
-              </thead>
-              <tbody>
-                
-                  <tr data="{'src': 'some-link-to-template-yaml', 'name': 'Some-design-1', 'action': 'template', 'description': 'some-desing-description1', 'image': 'some-link-for-design-image'}">
-                    <td></td>
-                    <td>Some-design-1</td>
-                    <td style='text-align: right;'>
-                      <button class='btn nohover' style="height:24px; width:30px; padding:0; cursor:pointer">
-                        <i class="fa fa-cloud-download" style="color:grey; font-size:18px"></i>
-                      </button>
-                    </td>
-                  </tr>
-                
-                  <tr data="{'src': 'some-link-to-template-yaml', 'name': 'Some-design-2', 'action': 'template', 'description': 'some-desing-description2', 'image': 'some-link-for-design-image'}">
-                    <td></td>
-                    <td>Some-design-2</td>
-                    <td style='text-align: right;'>
-                      <button class='btn nohover' style="height:24px; width:30px; padding:0; cursor:pointer">
-                        <i class="fa fa-cloud-download" style="color:grey; font-size:18px"></i>
-                      </button>
-                    </td>
-                  </tr>
-                
-                  <tr data="{'src': 'some-link-to-template-yaml', 'name': 'Some-design-3', 'action': 'template', 'description': 'some-design-description3', 'image': 'some-link-for-design-image'}">
-                    <td></td>
-                    <td>Some-design-3</td>
-                    <td style='text-align: right;'>
-                      <button class='btn nohover' style="height:24px; width:30px; padding:0; cursor:pointer">
-                        <i class="fa fa-cloud-download" style="color:grey; font-size:18px"></i>
-                      </button>
-                    </td>
-                  </tr>
-                
-              </tbody>
-            </table>
+          
+        <!-- Cards to be displayed -->
+          <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-6">
+              <div class="card border-dark mb-3">
+                <img class="card-img-top" src="https://raw.githubusercontent.com/AguaClara/aide_gui/spring-2018/aide_gui/palette_docs/home/component.png" style='height:9rem; width:100%;' alt="Card image cap">
+                <div class="card-body" style="padding:1rem;">
+                  <h5 class="card-title">Components</h5>
+                  <p class="card-text text-muted" style="font-size:0.8rem;">Some-description-about-components</p>
+                  
+                    <button type='button' class="btn btn-primary" onclick='sendInfoToFusion("table", "https://raw.githubusercontent.com/AguaClara/aide_gui/spring-2018/aide_gui/palette_docs/home/componentTable.yaml")'>Go to Components</button>
+                  
+                </div>
+              </div>
+            </div>
           </div>
+          
+        <!-- Cards to be displayed -->
+          <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-6">
+              <div class="card border-dark mb-3">
+                <img class="card-img-top" src="https://raw.githubusercontent.com/AguaClara/aide_gui/spring-2018/aide_gui/palette_docs/home/GitHub-Mark.jpg" style='height:9rem; width:100%;' alt="Card image cap">
+                <div class="card-body" style="padding:1rem;">
+                  <h5 class="card-title">GitHub</h5>
+                  <p class="card-text text-muted" style="font-size:0.8rem;">Some-description-about-gitpage</p>
+                  
+                    <a href="https://github.com/AguaClara" class="btn btn-primary">Go to GitHub</a>
+                  
+                </div>
+              </div>
+            </div>
+          </div>
+          
+        <!-- Cards to be displayed -->
+          <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-6">
+              <div class="card border-dark mb-3">
+                <img class="card-img-top" src="https://raw.githubusercontent.com/AguaClara/aide_gui/spring-2018/aide_gui/palette_docs/home/website.png" style='height:9rem; width:100%;' alt="Card image cap">
+                <div class="card-body" style="padding:1rem;">
+                  <h5 class="card-title">AguaClara Website</h5>
+                  <p class="card-text text-muted" style="font-size:0.8rem;">Some-description-about-aguasite</p>
+                  
+                    <a href="http://aguaclara.cornell.edu" class="btn btn-primary">Go to AguaClara Website</a>
+                  
+                </div>
+              </div>
+            </div>
+          </div>
+          
         </div>
 
-        <!-- test style -->
-        <style>
-        table.dataTable thead th, table.dataTable thead td{
-          padding:0;
-        }
-        td.details-control {
-          background: url('https://datatables.net/examples/resources/details_open.png') no-repeat center center;
-          cursor: pointer;
-        }
-        tr.shown td.details-control {
-          background: url('https://datatables.net/examples/resources/details_close.png') no-repeat center center;
-        }
-        button:active {
-          border: 1px solid lightgreen;
-        }
-        </style>
 
-
-
-      <!-- test script -->
-      <script>
-        $(document).ready(function() {
-            var table = $('#design_tab').DataTable( {
-                "lengthChange": false,
-                "ordering": false,
-                "info":     false,
-                "columns": [
-                              {"className"      :   'details-control',
-                                "orderable"     :   true,
-                                "defaultContent":   ''  },
-
-                              { "className"     :   "name" },
-
-                              { "className"     :   "load" },
-                              ],
-                "order": [[ 1, 'asc' ]]
-            } );
-
-
-            // Add event listener for opening and closing details
-            $('#design_tab tbody').on('click', 'td.details-control', function () {
-                var tr = $(this).closest('tr');
-                var row = table.row( tr );
-                var data = JSON.parse(tr[0].getAttribute("data").replace(/'/g, '"'));
-
-                // console.log(data);
-
-                if ( row.child.isShown() ) {
-                    // This row is already open - close it
-                    row.child.hide();
-                    tr.removeClass('shown');
-                }
-                else {
-                    // Open this row
-                    row.child( format(data) ).show();
-                    tr.addClass('shown');
-                }
-            } );
-        } );
-
-        /* Formatting function for row details - modify as you need */
-        function format (data) {
-          console.log(data);
-          return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px; width:100%;">'+
-              '<tr>'+
-                  '<td>Name:</td>'+
-                  '<td>'+data.name+'</td>'+
-              '</tr>'+
-              '<tr>'+
-                  '<td>Detail:</td>'+
-                  '<td>'+data.description+'</td>'+
-              '</tr>'+
-              '<tr>'+
-                  '<td>Image:</td>'+
-                  '<td><img class="" src="'+data.src+'"></td>'+
-              '</tr>'+
-          '</table>';
-        }
-
-      </script>
-
-    </div>
-
-    <!-- using cdn to load js. easier than loading from locally if changes made -->
-    <script type="text/javascript"src="https://gitcdn.link/repo/AguaClara/aide_gui/spring-2018/aide_gui/palette_gui/palette.js"></script>
-</body>
+        <!-- using cdn to load js. easier than loading from locally if changes made -->
+        <script type="text/javascript" src="https://gitcdn.link/repo/AguaClara/aide_gui/spring-2018/aide_gui/palette_gui/palette.js"></script>
+    </body>
 </html>

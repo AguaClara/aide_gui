@@ -13,9 +13,9 @@ dropdown:
 
 # design itself
 template:
-  name: Some-design-name
-  description: some-description
-  image: some-image-raw-link
+  name: Water Treatment Plant
+  description: 40L/s plant that will supply about 40,000 people with clean drinking water.
+  image: http://news.cornell.edu/sites/chronicle.cornell/files/water2.jpg
   params:
     - flow_rate:
         name : Flow Rate (L/s)
