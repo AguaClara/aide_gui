@@ -30,6 +30,6 @@ card:
   - name: AguaClara Website
     description: Some-description-about-aguasite
     image: some-link-to-raw-img-file
-    src: some-link-to-another-yaml-raw-file
+    src: http://aguaclara.cornell.edu
     action: web
 ...
