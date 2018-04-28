@@ -1,8 +1,9 @@
-function sendInfoToFusion(){
-    var args = {
-        arg1 : "Sample argument 1",
-        arg2 : "Sample argument 2"
+function sendInfoToFusion(action, src){
+    var command = {
+        type: action,
+        link: src
     };
+    console.log(command)
     adsk.fusionSendData('send', JSON.stringify(args));
 }
 

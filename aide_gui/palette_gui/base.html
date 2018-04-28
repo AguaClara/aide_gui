@@ -52,13 +52,16 @@
                 <div class="card-body" style="padding:1rem;">
                   <h5 class="card-title">{{card.name}}</h5>
                   <p class="card-text text-muted" style="font-size:0.8rem;">{{card.description}}</p>
-                  <a href="{{card.src}}" class="btn btn-primary">Go to {{card.name}}</a>
+                  {% if card.action == 'web'%}
+                    <a href="{{card.src}}" class="btn btn-primary">Go to {{card.name}}</a>
+                  {% else %}
+                    <button type='button' class="btn btn-primary" onclick='sendInfoToFusion({{card.action}}, {{card.src}})'>Go to {{card.name}}</button>
+                  {% endif %}
                 </div>
               </div>
             </div>
           </div>
           {% endfor %}
-
         </div>
 
 
