@@ -19,7 +19,7 @@ card:
     action: table
   - name: Components
     description: Some-description-about-components
-    image: some-link-to-raw-img-file
+    image: https://raw.githubusercontent.com/AguaClara/aide_gui/spring-2018/aide_gui/palette_docs/home/component.png
     src: https://raw.githubusercontent.com/AguaClara/aide_gui/spring-2018/aide_gui/palette_docs/home/componentTable.yaml
     action: table
   - name: GitHub
