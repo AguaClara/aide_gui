@@ -14,7 +14,7 @@ dropdown:
 card:
   - name: Designs
     description: some-description-about-designs
-    image: some-link-to-raw-img-file
+    image: https://raw.githubusercontent.com/AguaClara/aide_gui/spring-2018/aide_gui/palette_docs/home/water2.jpg
     src: https://raw.githubusercontent.com/AguaClara/aide_gui/spring-2018/aide_gui/palette_docs/home/designTable.yaml
     action: table
   - name: Components
