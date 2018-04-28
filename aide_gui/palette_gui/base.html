@@ -55,7 +55,7 @@
                   {% if card.action == 'web'%}
                     <a href="{{card.src}}" class="btn btn-primary">Go to {{card.name}}</a>
                   {% else %}
-                    <button type='button' class="btn btn-primary" onclick='sendInfoToFusion({{card.action}}, {{card.src}})'>Go to {{card.name}}</button>
+                    <button type='button' class="btn btn-primary" onclick='sendInfoToFusion("{{card.action}}", "{{card.src}}")'>Go to {{card.name}}</button>
                   {% endif %}
                 </div>
               </div>
@@ -66,6 +66,6 @@
 
 
         <!-- using cdn to load js. easier than loading from locally if changes made -->
-        <script type="text/javascript"src="https://cdn.rawgit.com/AguaClara/aide_gui/spring-2018/aide_gui/palette_gui/palette.js"></script>
+        <script type="text/javascript" src="https://rawgit.com/AguaClara/aide_gui/spring-2018/aide_gui/palette_gui/palette.js"></script>
     </body>
 </html>

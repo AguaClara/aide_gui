@@ -4,7 +4,7 @@ function sendInfoToFusion(action, src){
         link: src
     };
     console.log(command)
-    adsk.fusionSendData('send', JSON.stringify(args));
+    adsk.fusionSendData('send', JSON.stringify(command));
 }
 
 

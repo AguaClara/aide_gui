@@ -130,8 +130,7 @@ class MyHTMLEventHandler(adsk.core.HTMLEventHandler):
             incoming = json.loads(htmlArgs.data)
             # data is what is being sent from pallete in json form
             print(incoming)
-            # {'arg2': 'Sample argument 2', 'arg1': 'Sample argument 1'}
-
+            
         except:
             _ui.messageBox('Failed:\n{}'.format(traceback.format_exc()))
 
