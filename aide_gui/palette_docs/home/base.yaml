@@ -24,12 +24,12 @@ card:
     action: table
   - name: GitHub
     description: Some-description-about-gitpage
-    image: some-link-to-raw-img-file
-    src: some-link-to-another-yaml-raw-file
+    image: https://raw.githubusercontent.com/AguaClara/aide_gui/spring-2018/aide_gui/palette_docs/home/GitHub-Mark.png
+    src: https://github.com/AguaClara
     action: web
   - name: AguaClara Website
     description: Some-description-about-aguasite
-    image: some-link-to-raw-img-file
+    image: https://raw.githubusercontent.com/AguaClara/aide_gui/spring-2018/aide_gui/palette_docs/home/website.png
     src: http://aguaclara.cornell.edu
     action: web
 ...
