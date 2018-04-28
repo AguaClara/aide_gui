@@ -1,13 +1,13 @@
 ---
 dropdown:
   - name: Home
-    src: some-link-to-another-yaml-raw-file
+    src: https://raw.githubusercontent.com/AguaClara/aide_gui/spring-2018/aide_gui/palette_docs/home/base.yaml
     action: home
   - name: Designs
-    src: some-link-to-another-yaml-raw-file
+    src: https://raw.githubusercontent.com/AguaClara/aide_gui/spring-2018/aide_gui/palette_docs/home/designTable.yaml
     action: table
   - name: Components
-    src: some-link-to-another-yaml-raw-file
+    src: https://raw.githubusercontent.com/AguaClara/aide_gui/spring-2018/aide_gui/palette_docs/home/componentTable.yaml
     action: table
 # this section above will be in every yaml
 
