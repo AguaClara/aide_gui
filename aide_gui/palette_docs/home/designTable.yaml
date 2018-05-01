@@ -20,4 +20,10 @@ table:
     src: https://raw.githubusercontent.com/AguaClara/aide_gui/spring-2018/aide_gui/palette_docs/designs/des1.yaml
     action: template
 
+  - name: Water filtration Plant
+    description: plant that will filter drinking water.
+    image: http://news.cornell.edu/sites/chronicle.cornell/files/water2.jpg
+    src: 
+    action: template
+
 ...
