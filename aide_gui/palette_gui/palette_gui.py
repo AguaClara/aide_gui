@@ -11,6 +11,9 @@ from . import urllib3
 handlers = []
 _app = adsk.core.Application.cast(None)
 _ui = adsk.core.UserInterface.cast(None)
+environment = Environment(
+    loader = FileSystemLoader("./templates")
+)
 
 
 
@@ -19,9 +22,8 @@ def abs_path(file_path):
     return os.path.join(os.path.dirname(inspect.getfile(sys._getframe(1))), file_path)
 
 # jinjafy given the path to the template
-def render(environment, template_path, context):
-    path, filename = os.path.split(abs_path(template_path))
-    return environment.get_template(filename).render(context)
+def render(template_name, context):
+    return environment.get_template(template_name).render(context)
 
 # load yaml from online path
 def load_yaml(fpath):
@@ -187,9 +189,6 @@ def run(context):
         global _ui, _app, environment
         _app = adsk.core.Application.get()
         _ui  = _app.userInterface
-        environment = Environment(
-            loader = FileSystemLoader("./templates")
-        )
 
         # Add a command that displays the panel.
         showPaletteCmdDef = _ui.commandDefinitions.itemById('showPalette')
