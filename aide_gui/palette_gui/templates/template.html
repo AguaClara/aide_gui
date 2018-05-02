@@ -1,93 +1,49 @@
-<!DOCTYPE html>
-<html>
-    <head>
-      <!-- bootstrap -->
-      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-      <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+{% extends "base.html" %}
 
-      <!-- dataTables -->
-      <link rel='stylesheet' href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css">
-      <script src='https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js'></script>
+{% block content %}
+<div class="container" style='font-size: 1rem; max-width: 18rem;'>
+  <div class='card'>
+    <img class="card-img-top" style='height:10rem; width: 100%;' src="{{fields.template.image}}" alt="Card image cap">
+    <div class="card-header">
+      {{fields.template.name}}
+      <div class='text-muted' style='font-size:0.6rem'>{{fields.template.description}}</div>
+    </div>
+    <div class="card-body" style='padding:0.75rem 0.75rem;'>
 
-      <!-- font-awesome icons -->
-      <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-
-    </head>
-    <body>
-
-
-      <div class='col-lg-12 col-md-12 col-sm-12 col-xs-12' style='padding:0; font-weight: 200; font-size: 0.7rem; padding-bottom: 0.5rem;'>
-        <nav class="navbar navbar-default"  style='padding:0;'>
-          <div class="container-fluid">
-            <div class="navbar-header">
-              <a class="navbar-brand" href="#">AguaClara</a>
-            </div>
-            <ul class="nav navbar-nav navbar-left">
-              <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
-                <ul class="dropdown-menu dropdown-menu-right" style="position:absolute; font-size: 0.7rem; min-width: 4.5rem; max-width:5rem; padding-left:0.15rem;">
-
-                  {% for drop in fields.dropdown %}
-                    <li><a href='javascript:sendInfoToFusion("{{drop.action}}","{{drop.src}}")'>{{drop.name}}</a></li>
+        {% for param in fields.template.params  %}
+          {% for key, value in param.items() %}
+            {% if value.type == 'string' %}
+              <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                  <span class="input-group-text" id='{{ key }}'>{{ value.name }}</span>
+                </div>
+                <input type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" value='{{ value.default }}'>
+              </div>
+              {% endif %}
+              {% if value.type == 'dropdown' %}
+              <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                  <label class="input-group-text" for="{{ key }}">{{ value.name }}</label>
+                </div>
+                <select class="custom-select" style="font-size:0.7rem;" id="{{ key }}">
+                  {% for option in value.options %}
+                  <option value='{{ option }}'>{{ option }}</option>
                   {% endfor %}
+                </select>
+              </div>
+            {% endif %}
+          {% endfor %}
+        {% endfor %}
 
-                </ul>
-              </li>
-            </ul>
-          </div>
-        </nav>
+        <button type='button' class='btn btn-primary btn-lg btn-block' style='padding:0; font-size:1rem;' onclick='sendInfoToFusion("collect", "somelink")'>Collect</button>
+
       </div>
+    </div>
 
-      <div class="container" style='font-size: 1rem; max-width: 18rem;'>
-        <div class='card'>
-          <img class="card-img-top" style='height:10rem; width: 100%;' src="{{fields.template.image}}" alt="Card image cap">
-          <div class="card-header">
-            {{fields.template.name}}
-            <div class='text-muted' style='font-size:0.6rem'>{{fields.template.description}}</div>
-          </div>
-          <div class="card-body" style='padding:0.75rem 0.75rem;'>
+  <style>
+    .input-group-text, .form-control{
+      font-size: 0.7rem;}
+  </style>
+</div>
 
-              {% for param in fields.template.params  %}
-                {% for key, value in param.items() %}
-                  {% if value.type == 'string' %}
-                    <div class="input-group mb-3">
-                      <div class="input-group-prepend">
-                        <span class="input-group-text" id='{{ key }}'>{{ value.name }}</span>
-                      </div>
-                      <input type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" value='{{ value.default }}'>
-                    </div>
-                    {% endif %}
-                    {% if value.type == 'dropdown' %}
-                    <div class="input-group mb-3">
-                      <div class="input-group-prepend">
-                        <label class="input-group-text" for="{{ key }}">{{ value.name }}</label>
-                      </div>
-                      <select class="custom-select" style="font-size:0.7rem;" id="{{ key }}">
-                        {% for option in value.options %}
-                        <option value='{{ option }}'>{{ option }}</option>
-                        {% endfor %}
-                      </select>
-                    </div>
-                  {% endif %}
-                {% endfor %}
-              {% endfor %}
-
-              <button type='button' class='btn btn-primary btn-lg btn-block' style='padding:0; font-size:1rem;' onclick='sendInfoToFusion("collect", "somelink")'>Collect</button>
-
-            </div>
-          </div>
-
-          <style>
-            .input-group-text, .form-control{
-              font-size: 0.7rem;
-            }
-          </style>
-        </div>
-
-
-        <!-- using cdn to load js. easier than loading from locally if changes made -->
-        <script type="text/javascript" src="https://gitcdn.link/repo/AguaClara/aide_gui/spring-2018/aide_gui/palette_gui/palette.js"></script>
-    </body>
-</html>
+{% endblock %}

@@ -1,8 +1,8 @@
 import os, sys, inspect, json
 import adsk.core, adsk.fusion, adsk.cam, traceback
 # add the path to local library
-# sys.path.append("/Users/eldorbekpualtov/Desktop/AguaClara/aide_gui/aide_gui/palette_gui")
-from .jinja2 import Template, Environment, FileSystemLoader
+sys.path.append("/Users/eldorbekpualtov/Desktop/AguaClara/aide_gui/aide_gui/palette_gui")
+from .jinja2 import Template, Environment, FileSystemLoader, PackageLoader, select_autoescape
 from . import yaml
 from . import urllib3
 
@@ -11,8 +11,9 @@ from . import urllib3
 handlers = []
 _app = adsk.core.Application.cast(None)
 _ui = adsk.core.UserInterface.cast(None)
-environment = Environment(
-    loader = FileSystemLoader("./templates")
+_environment = Environment(
+    loader=FileSystemLoader('/Users/eldorbekpualtov/Desktop/AguaClara/aide_gui/aide_gui/palette_gui/templates'),
+    autoescape=select_autoescape(['html', 'xml'])
 )
 
 
@@ -23,7 +24,7 @@ def abs_path(file_path):
 
 # jinjafy given the path to the template
 def render(template_name, context):
-    return environment.get_template(template_name).render(context)
+    return _environment.get_template(template_name).render(context)
 
 # load yaml from online path
 def load_yaml(fpath):
@@ -68,17 +69,17 @@ def jinjafy(command):
     data=load_yaml(command["link"])
     context = {'fields': data}
 
-    htmlFile='error.html'
+    htmlFileName='error.html'
 
     if command["type"] == 'home':
-        htmlFile='base.html'
+        htmlFileName='home.html'
     elif command["type"] == 'table':
-        htmlFile='table.html'
+        htmlFileName='table.html'
     elif command["type"] == 'template':
-        htmlFile='template.html'
+        htmlFileName='template.html'
 
     # render the dictionary values onto the html file
-    result = render(,htmlFile, context)
+    result = render(htmlFileName, context)
 
     # create a local html file, with jinjafied values
     with open(abs_path("jinjafied.html"), 'w') as jinjafied:
@@ -147,7 +148,7 @@ class MyHTMLEventHandler(adsk.core.HTMLEventHandler):
 
             palette = _ui.palettes.itemById('myPalette')
             jinjafy(incoming)
-            # Set the html of the property.
+            # Set the html of the palette.
             palette.htmlFileURL = 'jinjafied.html'
 
         except:
@@ -186,7 +187,7 @@ class SendInfoCommandExecuteHandler(adsk.core.CommandEventHandler):
 
 def run(context):
     try:
-        global _ui, _app, environment
+        global _ui, _app, _environment
         _app = adsk.core.Application.get()
         _ui  = _app.userInterface
 
