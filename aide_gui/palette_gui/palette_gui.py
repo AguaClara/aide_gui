@@ -2,7 +2,8 @@ import os, sys, inspect, json
 import adsk.core, adsk.fusion, adsk.cam, traceback
 # add the path to local library
 sys.path.append("/Users/eldorbekpualtov/Desktop/AguaClara/aide_gui/aide_gui/palette_gui")
-from .jinja2 import Template, Environment, FileSystemLoader, PackageLoader, select_autoescape
+from . import jinja2
+from jinja2 import Template, Environment, FileSystemLoader, PackageLoader, select_autoescape
 from . import yaml
 from . import urllib3
 
