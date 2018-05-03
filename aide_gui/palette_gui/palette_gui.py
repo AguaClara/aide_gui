@@ -1,94 +1,33 @@
-import os, sys, inspect, json
+import os, sys, inspect, json, math
 import adsk.core, adsk.fusion, adsk.cam, traceback
+
+# returns absolute path
+def abs_path(file_path):
+    return os.path.join(os.path.dirname(inspect.getfile(sys._getframe(1))), file_path)
+
 # add the path to local library
-sys.path.append("/Users/eldorbekpualtov/Desktop/AguaClara/aide_gui/aide_gui/palette_gui")
-from . import jinja2
-from jinja2 import Template, Environment, FileSystemLoader, PackageLoader, select_autoescape
+sys.path.append(abs_path('.'))
+
 from . import yaml
 from . import urllib3
+from .jinja2 import Template, Environment, FileSystemLoader, select_autoescape
+from .helper import jinjafy, render, load_yaml
+
 
 link_cards = 'https://raw.githubusercontent.com/AguaClara/aide_gui/spring-2018/aide_gui/palette_docs/home/cards.yaml'
 link_dropdown ='https://raw.githubusercontent.com/AguaClara/aide_gui/spring-2018/aide_gui/palette_docs/home/dropdown.yaml'
+# this is loaded here because we want to fetch dropdown once only
+dropdown=load_yaml(link_dropdown)
+
 
 # global set of event handlers to keep them referenced for the duration of the command
 handlers = []
 _app = adsk.core.Application.cast(None)
 _ui = adsk.core.UserInterface.cast(None)
 _environment = Environment(
-    loader=FileSystemLoader('/Users/eldorbekpualtov/Desktop/AguaClara/aide_gui/aide_gui/palette_gui/templates'),
+    loader=FileSystemLoader(abs_path('.')+'/templates'),
     autoescape=select_autoescape(['html', 'xml'])
 )
-
-
-
-# returns absolute path
-def abs_path(file_path):
-    return os.path.join(os.path.dirname(inspect.getfile(sys._getframe(1))), file_path)
-
-# jinjafy given the path to the template
-def render(template_name, context):
-    return _environment.get_template(template_name).render(context)
-
-# load yaml from online path
-def load_yaml(fpath):
-    """
-    Returns a yaml form structure or None, if error occurred
-
-    Parameters
-    ----------
-    fpath: str
-        The local file path/URL for the yaml to be retrieved from
-
-    Return
-    --------
-    yam: dict
-        A dictionary thats extrapolated from yaml format
-    """
-    # If yaml is retrieved from user's local path
-    try:
-        with open(abs_path(fpath)) as fp:
-            yam = yaml.load(fp)
-            if (type(yam) != list and type(yam) != dict):
-                raise Exception('This is not a YAML')
-            return  yam
-    except:
-        # If yaml is retrieved from a given url
-        try:
-            url = fpath.strip()
-            http = urllib3.PoolManager()
-            r = http.request('GET', url)
-            status = r.status # check URL status
-            if (status != 200):
-                raise Exception('This is not a URL')
-            yam =  yaml.load(r.data.decode('utf-8'))
-            return yam
-        except:
-            if _ui:
-                _ui.messageBox('Not a YAML or URL \nPlease provide a correct form.')
-            return None
-
-
-def jinjafy(command):
-    dropdowns=load_yaml(link_dropdown)
-    data=load_yaml(command["link"])
-    context = {'fields': data, 'dropdowns':dropdowns}
-
-    htmlFileName='error.html'
-
-    if command["type"] == 'home':
-        htmlFileName='home.html'
-    elif command["type"] == 'table':
-        htmlFileName='table.html'
-    elif command["type"] == 'template':
-        htmlFileName='template.html'
-
-    # render the dictionary values onto the html file
-    result = render(htmlFileName, context)
-
-    # create a local html file, with jinjafied values
-    with open(abs_path("jinjafied.html"), 'w') as jinjafied:
-        jinjafied.write(result)
-
 
 
 # Event handler for the commandCreated event.
@@ -110,17 +49,17 @@ class ShowPaletteCommandExecuteHandler(adsk.core.CommandEventHandler):
         super().__init__()
     def notify(self, args):
         try:
+            global _ui, _app, _environment
             # Create or display the palette.
             palette = _ui.palettes.itemById('myPalette')
             if not palette:
-
 
                 command={
                     'type' : 'home',
                     'link' : link_cards
                 }
                 # if there was no palette then open homepage
-                jinjafy(command)
+                jinjafy(_environment, dropdown, command)
 
                 # let palette open the jinjafied.html
                 palette = _ui.palettes.add('myPalette', 'My Palette', 'jinjafied.html', True, True, True, 300, 200)
@@ -151,7 +90,7 @@ class MyHTMLEventHandler(adsk.core.HTMLEventHandler):
             # data is what is being sent from pallete in json form
 
             palette = _ui.palettes.itemById('myPalette')
-            jinjafy(incoming)
+            jinjafy(_environment, dropdown, incoming)
             # Set the html of the palette.
             palette.htmlFileURL = 'jinjafied.html'
 
@@ -198,7 +137,7 @@ def run(context):
         # Add a command that displays the panel.
         showPaletteCmdDef = _ui.commandDefinitions.itemById('showPalette')
         if not showPaletteCmdDef:
-            showPaletteCmdDef = _ui.commandDefinitions.addButtonDefinition('showPalette', 'Show custom palette', 'Show the custom palette', '')
+            showPaletteCmdDef = _ui.commandDefinitions.addButtonDefinition('showPalette', 'Show Palette', 'Show AIDE palette', '')
 
             # Connect to Command Created event.
             onCommandCreated = ShowPaletteCommandCreatedHandler()
@@ -223,7 +162,7 @@ def run(context):
         showPaletteButton= createPanel.controls.addCommand(showPaletteCmdDef)
         sendInfoButton= createPanel.controls.addCommand(sendInfoCmdDef)
 
-        # Testlines
+        # open the pallete as soon as user presses run()
         showPaletteCmdDef.execute()
 
     except:
