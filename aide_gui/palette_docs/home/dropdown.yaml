@@ -1,7 +1,7 @@
 ---
 dropdown:
   - name: Home
-    src: https://raw.githubusercontent.com/AguaClara/aide_gui/spring-2018/aide_gui/palette_docs/home/base.yaml
+    src: https://raw.githubusercontent.com/AguaClara/aide_gui/spring-2018/aide_gui/palette_docs/home/cards.yaml
     action: home
   - name: Designs
     src: https://raw.githubusercontent.com/AguaClara/aide_gui/spring-2018/aide_gui/palette_docs/home/designTable.yaml

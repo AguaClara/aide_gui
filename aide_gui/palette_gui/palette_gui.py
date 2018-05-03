@@ -7,8 +7,8 @@ from jinja2 import Template, Environment, FileSystemLoader, PackageLoader, selec
 from . import yaml
 from . import urllib3
 
-link_cards = 'https://raw.githubusercontent.com/AguaClara/aide_gui/spring-2018/aide_gui/palette_docs/home/base.yaml'
-link_dropdown =''
+link_cards = 'https://raw.githubusercontent.com/AguaClara/aide_gui/spring-2018/aide_gui/palette_docs/home/cards.yaml'
+link_dropdown ='https://raw.githubusercontent.com/AguaClara/aide_gui/spring-2018/aide_gui/palette_docs/home/dropdown.yaml'
 
 # global set of event handlers to keep them referenced for the duration of the command
 handlers = []
