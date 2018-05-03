@@ -7,6 +7,8 @@ from jinja2 import Template, Environment, FileSystemLoader, PackageLoader, selec
 from . import yaml
 from . import urllib3
 
+link_cards = 'https://raw.githubusercontent.com/AguaClara/aide_gui/spring-2018/aide_gui/palette_docs/home/base.yaml'
+link_dropdown =''
 
 # global set of event handlers to keep them referenced for the duration of the command
 handlers = []
@@ -67,8 +69,9 @@ def load_yaml(fpath):
 
 
 def jinjafy(command):
+    dropdowns=load_yaml(link_dropdown)
     data=load_yaml(command["link"])
-    context = {'fields': data}
+    context = {'fields': data, 'dropdowns':dropdowns}
 
     htmlFileName='error.html'
 
@@ -111,10 +114,10 @@ class ShowPaletteCommandExecuteHandler(adsk.core.CommandEventHandler):
             palette = _ui.palettes.itemById('myPalette')
             if not palette:
 
-                link_base = 'https://raw.githubusercontent.com/AguaClara/aide_gui/spring-2018/aide_gui/palette_docs/home/base.yaml'
+
                 command={
                     'type' : 'home',
-                    'link' : link_base
+                    'link' : link_cards
                 }
                 # if there was no palette then open homepage
                 jinjafy(command)

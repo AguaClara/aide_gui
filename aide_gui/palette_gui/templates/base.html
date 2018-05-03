@@ -28,7 +28,7 @@
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
                 <ul class="dropdown-menu dropdown-menu-right" style="position:absolute; font-size: 0.7rem; min-width: 4.5rem; max-width:5rem; padding-left:0.15rem;">
 
-                  {% for drop in fields.dropdown %}
+                  {% for drop in dropdowns.dropdown %}
                     <li><a href='javascript:sendInfoToFusion("{{drop.action}}","{{drop.src}}")'>{{drop.name}}</a></li>
                   {% endfor %}
 

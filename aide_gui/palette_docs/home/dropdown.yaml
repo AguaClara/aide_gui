@@ -10,21 +10,4 @@ dropdown:
     src: https://raw.githubusercontent.com/AguaClara/aide_gui/spring-2018/aide_gui/palette_docs/home/componentTable.yaml
     action: table
 # this section above will be in every yaml
-
-# design itself
-template:
-  name: Water Filtration Plant
-  description: 40L/s plant that will filter water for about 40,000 people with clean drinking water.
-  image: http://news.cornell.edu/sites/chronicle.cornell/files/water2.jpg
-  params:
-    - flow_rate:
-        name : Filter Rate (L/s)
-        default : 34
-        type : string
-        options : null
-    - sed_tank_length:
-        name : Sed filter length (m)
-        default : null
-        type : dropdown
-        options : [2, 4, 5]
 ...
