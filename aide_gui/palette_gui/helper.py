@@ -53,9 +53,6 @@ def load_yaml(fpath):
 # given environment with path to jinjafiable html files, header (a yaml data),
 # command (type: ~, src: ~) to match template to link data to, output jinjafied.html
 def jinjafy(environment, header, command):
-    data = load_yaml(command["link"])
-    context = {'fields': data, 'dropdowns': header}
-
     htmlFileName='error.html'
 
     if command["type"] == 'home':
@@ -64,6 +61,9 @@ def jinjafy(environment, header, command):
         htmlFileName='table.html'
     elif command["type"] == 'template':
         htmlFileName='template.html'
+
+    data = load_yaml(command["link"])
+    context = {'fields': data, 'dropdowns': header}
 
     # render the dictionary values onto the html file
     result = render(environment, htmlFileName, context)
