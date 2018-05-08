@@ -8,10 +8,4 @@ table:
     src: https://raw.githubusercontent.com/AguaClara/aide_gui/spring-2018/aide_gui/palette_docs/designs/des1.yaml
     action: template
 
-  - name: Water Treatment Plant
-    description: 40L/s plant that will supply about 40,000 people with clean drinking water.
-    image: http://news.cornell.edu/sites/chronicle.cornell/files/water2.jpg
-    src: https://raw.githubusercontent.com/AguaClara/aide_gui/spring-2018/aide_gui/palette_docs/designs/des2.yaml
-    action: template
-
 ...

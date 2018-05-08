@@ -14,7 +14,7 @@ def abs_path(file_path):
     Return
     -------
         : string
-        he correct absolute path.
+        The correct absolute path.
     """
     return os.path.join(os.path.dirname(inspect.getfile(sys._getframe(1))), file_path)
 
