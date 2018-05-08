@@ -1,6 +1,21 @@
 import os, sys, inspect, json
-# returns absolute path
+
 def abs_path(file_path):
+    """
+    Takes a relative file path to the calling file and returns the correct
+    absolute path. Needed because the Fusion 360 environment doesn't resolve
+    relative paths well.
+
+    Parameters
+    ----------
+    file_path: str
+        Relative file path to the calling file
+
+    Return
+    -------
+        : string
+        he correct absolute path.
+    """
     return os.path.join(os.path.dirname(inspect.getfile(sys._getframe(1))), file_path)
 
 # add the path to local library
@@ -11,6 +26,26 @@ from . import urllib3
 
 # jinjafy given the html template with given context
 def render(environment, template_name, context):
+    """
+    Returns a completed template string in UTF-8 encoding.
+
+    Parameters
+    ----------
+    environment: Environment
+        An object defined in Jinja2 library that specifies a directory with
+        list of templates (including inheritance).
+
+    template_name: string
+        Name of the template file. Must exist in environment.
+
+    context: dict
+        A dictionary with key:value pairs to match template specs.
+
+    Return
+    --------
+    : string
+        Completed template string in UTF-8 encoding.
+    """
     return environment.get_template(template_name).render(context)
 
 
@@ -50,9 +85,24 @@ def load_yaml(fpath):
         except:
             return None
 
-# given environment with path to jinjafiable html files, header (a yaml data),
-# command (type: ~, src: ~) to match template to link data to, output jinjafied.html
+
 def jinjafy(environment, header, command):
+    """
+    Outputs jinjafied.html in working directory.
+
+    Parameters
+    ----------
+    environment: Environment
+        An object defined in Jinja2 library that specifies a directory with
+        list of templates (including inheritance)
+
+    header: string
+        Yaml that holds information for the parent template.
+
+    command: dict
+        A command of form {type: ~, link:~} to match template type to data
+        collected from link.
+    """
     htmlFileName='error.html'
 
     if command["type"] == 'home':
