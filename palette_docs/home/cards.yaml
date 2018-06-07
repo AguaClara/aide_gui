@@ -3,22 +3,22 @@
 card:
   - name: Designs
     description: Get access to the latest water treatment designs deveoped in Cornell University.
-    image: https://raw.githubusercontent.com/AguaClara/aide_gui/spring-2018/aide_gui/palette_docs/home/design.png
-    src: https://raw.githubusercontent.com/AguaClara/aide_gui/spring-2018/aide_gui/palette_docs/tables/designTable.yaml
+    image: https://raw.githubusercontent.com/AguaClara/aide_gui/spring-2018/palette_docs/home/design.png
+    src: https://raw.githubusercontent.com/AguaClara/aide_gui/spring-2018/palette_docs/tables/designTable.yaml
     action: table
   - name: Components
     description: Get Access to the individual components of the water treatment Plant.
-    image: https://raw.githubusercontent.com/AguaClara/aide_gui/spring-2018/aide_gui/palette_docs/home/component.png
-    src: https://raw.githubusercontent.com/AguaClara/aide_gui/spring-2018/aide_gui/palette_docs/tables/componentTable.yaml
+    image: https://raw.githubusercontent.com/AguaClara/aide_gui/spring-2018/palette_docs/home/component.png
+    src: https://raw.githubusercontent.com/AguaClara/aide_gui/spring-2018/palette_docs/tables/componentTable.yaml
     action: table
   - name: GitHub
     description: Check out our GitHub page for the latest developments. Full access to all AguaClara resources.
-    image: https://raw.githubusercontent.com/AguaClara/aide_gui/spring-2018/aide_gui/palette_docs/home/GitHub-Mark.jpg
+    image: https://raw.githubusercontent.com/AguaClara/aide_gui/spring-2018/palette_docs/home/GitHub-Mark.jpg
     src: https://github.com/AguaClara
     action: web
   - name: Our Website
     description: Visit our official website to see our vision.
-    image: https://raw.githubusercontent.com/AguaClara/aide_gui/spring-2018/aide_gui/palette_docs/home/website.png
+    image: https://raw.githubusercontent.com/AguaClara/aide_gui/spring-2018/palette_docs/home/website.png
     src: http://aguaclara.cornell.edu
     action: web
 ...
