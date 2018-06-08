@@ -1,5 +1,5 @@
 import os, sys, inspect, json, math
-import adsk.core, adsk.fusion, adsk.cam, traceback
+import adsk.core, adsk.fusion, adsk.cam, traceback, datetime
 
 # returns absolute path
 def abs_path(file_path):
@@ -210,27 +210,27 @@ class CommandExecuteHandler(adsk.core.CommandEventHandler):
     fields: dict
         The design parameter list as a dictionary from the user inputted YAML
     """
-        def __init__(self, fields):
-            super().__init__()
-            self.fields = fields
+    def __init__(self, fields):
+        super().__init__()
+        self.fields = fields
 
-        def notify(self, args):
-            try:
+    def notify(self, args):
+        try:
         # Get the list of parameters and values from collectFields
-                param_values = collectFields(self.fields)
+            param_values = collectFields(self.fields)
 
-                current_time = str(datetime.datetime.now())
+        current_time = str(datetime.datetime.now())
         # output a file with collected values
-            with open(abs_path("user_inputs_"+ current_time + ".yaml"), 'w') as outfile:
-                yaml.dump(param_values, outfile)
+         with open(abs_path("user_inputs_"+ current_time + ".yaml"), 'w') as outfile:
+             yaml.dump(param_values, outfile)
 
         # Execute on finish code here (call aide_design/aide_templates)
-            except:
+        except:
                 if _ui:
                     _ui.messageBox('Failed:\n{}'.format(traceback.format_exc()))
 
 
-        def load_yaml(file_path):
+    def load_yaml(files_path):
     """
     Returns a yaml form structure or None, if error occurred
     Parameters
@@ -243,30 +243,30 @@ class CommandExecuteHandler(adsk.core.CommandEventHandler):
         A dictionary thats extrapolated from yaml format
     """
     # If yaml is retrieved from user's local path
-            try:
-                with open(abs_path(file_path)) as fp:
+        try:
+            with open(abs_path(file_path)) as fp:
                     yam = yaml.load(fp)
-                if (type(yam) != list and type(yam) != dict):
-                    raise Exception('This is not a YAML')
-                    return  yam
-                except:
+            if (type(yam) != list and type(yam) != dict):
+                raise Exception('This is not a YAML')
+                return  yam
+            except:
         # If yaml is retrieved from a given url
-                    try:
-                        url = file_path.strip()
-                        http = urllib3.PoolManager()
-                        r = http.request('GET', url)
-                        status = r.status # check URL status
-                        if (status != 200):
-                            raise Exception('This is not a URL')
-                            yam =  yaml.load(r.data.decode('utf-8'))
+                try:
+                    url = file_path.strip()
+                    http = urllib3.PoolManager()
+                    r = http.request('GET', url)
+                    status = r.status # check URL status
+                    if (status != 200):
+                        raise Exception('This is not a URL')
+                        yam =  yaml.load(r.data.decode('utf-8'))
                         return yam
-                        except:
-                            if _ui:
-                                _ui.messageBox('Not a YAML or URL \nPlease provide a correct form.')
-                                return None
+                    except:
+                        if _ui:
+                            _ui.messageBox('Not a YAML or URL \nPlease provide a correct form.')
+                            return None
 
 
-            def createFields(inputs, yaml_form):
+    def createFields(inputs, yaml_form):
     """
     Creates fields to be displayed in a new window on Fusion 360 based on
     parameter list in input YAML to solicit parameter values from a user
@@ -281,9 +281,9 @@ class CommandExecuteHandler(adsk.core.CommandEventHandler):
     fields: dict
         A dictionary to keep track of created fields
     """
-                fields = {}
+        fields = {}
     # For each parameter {dictionary} in design param list
-                for param in yaml_form:
+        for param in yaml_form:
         # Save the key of the first element as pName
                 pName = list(param.keys())[0]
         # Get the value [attributes of field] of the key from the dictionary
@@ -297,7 +297,7 @@ class CommandExecuteHandler(adsk.core.CommandEventHandler):
             # param_format(id, name, Dropdown)
                     fields[pName]= inputs.addDropDownCommandInput(str(pName), pAttr["name"], adsk.core.DropDownStyles.TextListDropDownStyle)
             # For each element in the list of options
-                for option in pAttr["options"]:
+            for option in pAttr["options"]:
                 # Append the dropdown option values from input YAML
                     fields[pName].listItems.add(str(option), True)
         # For fields specified by attr type: "spinnerInt"
@@ -312,7 +312,7 @@ class CommandExecuteHandler(adsk.core.CommandEventHandler):
                     return fields
 
 
-            def collectFields(fields):
+    def collectFields(fields):
     """
     Collect inputted values from the user and adds information to a list of
     dictionaries, each containing a parameter name and value
@@ -326,8 +326,8 @@ class CommandExecuteHandler(adsk.core.CommandEventHandler):
         A dictionary with the design parameter name as keys and the user
         inputted values as values
     """
-            params = {}
-            for key, kval in fields.items():
+        params = {}
+        for key, kval in fields.items():
         # If the parameter has a drop down type, the value is the selectedItem
             if isinstance(kval, adsk.core.DropDownCommandInput):
                 value = kval.selectedItem.name
