@@ -200,3 +200,139 @@ def stop(context):
     except:
         if _ui:
             _ui.messageBox('Failed:\n{}'.format(traceback.format_exc()))
+
+class CommandExecuteHandler(adsk.core.CommandEventHandler):
+    """
+    Creates a new YAML based on user inputs and the list of fields to be
+    collected
+    Parameters
+    ----------
+    fields: dict
+        The design parameter list as a dictionary from the user inputted YAML
+    """
+        def __init__(self, fields):
+            super().__init__()
+            self.fields = fields
+
+        def notify(self, args):
+            try:
+        # Get the list of parameters and values from collectFields
+                param_values = collectFields(self.fields)
+
+                current_time = str(datetime.datetime.now())
+        # output a file with collected values
+            with open(abs_path("user_inputs_"+ current_time + ".yaml"), 'w') as outfile:
+                yaml.dump(param_values, outfile)
+
+        # Execute on finish code here (call aide_design/aide_templates)
+            except:
+                if _ui:
+                    _ui.messageBox('Failed:\n{}'.format(traceback.format_exc()))
+
+
+        def load_yaml(file_path):
+    """
+    Returns a yaml form structure or None, if error occurred
+    Parameters
+    ----------
+    fpath: str
+        The local file path/URL for the yaml to be retrieved from
+    Return
+    --------
+    yam: dict
+        A dictionary thats extrapolated from yaml format
+    """
+    # If yaml is retrieved from user's local path
+            try:
+                with open(abs_path(file_path)) as fp:
+                    yam = yaml.load(fp)
+                if (type(yam) != list and type(yam) != dict):
+                    raise Exception('This is not a YAML')
+                    return  yam
+                except:
+        # If yaml is retrieved from a given url
+                    try:
+                        url = file_path.strip()
+                        http = urllib3.PoolManager()
+                        r = http.request('GET', url)
+                        status = r.status # check URL status
+                        if (status != 200):
+                            raise Exception('This is not a URL')
+                            yam =  yaml.load(r.data.decode('utf-8'))
+                        return yam
+                        except:
+                            if _ui:
+                                _ui.messageBox('Not a YAML or URL \nPlease provide a correct form.')
+                                return None
+
+
+            def createFields(inputs, yaml_form):
+    """
+    Creates fields to be displayed in a new window on Fusion 360 based on
+    parameter list in input YAML to solicit parameter values from a user
+    Parameters
+    ----------
+    inputs: CommandInputs
+        The collection of command inputs
+    yaml_form: list
+        The design parameter list from the user inputted YAML
+    Return
+    --------
+    fields: dict
+        A dictionary to keep track of created fields
+    """
+                fields = {}
+    # For each parameter {dictionary} in design param list
+                for param in yaml_form:
+        # Save the key of the first element as pName
+                pName = list(param.keys())[0]
+        # Get the value [attributes of field] of the key from the dictionary
+                pAttr = param[pName]
+        # For fields specified by attr type: "string"
+                if pAttr["type"] == "string":
+            # param_format(id, name, default)
+                    fields[pName]= inputs.addStringValueInput(str(pName), pAttr["name"], str(pAttr["default"]))
+        # For fields specified by attr type: "dropdown"
+                elif pAttr["type"] == "dropdown":
+            # param_format(id, name, Dropdown)
+                    fields[pName]= inputs.addDropDownCommandInput(str(pName), pAttr["name"], adsk.core.DropDownStyles.TextListDropDownStyle)
+            # For each element in the list of options
+                for option in pAttr["options"]:
+                # Append the dropdown option values from input YAML
+                    fields[pName].listItems.add(str(option), True)
+        # For fields specified by attr type: "spinnerInt"
+                elif pAttr["type"] == "spinnerInt":
+            # param _format(id, Name, min, max, step, default)
+                    fields[pName] = inputs.addIntegerSpinnerCommandInput(str(pName), pAttr["name"], pAttr["options"][0], pAttr["options"][2], pAttr["options"][1], pAttr["options"][0])
+        # For fields specified by attr type: "spinnerFloat"
+                elif pAttr["type"] == "spinnerFloat":
+            # param _format(id, Name, min, max, step, default)
+                    fields[pName] = inputs.addFloatSpinnerCommandInput(str(pName), pAttr["name"], '', pAttr["options"][0], pAttr["options"][2], pAttr["options"][1], pAttr["options"][0])
+
+                    return fields
+
+
+            def collectFields(fields):
+    """
+    Collect inputted values from the user and adds information to a list of
+    dictionaries, each containing a parameter name and value
+    Parameters
+    ----------
+    fields: list
+        The list of created field IDs from createFields
+    Return
+    ----------
+    params: dict
+        A dictionary with the design parameter name as keys and the user
+        inputted values as values
+    """
+            params = {}
+            for key, kval in fields.items():
+        # If the parameter has a drop down type, the value is the selectedItem
+            if isinstance(kval, adsk.core.DropDownCommandInput):
+                value = kval.selectedItem.name
+        # Otherwise it is simply the value the user enters
+            else:
+                value = kval.value
+                params[key]=value
+                return params
