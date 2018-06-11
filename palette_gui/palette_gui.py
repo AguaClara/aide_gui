@@ -96,7 +96,7 @@ class MyHTMLEventHandler(adsk.core.HTMLEventHandler):
             palette.htmlFileURL = 'jinjafied.html'
 
             if(incoming['type'] == 'code')
-                exec(incoming['link'])
+                print("code has been run")
 
         except:
             _ui.messageBox('Failed:\n{}'.format(traceback.format_exc()))
