@@ -14,8 +14,8 @@ from .jinja2 import Template, Environment, FileSystemLoader, select_autoescape
 from .helper import jinjafy, render, load_yaml
 
 
-link_cards = 'https://raw.githubusercontent.com/AguaClara/aide_gui/spring-2018/palette_docs/home/cards.yaml'
-link_dropdown ='https://raw.githubusercontent.com/AguaClara/aide_gui/spring-2018/palette_docs/home/dropdown.yaml'
+link_cards = 'data/home/cards.yaml'
+link_dropdown ='data/home/dropdown.yaml'
 # this is loaded here because we want to fetch dropdown once only
 dropdown=load_yaml(link_dropdown)
 
@@ -94,6 +94,8 @@ class MyHTMLEventHandler(adsk.core.HTMLEventHandler):
             # Set the html of the palette.
             palette.htmlFileURL = 'jinjafied.html'
 
+            if incoming['type'] == 'code':
+                _ui.messageBox('hello')
         except:
             _ui.messageBox('Failed:\n{}'.format(traceback.format_exc()))
 

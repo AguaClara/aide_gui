@@ -1,0 +1,13 @@
+---
+dropdown:
+  - name: Home
+    src: data/home/cards.yaml
+    action: home
+  - name: Designs
+    src: data/tables/designTable.yaml
+    action: table
+  - name: Components
+    src: data/tables/componentTable.yaml
+    action: table
+# this section above will be in every yaml
+...

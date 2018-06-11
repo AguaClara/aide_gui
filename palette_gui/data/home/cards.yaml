@@ -1,0 +1,29 @@
+---
+
+card:
+  - name: Test
+    description: Testing running of Python.
+    image: data/home/design.png
+    src: aide.main.test()
+    action: code
+  - name: Designs
+    description: Get access to the latest water treatment designs deveoped in Cornell University.
+    image: data/home/design.png
+    src: data/tables/designTable.yaml
+    action: table
+  - name: Components
+    description: Get Access to the individual components of the water treatment Plant.
+    image: data/home/component.png
+    src: data/tables/componentTable.yaml
+    action: table
+  - name: GitHub
+    description: Check out our GitHub page for the latest developments. Full access to all AguaClara resources.
+    image: data/home/GitHub-Mark.jpg
+    src: https://github.com/AguaClara
+    action: web
+  - name: Our Website
+    description: Visit our official website to see our vision.
+    image: data/home/website.png
+    src: http://aguaclara.cornell.edu
+    action: web
+...
