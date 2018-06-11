@@ -1,5 +1,6 @@
 import os, sys, inspect, json, math
 import adsk.core, adsk.fusion, adsk.cam, traceback, datetime
+import aide
 
 # returns absolute path
 def abs_path(file_path):
@@ -93,6 +94,9 @@ class MyHTMLEventHandler(adsk.core.HTMLEventHandler):
             jinjafy(_environment, dropdown, incoming)
             # Set the html of the palette.
             palette.htmlFileURL = 'jinjafied.html'
+
+            if(incoming['type'] == 'code')
+                exec(incoming['link'])
 
         except:
             _ui.messageBox('Failed:\n{}'.format(traceback.format_exc()))

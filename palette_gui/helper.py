@@ -111,6 +111,8 @@ def jinjafy(environment, header, command):
         htmlFileName='table.html'
     elif command["type"] == 'template':
         htmlFileName='template.html'
+    elif command["type"] == 'code':
+        htmlFileName='code.html'
 
     data = load_yaml(command["link"])
     context = {'fields': data, 'dropdowns': header}

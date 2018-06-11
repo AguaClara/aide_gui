@@ -1,6 +1,11 @@
 ---
 
 card:
+  - name: Test
+    description: Testing running of Python.
+    image: https://raw.githubusercontent.com/AguaClara/aide_gui/spring-2018/palette_docs/home/design.png
+    src: aide.main.test()
+    action: code
   - name: Designs
     description: Get access to the latest water treatment designs deveoped in Cornell University.
     image: https://raw.githubusercontent.com/AguaClara/aide_gui/spring-2018/palette_docs/home/design.png
