@@ -8,10 +8,10 @@ def abs_path(file_path):
 # add the path to local library
 sys.path.append(abs_path('.'))
 
-from . import yaml
-from . import urllib3
-from .jinja2 import Template, Environment, FileSystemLoader, select_autoescape
-from .helper import jinjafy, render, load_yaml
+from dependencies import yaml
+from dependencies import urllib3
+from dependencies.jinja2 import Template, Environment, FileSystemLoader, select_autoescape
+from helper import jinjafy, render, load_yaml
 
 
 link_cards = 'data/home/cards.yaml'
@@ -25,7 +25,7 @@ handlers = []
 _app = adsk.core.Application.cast(None)
 _ui = adsk.core.UserInterface.cast(None)
 _environment = Environment(
-    loader=FileSystemLoader(abs_path('.')+'/templates'),
+    loader=FileSystemLoader(abs_path('.')+'/data/templates'),
     autoescape=select_autoescape(['html', 'xml'])
 )
 
