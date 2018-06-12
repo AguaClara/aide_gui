@@ -1,7 +1,28 @@
 import os, sys, inspect, json, datetime, traceback
 import adsk.core, adsk.fusion, adsk.cam
-from jinja2 import Environment, FileSystemLoader, select_autoescape
-from helper import jinjafy, load_yaml
+
+def abs_path(file_path):
+    """
+    Takes a relative file path to the calling file and returns the correct
+    absolute path. Needed because the Fusion 360 environment doesn't resolve
+    relative paths well.
+
+    Parameters
+    ----------
+    file_path: str
+        Relative file path to the calling file
+
+    Return
+    -------
+        : string
+        The correct absolute path.
+    """
+    return os.path.join(os.path.dirname(inspect.getfile(sys._getframe(1))), file_path)
+
+sys.path.append(abs_path('.'))
+
+from .jinja2 import Environment, FileSystemLoader, select_autoescape
+from .helper import jinjafy, load_yaml
 
 link_cards = 'data/home/cards.yaml'
 link_dropdown ='data/home/dropdown.yaml'
@@ -13,11 +34,10 @@ dropdown=load_yaml(link_dropdown)
 handlers = []
 _app = adsk.core.Application.cast(None)
 _ui = adsk.core.UserInterface.cast(None)
-PATH = os.path.dirname(os.path.abspath(__file__))
 _environment = Environment(
-    loader=FileSystemLoader(os.path.join(PATH, 'templates')),
-    autoescape=select_autoescape(['html', 'xml'])
-)
+     loader=FileSystemLoader(abs_path('.')+'/data/templates'),
+     autoescape=select_autoescape(['html', 'xml'])
+ )
 
 
 # Event handler for the commandCreated event.

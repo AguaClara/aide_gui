@@ -20,8 +20,8 @@ def abs_path(file_path):
 
 # add the path to local library
 sys.path.append(abs_path('.'))
-import yaml
-import urllib3
+from . import yaml
+from . import urllib3
 
 
 # jinjafy given the html template with given context
