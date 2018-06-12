@@ -1,18 +1,7 @@
-import os, sys, inspect, json, math
-import adsk.core, adsk.fusion, adsk.cam, traceback, datetime
-
-# returns absolute path
-def abs_path(file_path):
-    return os.path.join(os.path.dirname(inspect.getfile(sys._getframe(1))), file_path)
-
-# add the path to local library
-sys.path.append(abs_path('.'))
-
-from dependencies import yaml
-from dependencies import urllib3
-from dependencies.jinja2 import Template, Environment, FileSystemLoader, select_autoescape
-from helper import jinjafy, render, load_yaml
-
+import os, sys, inspect, json, datetime, traceback
+import adsk.core, adsk.fusion, adsk.cam
+from jinja2 import Environment, FileSystemLoader, select_autoescape
+from helper import jinjafy, load_yaml
 
 link_cards = 'data/home/cards.yaml'
 link_dropdown ='data/home/dropdown.yaml'
@@ -24,8 +13,9 @@ dropdown=load_yaml(link_dropdown)
 handlers = []
 _app = adsk.core.Application.cast(None)
 _ui = adsk.core.UserInterface.cast(None)
+PATH = os.path.dirname(os.path.abspath(__file__))
 _environment = Environment(
-    loader=FileSystemLoader(abs_path('.')+'/data/templates'),
+    loader=FileSystemLoader(os.path.join(PATH, 'templates')),
     autoescape=select_autoescape(['html', 'xml'])
 )
 
