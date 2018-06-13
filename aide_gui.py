@@ -1,4 +1,4 @@
-import os, sys, inspect, json, datetime, traceback
+import os, sys, inspect, json, datetime, traceback, importlib
 import adsk.core, adsk.fusion, adsk.cam
 
 # Takes a relative file path (String) to the calling file and returns the correct absolute path (String). Needed because the Fusion 360 environment doesn't resolve relative paths well.
@@ -87,12 +87,15 @@ class MyHTMLEventHandler(adsk.core.HTMLEventHandler):
             # data is what is being sent from pallete in json form
 
             palette = ui.palettes.itemById('myPalette')
-            jinjafy(env, dropdown, incoming)
+            if (incoming['link'][-5:] == ".yaml"):
+                jinjafy(env, dropdown, incoming)
             # Set the html of the palette.
             palette.htmlFileURL = 'jinjafied.html'
 
-            if incoming['type'] == 'code':
+            if incoming['type'] == 'collect':
                 ui.messageBox('hello')
+                with open(abs_path("params.yaml"), 'w') as params_file:
+                    yaml.dump(incoming['link'], params_file)
 
         except:
             ui.messageBox('Failed:\n{}'.format(traceback.format_exc()))
@@ -102,6 +105,8 @@ def run(context):
         global ui, app, env
         app = adsk.core.Application.get()
         ui  = app.userInterface
+
+        importlib.reload(helper)
 
         # Add a command that displays the panel.
         showPaletteCmdDef = ui.commandDefinitions.itemById('showPalette')

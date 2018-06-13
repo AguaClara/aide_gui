@@ -20,9 +20,7 @@ def abs_path(file_path):
 
 # add the path to local library
 sys.path.append(abs_path('.'))
-from . import yaml
-from . import urllib3
-
+from .yaml import load
 
 # jinjafy given the html template with given context
 def render(environment, template_name, context):
@@ -65,25 +63,11 @@ def load_yaml(fpath):
         A dictionary thats extrapolated from yaml format
     """
     # If yaml is retrieved from user's local path
-    try:
-        with open(abs_path(fpath)) as fp:
-            yam = yaml.load(fp)
-            if (type(yam) != list and type(yam) != dict):
-                raise Exception('This is not a YAML')
-            return  yam
-    except:
-        # If yaml is retrieved from a given url
-        try:
-            url = fpath.strip()
-            http = urllib3.PoolManager()
-            r = http.request('GET', url)
-            status = r.status # check URL status
-            if (status != 200):
-                raise Exception('This is not a URL')
-            yam =  yaml.load(r.data.decode('utf-8'))
-            return yam
-        except:
-            return None
+    with open(abs_path(fpath)) as fp:
+        yam = load(fp)
+        if (type(yam) != list and type(yam) != dict):
+            raise Exception('This is not a YAML')
+        return  yam
 
 
 def jinjafy(environment, header, command):
@@ -111,7 +95,7 @@ def jinjafy(environment, header, command):
         htmlFileName='table.html'
     elif command["type"] == 'template':
         htmlFileName='template.html'
-    elif command["type"] == 'code':
+    elif command["type"] == 'collect':
         htmlFileName='code.html'
 
     data = load_yaml(command["link"])
