@@ -44,6 +44,40 @@
       {% endblock %}
 
       <!-- using cdn to load js. easier than loading from locally if changes made -->
-      <script type="text/javascript" src="https://gitcdn.link/repo/AguaClara/aide_gui/spring-2018/palette_gui/palette.js"></script>
+      <!-- TODO: Consider switching to local relative path to the JavaScript file-->
+      <!--<script type="text/javascript" src="https://gitcdn.link/repo/AguaClara/aide_gui/spring-2018/AddIn_HTML_communicator.js"></script>-->
+      <script type="text/javascript">
+        function sendInfoToFusion(action, src){
+            var command = {
+                type: action,
+                link: src
+            };
+            adsk.fusionSendData('send', JSON.stringify(command));
+        }
+
+
+
+        window.fusionJavaScriptHandler = {handle: function(action, data){
+            try {
+                if (action == 'send') {
+                    var list=JSON.parse(data);
+                    console.log(list);
+                }else if (action == 'debugger') {
+                    debugger;
+                }else {
+                    return 'Unexpected command type: ' + action;
+                }
+            } catch (e) {
+                console.log(e);
+                console.log('exception caught with command: ' + action + ', data: ' + data);
+            }
+            return 'OK';
+        }};
+
+        // activate the datatable when ready
+        $(document).ready( function () {
+            $('#myTable').DataTable();
+        } );
+      </script>
     </body>
 </html>

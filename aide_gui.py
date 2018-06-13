@@ -1,22 +1,8 @@
 import os, sys, inspect, json, datetime, traceback
 import adsk.core, adsk.fusion, adsk.cam
 
+# Takes a relative file path (String) to the calling file and returns the correct absolute path (String). Needed because the Fusion 360 environment doesn't resolve relative paths well.
 def abs_path(file_path):
-    """
-    Takes a relative file path to the calling file and returns the correct
-    absolute path. Needed because the Fusion 360 environment doesn't resolve
-    relative paths well.
-
-    Parameters
-    ----------
-    file_path: str
-        Relative file path to the calling file
-
-    Return
-    -------
-        : string
-        The correct absolute path.
-    """
     return os.path.join(os.path.dirname(inspect.getfile(sys._getframe(1))), file_path)
 
 sys.path.append(abs_path('.'))
@@ -32,13 +18,12 @@ dropdown=load_yaml(link_dropdown)
 
 # global set of event handlers to keep them referenced for the duration of the command
 handlers = []
-_app = adsk.core.Application.cast(None)
-_ui = adsk.core.UserInterface.cast(None)
-_environment = Environment(
+app = adsk.core.Application.cast(None)
+ui = adsk.core.UserInterface.cast(None)
+env = Environment(
      loader=FileSystemLoader(abs_path('.')+'/data/templates'),
      autoescape=select_autoescape(['html', 'xml'])
  )
-
 
 # Event handler for the commandCreated event.
 class ShowPaletteCommandCreatedHandler(adsk.core.CommandCreatedEventHandler):
@@ -51,7 +36,7 @@ class ShowPaletteCommandCreatedHandler(adsk.core.CommandCreatedEventHandler):
             command.execute.add(onExecute)
             handlers.append(onExecute)
         except:
-            _ui.messageBox('Failed:\n{}'.format(traceback.format_exc()))
+            ui.messageBox('Failed:\n{}'.format(traceback.format_exc()))
 
 # Event handler for the commandExecuted event.
 class ShowPaletteCommandExecuteHandler(adsk.core.CommandEventHandler):
@@ -59,9 +44,9 @@ class ShowPaletteCommandExecuteHandler(adsk.core.CommandEventHandler):
         super().__init__()
     def notify(self, args):
         try:
-            global _ui, _app, _environment
+            global ui, app, env
             # Create or display the palette.
-            palette = _ui.palettes.itemById('myPalette')
+            palette = ui.palettes.itemById('myPalette')
             if not palette:
 
                 command={
@@ -69,10 +54,10 @@ class ShowPaletteCommandExecuteHandler(adsk.core.CommandEventHandler):
                     'link' : link_cards
                 }
                 # if there was no palette then open homepage
-                jinjafy(_environment, dropdown, command)
+                jinjafy(env, dropdown, command)
 
                 # let palette open the jinjafied.html
-                palette = _ui.palettes.add('myPalette', 'My Palette', 'jinjafied.html', True, True, True, 300, 200)
+                palette = ui.palettes.add('myPalette', 'My Palette', 'jinjafied.html', True, True, True, 300, 200)
                 palette.setMinimumSize(300, 400)
                 # palette.setMaximumSize(300, 400)
 
@@ -86,8 +71,9 @@ class ShowPaletteCommandExecuteHandler(adsk.core.CommandEventHandler):
 
             else:
                 palette.isVisible = True
+
         except:
-            _ui.messageBox('Command executed failed: {}'.format(traceback.format_exc()))
+            ui.messageBox('Command executed failed: {}'.format(traceback.format_exc()))
 
 # Event handler for the palette HTML event.
 class MyHTMLEventHandler(adsk.core.HTMLEventHandler):
@@ -99,116 +85,53 @@ class MyHTMLEventHandler(adsk.core.HTMLEventHandler):
             incoming = json.loads(htmlArgs.data)
             # data is what is being sent from pallete in json form
 
-            palette = _ui.palettes.itemById('myPalette')
-            jinjafy(_environment, dropdown, incoming)
+            palette = ui.palettes.itemById('myPalette')
+            jinjafy(env, dropdown, incoming)
             # Set the html of the palette.
             palette.htmlFileURL = 'jinjafied.html'
 
             if incoming['type'] == 'code':
-                _ui.messageBox('hello')
+                ui.messageBox('hello')
+
         except:
-            _ui.messageBox('Failed:\n{}'.format(traceback.format_exc()))
-
-
-
-# Event handler for the commandCreated event.
-class SendInfoCommandCreatedHandler(adsk.core.CommandCreatedEventHandler):
-    def __init__(self):
-        super().__init__()
-    def notify(self, args):
-        try:
-            command = args.command
-            onExecute = SendInfoCommandExecuteHandler()
-            command.execute.add(onExecute)
-            handlers.append(onExecute)
-        except:
-            _ui.messageBox('Failed:\n{}'.format(traceback.format_exc()))
-
-# Event handler for the commandExecuted event.
-class SendInfoCommandExecuteHandler(adsk.core.CommandEventHandler):
-    def __init__(self):
-        super().__init__()
-    def notify(self, args):
-        try:
-            # Send information to the palette.
-            palette = _ui.palettes.itemById('myPalette')
-            if palette:
-                # here we replaced some terms so JSON in js recognizes the form
-                palette.sendInfoToHTML('send', str(data).replace("'", '"').replace("None", 'null'))
-        except:
-            _ui.messageBox('Command executed failed: {}'.format(traceback.format_exc()))
-
-
+            ui.messageBox('Failed:\n{}'.format(traceback.format_exc()))
 
 def run(context):
     try:
-        global _ui, _app, _environment
-        _app = adsk.core.Application.get()
-        _ui  = _app.userInterface
+        global ui, app, env
+        app = adsk.core.Application.get()
+        ui  = app.userInterface
 
         # Add a command that displays the panel.
-        showPaletteCmdDef = _ui.commandDefinitions.itemById('showPalette')
+        showPaletteCmdDef = ui.commandDefinitions.itemById('showPalette')
         if not showPaletteCmdDef:
-            showPaletteCmdDef = _ui.commandDefinitions.addButtonDefinition('showPalette', 'Show Palette', 'Show AIDE palette', '')
+            showPaletteCmdDef = ui.commandDefinitions.addButtonDefinition('showPalette', 'Show Palette', 'Show AIDE palette', '')
 
             # Connect to Command Created event.
             onCommandCreated = ShowPaletteCommandCreatedHandler()
             showPaletteCmdDef.commandCreated.add(onCommandCreated)
             handlers.append(onCommandCreated)
 
-
-        # Add a command under ADD-INS panel which sends information from Fusion to the palette's HTML.
-        sendInfoCmdDef = _ui.commandDefinitions.itemById('sendInfoToHTML')
-        if not sendInfoCmdDef:
-            sendInfoCmdDef = _ui.commandDefinitions.addButtonDefinition('sendInfoToHTML', 'Send info to Palette', 'Send Info to Palette HTML', '')
-
-            # Connect to Command Created event.
-            onCommandCreated = SendInfoCommandCreatedHandler()
-            sendInfoCmdDef.commandCreated.add(onCommandCreated)
-            handlers.append(onCommandCreated)
-
-
-        # Get the Create Panel in the model workspace in Fusion
-        createPanel = _ui.allToolbarPanels.itemById('SolidCreatePanel')
-        # Add the button to the bottom of the Create Panel in Fusion
-        showPaletteButton= createPanel.controls.addCommand(showPaletteCmdDef)
-        sendInfoButton= createPanel.controls.addCommand(sendInfoCmdDef)
-
-        # open the pallete as soon as user presses run()
+        # Open the palette as soon as the user runs the add-in.
         showPaletteCmdDef.execute()
 
     except:
-        if _ui:
-            _ui.messageBox('Failed:\n{}'.format(traceback.format_exc()))
+        if ui:
+            ui.messageBox('Failed:\n{}'.format(traceback.format_exc()))
 
 
 def stop(context):
     try:
         # Delete the palette created by this add-in.
-        palette = _ui.palettes.itemById('myPalette')
+        palette = ui.palettes.itemById('myPalette')
         if palette:
             palette.deleteMe()
 
-        # Delete the created buttons under SolidCreatePanel
-        createPanel = _ui.allToolbarPanels.itemById('SolidCreatePanel')
-
-        showPaletteButton = createPanel.controls.itemById('showPalette')
-        if showPaletteButton:
-            showPaletteButton.deleteMe()
-
-        sendInfoButton = createPanel.controls.itemById('sendInfoToHTML')
-        if sendInfoButton:
-            sendInfoButton.deleteMe()
-
-        # Delete controls and associated command definitions created by this add-ins
-        cmdDef = _ui.commandDefinitions.itemById('showPalette')
-        if cmdDef:
-            cmdDef.deleteMe()
-
-        cmdDef = _ui.commandDefinitions.itemById('sendInfoToHTML')
+        # Delete controls and associated command definitions created by this add-in.
+        cmdDef = ui.commandDefinitions.itemById('showPalette')
         if cmdDef:
             cmdDef.deleteMe()
 
     except:
-        if _ui:
-            _ui.messageBox('Failed:\n{}'.format(traceback.format_exc()))
+        if ui:
+            ui.messageBox('Failed:\n{}'.format(traceback.format_exc()))
