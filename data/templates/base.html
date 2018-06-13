@@ -67,7 +67,21 @@
             }
             return 'OK';
         }};
-
+        function formToDict(){
+            window.alert("formtodict called");
+            var form = document.getElementById("user_params");
+            window.alert("form created");
+            var data = {};
+            window.alert("data created");
+            for (var i = 0; i < form.length ; i++) {
+                window.alert("for loop starts");
+                <!-- Doesnt work -->
+                data[form.elements[item]] = form.elements[item].value;
+                window.alert("value added");
+            }
+            window.alert("data");
+            return data;
+        }
         // activate the datatable when ready
         $(document).ready( function () {
             $('#myTable').DataTable();

@@ -9,7 +9,7 @@
       <div class='text-muted' style='font-size:0.6rem'>{{fields.template.description}}</div>
     </div>
     <div class="card-body" style='padding:0.75rem 0.75rem;'>
-
+      <form id="user_params">
         {% for param in fields.template.params  %}
           {% for key, value in param.items() %}
             {% if value.type == 'string' %}
@@ -17,7 +17,7 @@
                 <div class="input-group-prepend">
                   <span class="input-group-text" id='{{ key }}'>{{ value.name }}</span>
                 </div>
-                <input type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" value='{{ value.default }}'>
+                <input name = "{{ value.name }}" type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" value='{{ value.default }}'>
               </div>
               {% endif %}
               {% if value.type == 'dropdown' %}
@@ -35,7 +35,8 @@
           {% endfor %}
         {% endfor %}
 
-        <button type='button' class='btn btn-primary btn-lg btn-block' style='padding:0; font-size:1rem;' onclick='sendInfoToFusion("collect", "somelink")'>Collect</button>
+        </form>
+        <button type='button' class='btn btn-primary btn-lg btn-block' style='padding:0; font-size:1rem;' onclick='sendInfoToFusion("collect", formToDict())'>Collect</button>
 
       </div>
     </div>
