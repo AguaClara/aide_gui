@@ -39,13 +39,9 @@
         </nav>
       </div>
 
-
       {% block content %}
       {% endblock %}
 
-      <!-- using cdn to load js. easier than loading from locally if changes made -->
-      <!-- TODO: Consider switching to local relative path to the JavaScript file-->
-      <!--<script type="text/javascript" src="https://gitcdn.link/repo/AguaClara/aide_gui/spring-2018/AddIn_HTML_communicator.js"></script>-->
       <script type="text/javascript">
         function sendInfoToFusion(action, src){
             var command = {
@@ -54,8 +50,6 @@
             };
             adsk.fusionSendData('send', JSON.stringify(command));
         }
-
-
 
         window.fusionJavaScriptHandler = {handle: function(action, data){
             try {
@@ -79,5 +73,6 @@
             $('#myTable').DataTable();
         } );
       </script>
+
     </body>
 </html>

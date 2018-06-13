@@ -12,11 +12,12 @@ from .helper import jinjafy, load_yaml
 
 link_cards = 'data/home/cards.yaml'
 link_dropdown ='data/home/dropdown.yaml'
-# this is loaded here because we want to fetch dropdown once only
+
+# Dropdown only needs to be fetched once
 dropdown=load_yaml(link_dropdown)
 
 
-# global set of event handlers to keep them referenced for the duration of the command
+# Global set of event handlers to keep them referenced for the duration of the command.
 handlers = []
 app = adsk.core.Application.cast(None)
 ui = adsk.core.UserInterface.cast(None)
@@ -44,7 +45,7 @@ class ShowPaletteCommandExecuteHandler(adsk.core.CommandEventHandler):
         super().__init__()
     def notify(self, args):
         try:
-            global ui, app, env
+            global app, ui, env
             # Create or display the palette.
             palette = ui.palettes.itemById('myPalette')
             if not palette:
@@ -73,7 +74,7 @@ class ShowPaletteCommandExecuteHandler(adsk.core.CommandEventHandler):
                 palette.isVisible = True
 
         except:
-            ui.messageBox('Command executed failed: {}'.format(traceback.format_exc()))
+            ui.messageBox('Failed: \{}'.format(traceback.format_exc()))
 
 # Event handler for the palette HTML event.
 class MyHTMLEventHandler(adsk.core.HTMLEventHandler):
@@ -118,7 +119,6 @@ def run(context):
     except:
         if ui:
             ui.messageBox('Failed:\n{}'.format(traceback.format_exc()))
-
 
 def stop(context):
     try:

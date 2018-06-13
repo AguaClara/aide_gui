@@ -1,11 +1,6 @@
 ---
 
 card:
-  - name: Test
-    description: Testing running of Python.
-    image: data/home/design.png
-    src: aide.main.test()
-    action: code
   - name: Designs
     description: Get access to the latest water treatment designs deveoped in Cornell University.
     image: data/home/design.png
