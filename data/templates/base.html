@@ -73,9 +73,10 @@
             window.alert("form created");
             var data = {};
             window.alert("data created");
-            for (var i = 0; i < form.length ; i++) {
+            //for (var i = 0; i < form.length ; i++) {
+            for (var i in form){
                 window.alert("for loop starts");
-                <!-- Doesnt work -->
+              //  <!-- Doesnt work -->
                 data[form.elements[item]] = form.elements[item].value;
                 window.alert("value added");
             }
