@@ -106,8 +106,6 @@ def run(context):
         app = adsk.core.Application.get()
         ui  = app.userInterface
 
-        importlib.reload(helper)
-
         # Add a command that displays the panel.
         showPaletteCmdDef = ui.commandDefinitions.itemById('showPalette')
         if not showPaletteCmdDef:
