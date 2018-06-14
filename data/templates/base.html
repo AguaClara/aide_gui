@@ -73,8 +73,8 @@
             window.alert("form created");
             var data = {};
             window.alert("data created");
-            //for (var i = 0; i < form.length ; i++) {
-            for (var i in form){
+            for (var item = 0; item < form.length ; item++) {
+            //for (var item in form){
                 window.alert("for loop starts");
               //  <!-- Doesnt work -->
                 data[form.elements[item]] = form.elements[item].value;

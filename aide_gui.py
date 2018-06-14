@@ -87,15 +87,15 @@ class MyHTMLEventHandler(adsk.core.HTMLEventHandler):
             # data is what is being sent from pallete in json form
 
             palette = ui.palettes.itemById('myPalette')
-            if (incoming['link'][-5:] == ".yaml"):
-                jinjafy(env, dropdown, incoming)
-            # Set the html of the palette.
-            palette.htmlFileURL = 'jinjafied.html'
-
             if incoming['type'] == 'collect':
                 ui.messageBox('hello')
                 with open(abs_path("params.yaml"), 'w') as params_file:
                     yaml.dump(incoming['link'], params_file)
+            else:
+                jinjafy(env, dropdown, incoming)
+            # Set the html of the palette.
+            palette.htmlFileURL = 'jinjafied.html'
+
 
         except:
             ui.messageBox('Failed:\n{}'.format(traceback.format_exc()))
