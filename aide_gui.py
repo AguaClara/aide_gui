@@ -95,7 +95,7 @@ class MyHTMLEventHandler(adsk.core.HTMLEventHandler):
             palette = ui.palettes.itemById('myPalette')
             if incoming['type'] == 'collect':
                 with open(make_path('params.yaml'), 'w') as params_file:
-                    yaml.dump(incoming['link'], params_file)
+                    yaml.dump(literal_eval(str(incoming['link'])), params_file, default_flow_style=False)
             else:
                 jinjafy(env, dropdown, incoming)
             # Set the html of the palette.
