@@ -68,19 +68,11 @@
             return 'OK';
         }};
         function formToDict(){
-            window.alert("formtodict called");
             var form = document.getElementById("user_params");
-            window.alert("form created");
             var data = {};
-            window.alert("data created");
             for (var item = 0; item < form.length ; item++) {
-            //for (var item in form){
-                window.alert("for loop starts");
-              //  <!-- Doesnt work -->
-                data[form.elements[item]] = form.elements[item].value;
-                window.alert("value added");
+                data[form.elements[item].name] = form.elements[item].value;
             }
-            window.alert("data");
             return data;
         }
         // activate the datatable when ready

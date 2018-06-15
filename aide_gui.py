@@ -1,5 +1,7 @@
-import os, sys, inspect, json, datetime, traceback, importlib
+import os, sys, inspect, json, datetime, traceback, importlib, yaml
 import adsk.core, adsk.fusion, adsk.cam
+
+from ast import literal_eval
 
 # Takes a relative file path (String) to the calling file and returns the correct absolute path (String). Needed because the Fusion 360 environment doesn't resolve relative paths well.
 def abs_path(file_path):
@@ -92,7 +94,6 @@ class MyHTMLEventHandler(adsk.core.HTMLEventHandler):
 
             palette = ui.palettes.itemById('myPalette')
             if incoming['type'] == 'collect':
-                ui.messageBox('hello')
                 with open(make_path('params.yaml'), 'w') as params_file:
                     yaml.dump(incoming['link'], params_file)
             else:
