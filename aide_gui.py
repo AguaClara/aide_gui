@@ -1,38 +1,31 @@
-import os, sys, inspect, json, datetime, traceback, importlib, yaml
-import adsk.core, adsk.fusion, adsk.cam
-
+import sys, adsk.core, traceback, json, datetime
+from importlib import reload
 from ast import literal_eval
 
-# Takes a relative file path (String) to the calling file and returns the correct absolute path (String). Needed because the Fusion 360 environment doesn't resolve relative paths well.
-def abs_path(file_path):
-    return os.path.join(os.path.dirname(inspect.getfile(sys._getframe(1))), file_path)
+# NOTE: This can be changed to "from aide_gui.helper import display" once development on helper has been finalized. Also see "reload(helper)" and "helper.display" statements below.
+from aide_gui import helper
 
-sys.path.append(abs_path('.'))
+# Allows Python to search for packages in the directory where this file is located.
+sys.path.append(helper.abs_path('.'))
 
-from .jinja2 import Environment, FileSystemLoader, select_autoescape
-from .helper import jinjafy, load_yaml
+from jinja2 import Environment, FileSystemLoader, select_autoescape
 
-# Locks in file locations when calling aide > aide_gui
-BASEDIR = os.path.dirname(os.path.abspath(__file__))
-def make_path(filename, directory=BASEDIR):
-    return os.path.join(directory, filename)
+# Dropdown only needs to be fetched once.
+# TODO: Use back buttons for more intuitive navigation. Also see helper.display.
+dropdown = helper.load_yaml(helper.abs_path('data/home/dropdown.yaml'))
 
-link_cards = make_path('data/home/cards.yaml')
-link_dropdown = make_path('data/home/dropdown.yaml')
-
-# Dropdown only needs to be fetched once
-dropdown=load_yaml(link_dropdown)
-
-# Global set of event handlers to keep them referenced for the duration of the command.
+# Global set of event handlers to keep them referenced while the palette is being run.
 handlers = []
+
+# Global set of variables to render the palette.
 app = adsk.core.Application.cast(None)
 ui = adsk.core.UserInterface.cast(None)
 env = Environment(
-     loader=FileSystemLoader(abs_path('.')+ '/data/templates'),
-     autoescape=select_autoescape(['html', 'xml'])
- )
+     loader = FileSystemLoader(helper.abs_path('data/templates')),
+     autoescape = select_autoescape(['html', 'xml'])
+)
 
-# Event handler for the commandCreated event.
+# Event handler for creating the command to show the palette.
 class ShowPaletteCommandCreatedHandler(adsk.core.CommandCreatedEventHandler):
     def __init__(self):
         super().__init__()
@@ -45,84 +38,84 @@ class ShowPaletteCommandCreatedHandler(adsk.core.CommandCreatedEventHandler):
         except:
             ui.messageBox('Failed:\n{}'.format(traceback.format_exc()))
 
-# Event handler for the commandExecuted event.
+# Event handler for executing the command to show the palette.
 class ShowPaletteCommandExecuteHandler(adsk.core.CommandEventHandler):
     def __init__(self):
         super().__init__()
     def notify(self, args):
         try:
-            global app, ui, env
-            # Create or display the palette.
-            palette = ui.palettes.itemById('myPalette')
-            if not palette:
+            # Render the Home page.
+            palette = ui.palettes.itemById('aide_gui')
+            command={
+                'type' : 'home',
+                'data' : helper.abs_path('data/home/cards.yaml')
+            }
+            # NOTE: This can be changed to "display(...)" once development on helper has been finalized.
+            helper.display(env, dropdown, command)
 
-                command={
-                    'type' : 'home',
-                    'link' : link_cards
-                }
-                # if there was no palette then open homepage
-                jinjafy(env, dropdown, command)
+            # Initialize the palette.
+            palette = ui.palettes.add(
+                'aide_gui', 'AguaClara Infrastructure Design Engine', helper.abs_path('data/display.html'), # ID, Displayed name, Displayed HTML
+                True, False, True # Visible, Close button, Resizable
+            )
+            palette.setMinimumSize(300, 400)
 
-                # let palette open the jinjafied.html
-                palette = ui.palettes.add('myPalette', 'My Palette', make_path('jinjafied.html'), True, True, True, 300, 200)
-                palette.setMinimumSize(300, 400)
-                # palette.setMaximumSize(300, 400)
+            # Dock the palette to the right side of Fusion window.
+            palette.dockingState = adsk.core.PaletteDockingStates.PaletteDockStateRight
 
-                # Dock the palette to the right side of Fusion window.
-                palette.dockingState = adsk.core.PaletteDockingStates.PaletteDockStateRight
-
-                # Add handler to HTMLEvent of the palette.
-                onHTMLEvent = MyHTMLEventHandler()
-                palette.incomingFromHTML.add(onHTMLEvent)
-                handlers.append(onHTMLEvent)
-
-            else:
-                palette.isVisible = True
-
+            # Add handler to HTMLEvent of the palette.
+            onHTMLEvent = MyHTMLEventHandler()
+            palette.incomingFromHTML.add(onHTMLEvent)
+            handlers.append(onHTMLEvent)
         except:
             ui.messageBox('Failed: \{}'.format(traceback.format_exc()))
 
-# Event handler for the palette HTML event.
+# Event handler for executing clicks from the HTML.
 class MyHTMLEventHandler(adsk.core.HTMLEventHandler):
     def __init__(self):
         super().__init__()
     def notify(self, args):
         try:
+            # Receive data from the HTML and convert to dict.
             htmlArgs = adsk.core.HTMLEventArgs.cast(args)
-            incoming = json.loads(htmlArgs.data)
-            # data is what is being sent from pallete in json form
+            command = literal_eval(str(json.loads(htmlArgs.data)))
 
-            palette = ui.palettes.itemById('myPalette')
-            if incoming['type'] == 'collect':
-                with open(make_path('params.yaml'), 'w') as params_file:
-                    yaml.dump(literal_eval(str(incoming['link'])), params_file, default_flow_style=False)
+            # Send user parameters (if given) to YAML.
+            if command['type'] == 'collect':
+                # TODO: Rename collect across everything to user_input.
+                # TODO: Don't write to locations where code is located.
+                helper.write_yaml('params.yaml', command['data'])
+            
             else:
-                jinjafy(env, dropdown, incoming)
-            # Set the html of the palette.
-            palette.htmlFileURL = make_path('jinjafied.html')
-
+                # Render a new page.
+                # NOTE: This can be changed to "display(...)" once development on helper has been finalized.
+                helper.display(env, dropdown, command)
+                palette = ui.palettes.itemById('aide_gui')
+                palette.htmlFileURL = helper.abs_path('data/display.html')
         except:
             ui.messageBox('Failed:\n{}'.format(traceback.format_exc()))
 
 def run(context):
     try:
+        # Load global variables for use in events.
         global ui, app, env
         app = adsk.core.Application.get()
         ui  = app.userInterface
 
-        # Add a command that displays the panel.
-        showPaletteCmdDef = ui.commandDefinitions.itemById('showPalette')
-        if not showPaletteCmdDef:
-            showPaletteCmdDef = ui.commandDefinitions.addButtonDefinition('showPalette', 'Show Palette', 'Show AIDE palette', '')
+        # Reload functions from helper if changes have been made.
+        # NOTE: This can be deleted once development on helper has been finalized.
+        reload(helper)
 
-            # Connect to Command Created event.
-            onCommandCreated = ShowPaletteCommandCreatedHandler()
-            showPaletteCmdDef.commandCreated.add(onCommandCreated)
-            handlers.append(onCommandCreated)
+        # Add a command that displays the panel.
+        showPaletteCmdDef = ui.commandDefinitions.addButtonDefinition('showPalette', '', '')
+
+        # Connect to Command Created event.
+        onCommandCreated = ShowPaletteCommandCreatedHandler()
+        showPaletteCmdDef.commandCreated.add(onCommandCreated)
+        handlers.append(onCommandCreated)
 
         # Open the palette as soon as the user runs the add-in.
         showPaletteCmdDef.execute()
-
     except:
         if ui:
             ui.messageBox('Failed:\n{}'.format(traceback.format_exc()))
@@ -130,7 +123,7 @@ def run(context):
 def stop(context):
     try:
         # Delete the palette created by this add-in.
-        palette = ui.palettes.itemById('myPalette')
+        palette = ui.palettes.itemById('aide_gui')
         if palette:
             palette.deleteMe()
 
@@ -138,7 +131,6 @@ def stop(context):
         cmdDef = ui.commandDefinitions.itemById('showPalette')
         if cmdDef:
             cmdDef.deleteMe()
-
     except:
         if ui:
             ui.messageBox('Failed:\n{}'.format(traceback.format_exc()))
