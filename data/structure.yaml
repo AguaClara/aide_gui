@@ -1,19 +1,18 @@
-cards:
-  - name: Designs
-    description: Get access to the latest water treatment designs deveoped in Cornell University.
-    image: home/design.png
-    action: table
-    src: data/tables/designTable.yaml
+- name: Designs
+  description: Get access to the latest water treatment designs deveoped in Cornell University.
+  image: home/design.png
+  action: table
+  src: data/tables/designTable.yaml
 
-    # TODO: Change these to a link that opens externally in the browser.
-  - name: GitHub
-    description: Check out our GitHub page for the latest developments. Full access to all AguaClara resources.
-    image: home/GitHub-Mark.jpg
-    action: web
-    src: https://github.com/AguaClara
+  # TODO: Change these to a link that opens externally in the browser.
+- name: GitHub
+  description: Check out our GitHub page for the latest developments. Full access to all AguaClara resources.
+  image: home/GitHub-Mark.jpg
+  action: web
+  src: https://github.com/AguaClara
 
-  - name: Our Website
-    description: Visit our official website to see our vision.
-    image: home/website.png
-    action: web
-    src: http://aguaclara.cornell.edu
+- name: Our Website
+  description: Visit our official website to see our vision.
+  image: home/website.png
+  action: web
+  src: http://aguaclara.cornell.edu
