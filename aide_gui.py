@@ -6,7 +6,7 @@ from ast import literal_eval
 from aide_gui import helper
 
 # Allows Python to search for packages in the directory where this file is located.
-sys.path.append(helper.abs_path('.'))
+sys.path.append(helper.abs_path('./dependencies'))
 
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 

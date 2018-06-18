@@ -6,7 +6,7 @@ def abs_path(file_path):
     return join(dirname(abspath(__file__)), file_path)
 
 # Allows Python to search for packages in the directory where this file is located.
-sys.path.append(abs_path('.'))
+sys.path.append(abs_path('./dependencies'))
 
 from yaml import load, dump
 
