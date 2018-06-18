@@ -7,7 +7,7 @@
         <!-- this is here to test samples -->
         <div class='card'>
           <div class="card-header" style="font-size: 0.8rem;">
-            Table of {{fields.name}}
+            {{fields.name}}
           </div>
           <div class="card-body" style='padding:0.75rem 0.25rem'>
             <table id="design_tab" class="hover row-border order-column">
@@ -19,12 +19,12 @@
                 </tr>
               </thead>
               <tbody>
-                {% for design in fields.src %}
+                {% for item in fields.items %}
                   <tr data="{{design}}">
                     <td></td>
-                    <td>{{design.name}}</td>
+                    <td>{{item.name}}</td>
                     <td style='text-align: right;'>
-                      <button class='btn nohover' onclick="sendInfoToFusion('{{design.action}}', '{{design.src}}')" style="height:24px; width:30px; padding:0; cursor:pointer">
+                      <button class='btn nohover' onclick="sendInfoToFusion('{{item.action}}', '{{item.src}}')" style="height:24px; width:30px; padding:0; cursor:pointer">
                         <i class="fa fa-cloud-download" style="color:grey; font-size:18px"></i>
                       </button>
                     </td>
