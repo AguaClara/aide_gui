@@ -48,7 +48,7 @@ class ShowPaletteCommandExecuteHandler(adsk.core.CommandEventHandler):
             palette = ui.palettes.itemById('aide_gui')
             command={
                 'type' : 'home',
-                'data' : helper.abs_path('data/home/cards.yaml')
+                'data' : helper.abs_path('data/structure.yaml')
             }
             # NOTE: This can be changed to "display(...)" once development on helper has been finalized.
             helper.display(env, dropdown, command)

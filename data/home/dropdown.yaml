@@ -1,7 +1,7 @@
 ---
 dropdown:
   - name: Home
-    src: data/home/cards.yaml
+    src: data/structure.yaml
     action: home
   - name: Designs
     src: data/tables/designTable.yaml
