@@ -47,8 +47,8 @@ class ShowPaletteCommandExecuteHandler(adsk.core.CommandEventHandler):
             # Render the Home page.
             palette = ui.palettes.itemById('aide_gui')
             command={
-                'type' : 'home',
-                'data' : helper.abs_path('data/structure.yaml')
+                'action': 'home',
+                'src' : helper.load_yaml('data/structure.yaml')['src']
             }
             # NOTE: This can be changed to "display(...)" once development on helper has been finalized.
             helper.display(env, dropdown, command)
@@ -79,9 +79,10 @@ class MyHTMLEventHandler(adsk.core.HTMLEventHandler):
             # Receive data from the HTML and convert to dict.
             htmlArgs = adsk.core.HTMLEventArgs.cast(args)
             command = literal_eval(str(json.loads(htmlArgs.data)))
+            ui.messageBox(str(command))
 
             # Send user parameters (if given) to YAML.
-            if command['type'] == 'collect':
+            if command['action'] == 'collect':
                 # TODO: Rename collect across everything to user_input.
                 # TODO: Don't write to locations where code is located.
                 helper.write_yaml('params.yaml', command['data'])

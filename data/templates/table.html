@@ -7,7 +7,7 @@
         <!-- this is here to test samples -->
         <div class='card'>
           <div class="card-header" style="font-size: 0.8rem;">
-            Table of {{fields.template}}s
+            Table of {{fields.name}}
           </div>
           <div class="card-body" style='padding:0.75rem 0.25rem'>
             <table id="design_tab" class="hover row-border order-column">
@@ -19,7 +19,7 @@
                 </tr>
               </thead>
               <tbody>
-                {% for design in fields.table %}
+                {% for design in fields.src %}
                   <tr data="{{design}}">
                     <td></td>
                     <td>{{design.name}}</td>

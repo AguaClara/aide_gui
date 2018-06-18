@@ -14,7 +14,7 @@
             {% if card.action == 'web'%}
               <a href="{{card.src}}" class="btn btn-primary">Go to {{card.name}}</a>
             {% else %}
-              <button type='button' class="btn btn-primary" onclick='sendInfoToFusion("{{card.action}}", "{{card.src}}")'>Go to {{card.name}}</button>
+              <button type='button' class="btn btn-primary" onclick='sendInfoToFusion("{{card}}")'>Go to {{card.name}}</button>
             {% endif %}
           </div>
         </div>

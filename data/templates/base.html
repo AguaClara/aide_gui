@@ -43,11 +43,7 @@
       {% endblock %}
 
       <script type="text/javascript">
-        function sendInfoToFusion(action, src){
-            var command = {
-                type: action,
-                data: src
-            };
+        function sendInfoToFusion(command){
             adsk.fusionSendData('send', JSON.stringify(command));
         }
 

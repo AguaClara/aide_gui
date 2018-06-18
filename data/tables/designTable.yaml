@@ -2,10 +2,4 @@
 template: Design
 table:
   # this will be a long list of this form below for each design
-  - name: Water Treatment Plant
-    description: 40L/s plant that will supply about 40,000 people with clean drinking water.
-    image: http://news.cornell.edu/sites/chronicle.cornell/files/water2.jpg
-    src: data/designs/des1.yaml
-    action: template
-
 ...

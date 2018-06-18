@@ -55,17 +55,17 @@ def display(env, dropdown, command):
 
     # Select the correct template given the command type.
     # NOTE: If more templates/command types are made, they must be entered in here.
-    if command["type"] == 'home':
+    if command["action"] == 'home':
         template_name='home.html'
-    elif command["type"] == 'table':
+    elif command["action"] == 'table':
         template_name='table.html'
-    elif command["type"] == 'template':
+    elif command["action"] == 'template':
         template_name='template.html'
     else:
-        template_name='error.html'
+        template_name='home.html'
 
     # Compile values to be combined with the template.
-    context = {'fields': load_yaml(command['data']), 'dropdowns': dropdown}
+    context = {'fields': command['src'], 'dropdowns': dropdown}
 
     # Refresh display.html with the next page to be rendered.
     with open(abs_path('data/display.html'), 'w') as display:
