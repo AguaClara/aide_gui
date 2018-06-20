@@ -3,14 +3,14 @@
 {% block content %}
 <div class="container" style='font-size: 1rem; max-width: 18rem;'>
   <div class='card'>
-    <img class="card-img-top" style='height:10rem; width: 100%;' src="{{fields.template.image}}" alt="Card image cap">
+    <img class="card-img-top" style='height:10rem; width: 100%;' src="{{fields.image}}" alt="Card image cap">
     <div class="card-header">
-      {{fields.template.name}}
-      <div class='text-muted' style='font-size:0.6rem'>{{fields.template.description}}</div>
+      {{fields.name}}
+      <div class='text-muted' style='font-size:0.6rem'>{{fields.description}}</div>
     </div>
     <div class="card-body" style='padding:0.75rem 0.75rem;'>
       <form id="user_params">
-        {% for param in fields.template.params  %}
+        {% for param in fields.params  %}
           {% for key, value in param.items() %}
             {% if value.type == 'string' %}
               <div class="input-group mb-3">

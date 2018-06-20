@@ -12,7 +12,7 @@ from jinja2 import Environment, FileSystemLoader, select_autoescape
 
 # Dropdown only needs to be fetched once.
 # TODO: Use back buttons for more intuitive navigation. Also see helper.display.
-dropdown = helper.load_yaml(helper.abs_path('data/home/dropdown.yaml'))
+dropdown = helper.load_yaml(helper.abs_path('data/dropdown.yaml'))
 
 # Global set of event handlers to keep them referenced while the palette is being run.
 handlers = []
@@ -48,7 +48,7 @@ class ShowPaletteCommandExecuteHandler(adsk.core.CommandEventHandler):
             palette = ui.palettes.itemById('aide_gui')
             command={
                 'action' : 'home',
-                'src' : helper.load_yaml(helper.abs_path('data/home/cards.yaml'))
+                'src' : helper.load_yaml(helper.abs_path('data/structure.yaml'))
             }
 
             # NOTE: This can be changed to "display(...)" once development on helper has been finalized.
@@ -81,16 +81,26 @@ class MyHTMLEventHandler(adsk.core.HTMLEventHandler):
             htmlArgs = adsk.core.HTMLEventArgs.cast(args)
             command = json.loads(htmlArgs.data)
 
-            # Convert command['src'] from string to dict.
-            command['src'] = literal_eval(command['src'])
-
             # Send user parameters (if given) to YAML.
             if command['action'] == 'collect':
                 # TODO: Rename collect across everything to user_input.
                 # TODO: Don't write to locations where code is located.
                 helper.write_yaml('params.yaml', command['src'])
 
+            # NOTE: This is a temporary fix until a back button can be figured out.
+            elif command['action'] == 'dropdown':
+                command={
+                    'action' : 'home',
+                    'src' : helper.load_yaml(helper.abs_path('data/structure.yaml'))
+                }
+                helper.display(env, dropdown, command)
+                palette = ui.palettes.itemById('aide_gui')
+                palette.htmlFileURL = helper.abs_path('data/display.html')
+
             else:
+                # Convert command['src'] from string to dict.
+                command['src'] = literal_eval(command['src'])
+
                 # Render a new page.
                 # NOTE: This can be changed to "display(...)" once development on helper has been finalized.
                 helper.display(env, dropdown, command)

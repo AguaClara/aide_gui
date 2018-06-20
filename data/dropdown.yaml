@@ -1,0 +1,7 @@
+---
+dropdown:
+  - name: Home
+    action: dropdown
+    src: data/structure.yaml
+# This section above will be in every page
+...
