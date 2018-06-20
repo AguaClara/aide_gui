@@ -65,7 +65,7 @@ def display(env, dropdown, command):
         template_name='home.html'
 
     # Compile values to be combined with the template.
-    context = {'fields': load_yaml(command['src']), 'dropdowns': dropdown}
+    context = {'fields': command['src'], 'dropdowns': dropdown}
 
     # Refresh display.html with the next page to be rendered.
     with open(abs_path('data/display.html'), 'w') as display:

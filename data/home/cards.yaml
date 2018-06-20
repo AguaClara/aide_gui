@@ -3,7 +3,15 @@
 - name: Designs
   description: Get access to the latest water treatment designs deveoped in Cornell University.
   image: home/design.png
-  src: data/tables/designTable.yaml
+  src: 
+    template: Component
+    table:
+      # this will be a long list of this form below for each design
+      - name: Sedimentation Tank
+        description: Sedimentation tank is part of the treatment plant. It is used to let the clay particles settle.
+        image: http://news.cornell.edu/sites/chronicle.cornell/files/water2.jpg
+        src: data/components/comp1.yaml
+        action: template
   action: table
 
   # TODO: Change these to a link that opens externally in the browser.
