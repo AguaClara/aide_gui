@@ -1,0 +1,27 @@
+---
+
+# NOTE: Image paths are given relative to data/, and src's are given relative to aide_gui/.
+card:
+  - name: Designs
+    description: Get access to the latest water treatment designs deveoped in Cornell University.
+    image: home/design.png
+    src: data/tables/designTable.yaml
+    action: table
+  - name: Components
+    description: Get Access to the individual components of the water treatment Plant.
+    image: home/component.png
+    src: data/tables/componentTable.yaml
+    action: table
+
+    # TODO: Change these to a link that opens externally in the browser.
+  - name: GitHub
+    description: Check out our GitHub page for the latest developments. Full access to all AguaClara resources.
+    image: home/GitHub-Mark.jpg
+    src: https://github.com/AguaClara
+    action: web
+  - name: Our Website
+    description: Visit our official website to see our vision.
+    image: home/website.png
+    src: http://aguaclara.cornell.edu
+    action: web
+...
