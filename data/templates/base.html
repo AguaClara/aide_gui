@@ -44,11 +44,16 @@
 
       <script type="text/javascript">
         function sendInfoToFusion(type, data){
-            var command = {
-                action : type,
-                src : data
-            };
-            adsk.fusionSendData('send', JSON.stringify(command));
+            try {
+                var command = {
+                    action : type,
+                    src : data
+                };
+                adsk.fusionSendData('send', JSON.stringify(command));
+            }
+            catch(error) {
+                window.alert(error.stack);
+            }
         }
 
         window.fusionJavaScriptHandler = {handle: function(action, data){
@@ -56,24 +61,31 @@
                 if (action == 'send') {
                     var list=JSON.parse(data);
                     console.log(list);
-                }else if (action == 'debugger') {
+                }
+                else if (action == 'debugger') {
                     debugger;
-                }else {
+                }
+                else {
                     return 'Unexpected command type: ' + action;
                 }
-            } catch (e) {
-                console.log(e);
-                console.log('exception caught with command: ' + action + ', data: ' + data);
+            }
+            catch (error) {
+                window.alert(error.stack);
             }
             return 'OK';
         }};
         function formToDict(){
-            var form = document.getElementById("user_params");
-            var data = {};
-            for (var item = 0; item < form.length ; item++) {
-                data[form.elements[item].name] = form.elements[item].value;
+            try {
+                var form = document.getElementById("user_params");
+                var data = {};
+                for (var item = 0; item < form.length ; item++) {
+                    data[form.elements[item].name] = form.elements[item].value;
+                }
+                return data;
             }
-            return data;
+            catch (error) {
+                window.alert(error.stack);
+            }
         }
         // activate the datatable when ready
         $(document).ready( function () {
