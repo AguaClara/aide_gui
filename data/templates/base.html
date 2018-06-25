@@ -44,16 +44,11 @@
 
       <script type="text/javascript">
         function sendInfoToFusion(type, data){
-            try {
-                var command = {
-                    action : type,
-                    src : data
-                };
-                adsk.fusionSendData('send', JSON.stringify(command));
-            }
-            catch(error) {
-                window.alert(error.stack);
-            }
+            var command = {
+                action : type,
+                src : data
+            };
+            adsk.fusionSendData('send', JSON.stringify(command));
         }
 
         window.fusionJavaScriptHandler = {handle: function(action, data){

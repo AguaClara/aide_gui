@@ -88,7 +88,7 @@ class MyHTMLEventHandler(adsk.core.HTMLEventHandler):
                 # TODO: Rename collect across everything to user_input.
                 # TODO: Don't write to locations where code is located.
                 helper.write_yaml('params.yaml', command['src'])
-
+                on_Success()
             # NOTE: This is a temporary fix until a back button can be figured out.
             elif command['action'] == 'dropdown':
                 command={
@@ -111,13 +111,13 @@ class MyHTMLEventHandler(adsk.core.HTMLEventHandler):
         except:
             ui.messageBox('Failed:\n{}'.format(traceback.format_exc()))
 
-def run(context):
+def main_run(context, onSuccess):
     try:
         # Load global variables for use in events.
-        global ui, app, env
+        global ui, app, env, on_Success
         app = adsk.core.Application.get()
         ui  = app.userInterface
-
+        on_Success = onSuccess
         # Reload functions from helper if changes have been made.
         # NOTE: This can be deleted once development on helper has been finalized.
         reload(helper)
@@ -132,11 +132,12 @@ def run(context):
 
         # Open the palette as soon as the user runs the add-in.
         showPaletteCmdDef.execute()
+
     except:
         if ui:
             ui.messageBox('Failed:\n{}'.format(traceback.format_exc()))
 
-def stop(context):
+def main_stop(context):
     try:
         # Delete the palette created by this add-in.
         palette = ui.palettes.itemById('aide_gui')
