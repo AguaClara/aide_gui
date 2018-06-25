@@ -17,9 +17,11 @@ dropdown = helper.load_yaml(helper.abs_path('data/dropdown.yaml'))
 # Global set of event handlers to keep them referenced while the palette is being run.
 handlers = []
 
-# Global set of variables to render the palette.
+# Global set of variables to render the palette in Fusion 360.
 app = adsk.core.Application.cast(None)
 ui = adsk.core.UserInterface.cast(None)
+
+# Specify the HTML templates that are rendered through Jinja2.
 env = Environment(
      loader = FileSystemLoader(helper.abs_path('data/templates')),
      autoescape = select_autoescape(['html', 'xml'])
