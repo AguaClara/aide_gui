@@ -17,7 +17,7 @@
           description: Has a lot of holes.
           image: http://news.cornell.edu/sites/chronicle.cornell/files/water2.jpg
           params:
-            - flow_rate:
+            - q:
                 name : Flow Rate (L/s)
                 default : 34
                 type : string
