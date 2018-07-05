@@ -74,7 +74,7 @@
                 var form = document.getElementById("user_params");
                 var data = {};
                 for (var item = 0; item < form.length ; item++) {
-                    data[form.elements[item].name] = form.elements[item].value;
+                    data[form.elements[item].name] = parseFloat(form.elements[item].value);
                 }
                 return data;
             }
