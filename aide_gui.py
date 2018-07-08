@@ -56,7 +56,7 @@ class ShowPaletteCommandExecuteHandler(adsk.core.CommandEventHandler):
         try:
             command = {
                 'action' : 'home',
-                'src' : helper.load_yaml(helper.abs_path('data/structure.yaml'))
+                'src' : helper.load_yaml(helper.abs_path('data/page_structure.yaml'))
             }
             helper.render_page(page_templates, dropdown_structure, command)
 
@@ -93,7 +93,7 @@ class HTMLEventHandler(adsk.core.HTMLEventHandler):
             elif command['action'] == 'dropdown':
                 command = {
                     'action' : 'home',
-                    'src' : helper.load_yaml(helper.abs_path('data/structure.yaml'))
+                    'src' : helper.load_yaml(helper.abs_path('data/page_structure.yaml'))
                 }
                 helper.render_page(page_templates, dropdown_structure, command)
                 palette = f360_ui.palettes.itemById('aide_gui')
