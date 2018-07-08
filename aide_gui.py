@@ -7,9 +7,7 @@ from aide_gui import helper
 sys.path.append(helper.abs_path('./dependencies'))
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
-fusion360_app = adsk.core.Application.cast(None)
-ui = adsk.core.UserInterface.cast(None)
-event_handlers = []
+f360_event_handlers = []
 
 page_templates = Environment(
      loader = FileSystemLoader(helper.abs_path('data/templates')),
@@ -17,127 +15,109 @@ page_templates = Environment(
 )
 dropdown_structure = helper.load_yaml(helper.abs_path('data/dropdown.yaml'))
 
-# Event handler for creating the command to show the palette.
+def run(context, other_aide_modules):
+    try:
+        global f360_ui, f360_app, run_other_aide_modules
+        f360_app = adsk.core.Application.get()
+        f360_ui  = f360_app.userInterface
+        run_other_aide_modules = other_aide_modules
+
+        reload(helper)
+
+        # NOTE: This "button" is not actually rendered in the Fusion 360 UI. When the add-in is run, the command associated with the "button" is called immediately to render the palette.
+        show_palette_button = f360_ui.commandDefinitions.addButtonDefinition('showPalette', '', '')
+        event_handler = ShowPaletteCommandCreatedHandler()
+        show_palette_button.commandCreated.add(event_handler)
+        f360_event_handlers.append(event_handler)
+
+        show_palette_button.execute()
+
+    except:
+        if f360_ui:
+            f360_ui.messageBox('Failed:\n{}'.format(traceback.format_exc()))
+
 class ShowPaletteCommandCreatedHandler(adsk.core.CommandCreatedEventHandler):
     def __init__(self):
         super().__init__()
     def notify(self, args):
         try:
-            command = args.command
-            onExecute = ShowPaletteCommandExecuteHandler()
-            command.execute.add(onExecute)
-            event_handlers.append(onExecute)
-        except:
-            ui.messageBox('Failed:\n{}'.format(traceback.format_exc()))
+            show_palette_command = args.command
+            event_handler = ShowPaletteCommandExecuteHandler()
+            show_palette_command.execute.add(event_handler)
+            f360_event_handlers.append(event_handler)
 
-# Event handler for executing the command to show the palette.
+        except:
+            f360_ui.messageBox('Failed:\n{}'.format(traceback.format_exc()))
+
 class ShowPaletteCommandExecuteHandler(adsk.core.CommandEventHandler):
     def __init__(self):
         super().__init__()
     def notify(self, args):
         try:
-            # Render the Home page.
-            palette = ui.palettes.itemById('aide_gui')
-            command={
+            command = {
                 'action' : 'home',
                 'src' : helper.load_yaml(helper.abs_path('data/structure.yaml'))
             }
+            helper.render_page(page_templates, dropdown_structure, command)
 
-            # NOTE: This can be changed to "display(...)" once development on helper has been finalized.
-            helper.display(page_templates, dropdown_structure, command)
-
-            # Initialize the palette.
-            palette = ui.palettes.add(
-                'aide_gui', 'AguaClara Infrastructure Design Engine', helper.abs_path('data/display.html'), # ID, Displayed name, Displayed HTML
-                True, False, True # Visible, Close button, Resizable
+            palette = f360_ui.palettes.add(
+                'aide_gui', # ID
+                'AguaClara Infrastructure Design Engine', # Displayed name
+                helper.abs_path('data/display.html'), # Displayed page
+                True, # Visible
+                False, # Show close button
+                True # Resizable
             )
             palette.setMinimumSize(300, 400)
-
-            # Dock the palette to the right side of Fusion window.
             palette.dockingState = adsk.core.PaletteDockingStates.PaletteDockStateRight
 
-            # Add handler to HTMLEvent of the palette.
-            onHTMLEvent = MyHTMLEventHandler()
-            palette.incomingFromHTML.add(onHTMLEvent)
-            event_handlers.append(onHTMLEvent)
-        except:
-            ui.messageBox('Failed: \{}'.format(traceback.format_exc()))
+            event_handler = HTMLEventHandler()
+            palette.incomingFromHTML.add(event_handler)
+            f360_event_handlers.append(event_handler)
 
-# Event handler for executing clicks from the HTML.
-class MyHTMLEventHandler(adsk.core.HTMLEventHandler):
+        except:
+            f360_ui.messageBox('Failed: \{}'.format(traceback.format_exc()))
+
+class HTMLEventHandler(adsk.core.HTMLEventHandler):
     def __init__(self):
         super().__init__()
     def notify(self, args):
         try:
-            # Receive data from the HTML and convert to dict.
-            htmlArgs = adsk.core.HTMLEventArgs.cast(args)
-            command = json.loads(htmlArgs.data)
+            html_event = adsk.core.HTMLEventArgs.cast(args)
+            command = json.loads(html_event.data)
 
-            # Send user parameters (if given) to YAML.
-            if command['action'] == 'collect':
-                # TODO: Rename collect across everything to user_input.
-                # TODO: Don't write to locations where code is located.
-                helper.write_yaml('params.yaml', command['src'])
-                on_Success()
-            # NOTE: This is a temporary fix until a back button can be figured out.
+            if command['action'] == 'user_input':
+                helper.write_yaml('data/params.yaml', command['src'])
+                run_other_aide_modules()
+
             elif command['action'] == 'dropdown':
-                command={
+                command = {
                     'action' : 'home',
                     'src' : helper.load_yaml(helper.abs_path('data/structure.yaml'))
                 }
-                helper.display(page_templates, dropdown_structure, command)
-                palette = ui.palettes.itemById('aide_gui')
+                helper.render_page(page_templates, dropdown_structure, command)
+                palette = f360_ui.palettes.itemById('aide_gui')
                 palette.htmlFileURL = helper.abs_path('data/display.html')
 
             else:
                 # Convert command['src'] from string to dict.
                 command['src'] = literal_eval(command['src'])
 
-                # Render a new page.
-                # NOTE: This can be changed to "display(...)" once development on helper has been finalized.
-                helper.display(page_templates, dropdown_structure, command)
-                palette = ui.palettes.itemById('aide_gui')
+                helper.render_page(page_templates, dropdown_structure, command)
+                palette = f360_ui.palettes.itemById('aide_gui')
                 palette.htmlFileURL = helper.abs_path('data/display.html')
+
         except:
-            ui.messageBox('Failed:\n{}'.format(traceback.format_exc()))
-
-def run(context, onSuccess):
-    try:
-        # Load global variables for use in events.
-        global ui, fusion360_app, env, on_Success
-        fusion360_app = adsk.core.Application.get()
-        ui  = fusion360_app.userInterface
-        on_Success = onSuccess
-        # Reload functions from helper if changes have been made.
-        # NOTE: This can be deleted once development on helper has been finalized.
-        reload(helper)
-
-        # Add a command that displays the panel.
-        showPaletteCmdDef = ui.commandDefinitions.addButtonDefinition('showPalette', '', '')
-
-        # Connect to Command Created event.
-        onCommandCreated = ShowPaletteCommandCreatedHandler()
-        showPaletteCmdDef.commandCreated.add(onCommandCreated)
-        event_handlers.append(onCommandCreated)
-
-        # Open the palette as soon as the user runs the add-in.
-        showPaletteCmdDef.execute()
-
-    except:
-        if ui:
-            ui.messageBox('Failed:\n{}'.format(traceback.format_exc()))
+            f360_ui.messageBox('Failed:\n{}'.format(traceback.format_exc()))
 
 def stop(context):
     try:
-        # Delete the palette created by this add-in.
-        palette = ui.palettes.itemById('aide_gui')
-        if palette:
-            palette.deleteMe()
+        palette = f360_ui.palettes.itemById('aide_gui')
+        palette.deleteMe()
 
-        # Delete controls and associated command definitions created by this add-in.
-        cmdDef = ui.commandDefinitions.itemById('showPalette')
-        if cmdDef:
-            cmdDef.deleteMe()
+        show_palette_button = f360_ui.commandDefinitions.itemById('showPalette')
+        show_palette_button.deleteMe()
+        
     except:
-        if ui:
-            ui.messageBox('Failed:\n{}'.format(traceback.format_exc()))
+        if f360_ui:
+            f360_ui.messageBox('Failed:\n{}'.format(traceback.format_exc()))

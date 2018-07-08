@@ -1,13 +1,12 @@
-import sys, inspect, json
+import os, sys, inspect, json
 
 # Takes a relative file path (String) to the calling file and returns the correct absolute path (String). Needed to access other files within aide_gui when initialized by aide.
 from os.path import join, dirname, abspath
 def abs_path(file_path):
     return join(dirname(abspath(__file__)), file_path)
 
-# Allows Python to search for packages in the directory where this file is located.
+# Import local dependencies.
 sys.path.append(abs_path('./dependencies'))
-
 from yaml import load, dump
 
 def load_yaml(file_path):
@@ -19,7 +18,6 @@ def load_yaml(file_path):
     file_path: String
         The relative file path to the YAML file to be loaded.
     """
-    # If yaml is retrieved from user's local path
     with open(abs_path(file_path)) as file:
         return load(file)
 
@@ -37,7 +35,7 @@ def write_yaml(file_path, data):
     with open(abs_path(file_path), 'w') as file:
         dump(data, file, default_flow_style=False)
 
-def display(env, dropdown, command):
+def render_page(env, dropdown, command):
     """
     Refreshes data/display.html with the next page to be rendered.
 
