@@ -3,8 +3,8 @@ __pycache__/
 *.py[cod]
 
 .DS_Store
-display.html
-params.yaml
+displayed_page.html
+user_inputs.yaml
 
 # C extensions
 *.so

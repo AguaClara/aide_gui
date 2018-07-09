@@ -47,7 +47,7 @@ def write_yaml(file_path, data):
 
 def render_page(env, dropdown, command):
     """
-    Refreshes data/display.html with the next page to be rendered.
+    Refreshes data/displayed_page.html with the next page to be rendered.
 
     Parameters
     ----------
@@ -77,5 +77,6 @@ def render_page(env, dropdown, command):
         'dropdowns': dropdown
     }
 
-    with open(abs_path('data/display.html'), 'w') as display:
-        display.write(env.get_template(template_name).render(context))
+    with open(abs_path('data/displayed_page.html'), 'w') as displayed_page:
+        next_displayed_page = env.get_template(template_name).render(context)
+        displayed_page.write(next_displayed_page)

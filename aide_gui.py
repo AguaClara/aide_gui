@@ -13,7 +13,7 @@ page_templates = Environment(
      loader = FileSystemLoader(helper.abs_path('data/templates')),
      autoescape = select_autoescape(['html', 'xml'])
 )
-dropdown_structure = helper.load_yaml(helper.abs_path('data/dropdown.yaml'))
+dropdown_structure = helper.load_yaml(helper.abs_path('data/dropdown_structure.yaml'))
 
 def run(context, other_aide_modules):
     try:
@@ -63,7 +63,7 @@ class ShowPaletteCommandExecuteHandler(adsk.core.CommandEventHandler):
             palette = f360_ui.palettes.add(
                 'aide_gui', # ID
                 'AguaClara Infrastructure Design Engine', # Displayed name
-                helper.abs_path('data/display.html'), # Displayed page
+                helper.abs_path('data/displayed_page.html'), # Displayed page
                 True, # Visible
                 False, # Show close button
                 True # Resizable
@@ -87,7 +87,7 @@ class HTMLEventHandler(adsk.core.HTMLEventHandler):
             command = json.loads(html_event.data)
 
             if command['action'] == 'user_input':
-                helper.write_yaml('data/params.yaml', command['src'])
+                helper.write_yaml('data/user_inputs.yaml', command['src'])
                 run_other_aide_modules()
 
             elif command['action'] == 'dropdown':
@@ -97,7 +97,7 @@ class HTMLEventHandler(adsk.core.HTMLEventHandler):
                 }
                 helper.render_page(page_templates, dropdown_structure, command)
                 palette = f360_ui.palettes.itemById('aide_gui')
-                palette.htmlFileURL = helper.abs_path('data/display.html')
+                palette.htmlFileURL = helper.abs_path('data/displayed_page.html')
 
             else:
                 # Convert command['src'] from string to dict.
@@ -105,7 +105,7 @@ class HTMLEventHandler(adsk.core.HTMLEventHandler):
 
                 helper.render_page(page_templates, dropdown_structure, command)
                 palette = f360_ui.palettes.itemById('aide_gui')
-                palette.htmlFileURL = helper.abs_path('data/display.html')
+                palette.htmlFileURL = helper.abs_path('data/displayed_page.html')
 
         except:
             f360_ui.messageBox('Failed:\n{}'.format(traceback.format_exc()))
