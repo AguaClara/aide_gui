@@ -45,7 +45,7 @@ def write_yaml(file_path, data):
     with open(abs_path(file_path), 'w') as file:
         yaml.dump(data, file, default_flow_style=False)
 
-def render_page(env, dropdown, command):
+def render_page(page_templates, dropdown_structure, command):
     """
     Refreshes data/displayed_page.html with the next page to be rendered.
 
@@ -74,9 +74,10 @@ def render_page(env, dropdown, command):
     # Compile values to be combined with the template.
     context = {
         'fields': command['src'],
-        'dropdowns': dropdown
+        'dropdowns': dropdown_structure
     }
 
     with open(abs_path('data/displayed_page.html'), 'w') as displayed_page:
-        next_displayed_page = env.get_template(template_name).render(context)
-        displayed_page.write(next_displayed_page)
+        template = page_templates.get_template(template_name)
+        new_page = template.render(context)
+        displayed_page.write(new_page)

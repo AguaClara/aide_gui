@@ -1,117 +1,132 @@
-{% extends "base.html" %}
+{% extends "base.html" %} {% block content %}
+<div class="container-fluid" style="font-size: 0.6rem;">
 
-{% block content %}
-
-    <div class="container-fluid" style="font-size: 0.6rem;">
-
-        <!-- this is here to test samples -->
-        <div class='card'>
-          <div class="card-header" style="font-size: 0.8rem;">
-            {{fields.name}}
-          </div>
-          <div class="card-body" style='padding:0.75rem 0.25rem'>
-            <table id="design_tab" class="hover row-border order-column">
-              <thead style='padding:0px'>
-                <tr>
-                   <th></th>
-                   <th style='text-align:left; padding-left: 10px;'>Name</th>
-                   <th style='text-align:right; padding-right: 14px;'>Load</th>
-                </tr>
-              </thead>
-              <tbody>
-                {% for card in fields.cards %}
-                  <tr data="{{design}}">
-                    <td></td>
-                    <td>{{card.name}}</td>
-                    <td style='text-align: right;'>
-                      <button class='btn nohover' onclick='sendInfoToFusion("{{card.action}}", "{{card.src}}")' style="height:24px; width:30px; padding:0; cursor:pointer">
-                        <i class="fa fa-cloud-download" style="color:grey; font-size:18px"></i>
-                      </button>
-                    </td>
-                  </tr>
-                {% endfor %}
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-      <!-- test style -->
-      <style>
-        table.dataTable thead th, table.dataTable thead td{
-          padding:0;
-        }
-        td.details-control {
-          background: url('https://datatables.net/examples/resources/details_open.png') no-repeat center center;
-          cursor: pointer;
-        }
-        tr.shown td.details-control {
-          background: url('https://datatables.net/examples/resources/details_close.png') no-repeat center center;
-        }
-        button:active {
-          border: 1px solid lightgreen;
-        }
-      </style>
-
-      <!-- test script -->
-      <script>
-        $(document).ready(function() {
-            var table = $('#design_tab').DataTable( {
-                "lengthChange": false,
-                "ordering": false,
-                "info":     false,
-                "columns": [
-                              {"className"      :   'details-control',
-                                "orderable"     :   true,
-                                "defaultContent":   ''  },
-
-                              { "className"     :   "name" },
-
-                              { "className"     :   "load" },
-                              ],
-                "order": [[ 1, 'asc' ]]
-            } );
-
-
-            // Add event listener for opening and closing details
-            $('#design_tab tbody').on('click', 'td.details-control', function () {
-                var tr = $(this).closest('tr');
-                var row = table.row( tr );
-                var data = JSON.parse(tr[0].getAttribute("data").replace(/'/g, '"'));
-
-                // console.log(data);
-
-                if ( row.child.isShown() ) {
-                    // This row is already open - close it
-                    row.child.hide();
-                    tr.removeClass('shown');
-                }
-                else {
-                    // Open this row
-                    row.child( format(data) ).show();
-                    tr.addClass('shown');
-                }
-            } );
-        } );
-
-        /* Formatting function for row details - modify as you need */
-        function format (data) {
-          console.log(data);
-          return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px; width:100%;">'+
-              '<tr>'+
-                  '<td>Name:</td>'+
-                  '<td>'+data.name+'</td>'+
-              '</tr>'+
-              '<tr>'+
-                  '<td>Detail:</td>'+
-                  '<td>'+data.description+'</td>'+
-              '</tr>'+
-              '<tr>'+
-                  '<td>Image:</td>'+
-                  '<td><img style="height: 50%;max-height: 113px;width: 100%;max-width: 169px;" src="'+data.image+'"></td>'+
-              '</tr>'+
-          '</table>';
-        }
-
-      </script>
+  <div class='card'>
+    
+    <div class="card-header" style="font-size: 0.8rem;">
+      {{fields.name}}
     </div>
-  {% endblock %}
+
+    <div class="card-body" style='padding:0.75rem 0.25rem'>
+      <table id="design_tab" class="hover row-border order-column">
+
+        <thead style='padding:0px'>
+          <tr>
+
+            <th></th>
+
+            <th style='text-align:left; padding-left: 10px;'>Name</th>
+
+            <th style='text-align:right; padding-right: 14px;'>Load</th>
+
+          </tr>
+        </thead>
+
+        <tbody>
+          {% for card in fields.cards %}
+          <tr data="{{design}}">
+
+            <td></td>
+
+            <td>{{card.name}}</td>
+
+            <td style='text-align: right;'>
+              <button class='btn nohover' onclick='sendInfoToFusion("{{card.action}}", "{{card.src}}")' style="height:24px; width:30px; padding:0; cursor:pointer">
+                <i class="fa fa-cloud-download" style="color:grey; font-size:18px"></i>
+              </button>
+            </td>
+
+          </tr>
+          {% endfor %}
+        </tbody>
+
+      </table>
+    </div>
+
+  </div>
+
+  <style>
+    table.dataTable thead th,
+    table.dataTable thead td {
+      padding: 0;
+    }
+
+    td.details-control {
+      background: url('https://datatables.net/examples/resources/details_open.png') no-repeat center center;
+      cursor: pointer;
+    }
+
+    tr.shown td.details-control {
+      background: url('https://datatables.net/examples/resources/details_close.png') no-repeat center center;
+    }
+
+    button:active {
+      border: 1px solid lightgreen;
+    }
+  </style>
+
+  <script>
+    $(document).ready(function () {
+      var table = $('#design_tab').DataTable({
+        "lengthChange": false,
+        "ordering": false,
+        "info": false,
+        "columns": [
+          {
+            "className": 'details-control',
+            "orderable": true,
+            "defaultContent": ''
+          },
+
+          { "className": "name" },
+
+          { "className": "load" },
+        ],
+        "order": [[1, 'asc']]
+      });
+
+
+      // Add event listener for opening and closing details
+      $('#design_tab tbody').on('click', 'td.details-control', function () {
+        var tr = $(this).closest('tr');
+        var row = table.row(tr);
+        var data = JSON.parse(tr[0].getAttribute("data").replace(/'/g, '"'));
+
+        // console.log(data);
+
+        if (row.child.isShown()) {
+          // This row is already open - close it
+          row.child.hide();
+          tr.removeClass('shown');
+        }
+        else {
+          // Open this row
+          row.child(format(data)).show();
+          tr.addClass('shown');
+        }
+      });
+    });
+
+    /* Formatting function for row details - modify as you need */
+    function format(data) {
+      console.log(data);
+      return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px; width:100%;">' +
+        '<tr>' +
+        '<td>Name:</td>' +
+        '<td>' + data.name + '</td>' +
+        '</tr>' +
+        '<tr>' +
+        '<td>Detail:</td>' +
+        '<td>' + data.description + '</td>' +
+        '</tr>' +
+        '<tr>' +
+        '<td>Image:</td>' +
+        '<td><img style="height: 50%;max-height: 113px;width: 100%;max-width: 169px;" src="' + data.image + '"></td>' +
+        '</tr>' +
+        '</table>';
+    }
+
+  </script>
+  
+</div>
+{% endblock %}
