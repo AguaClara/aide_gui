@@ -1,0 +1,13 @@
+{
+	"autodeskProduct":	"Fusion360",
+	"type":	"addin",
+	"id":	"6c3567e8-03c7-4d1d-bb28-e96279cbbfdf",
+	"author":	"AguaClara Cornell",
+	"description":	{
+		"":	"Provides a GUI for collecting user inputs that are used in AIDE."
+	},
+	"version":	"",
+	"runOnStartup":	false,
+	"supportedOS":	"windows|mac",
+	"editEnabled":	true
+}

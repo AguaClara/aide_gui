@@ -1,0 +1,37 @@
+# NOTE: Image paths are given relative to data/.
+- name: Designs
+  description: Get access to the latest water treatment designs deveoped in Cornell University.
+  image: images/design.png
+  action: designs
+  src:
+
+    name: Designs
+    cards:
+      - name: LFOM
+        description: Has a lot of holes.
+        image: http://news.cornell.edu/sites/chronicle.cornell/files/water2.jpg
+        action: input
+        src:
+
+          name: LFOM
+          description: Has a lot of holes.
+          image: http://news.cornell.edu/sites/chronicle.cornell/files/water2.jpg
+          params:
+            - q:
+                name : Flow Rate (L/s)
+                default : 34
+                type : string
+                options : null
+
+  # TODO: Change these to a link that opens externally in the browser.
+- name: GitHub
+  description: Check out our GitHub page for the latest developments. Full access to all AguaClara resources.
+  image: images/GitHub-Mark.jpg
+  src: https://github.com/AguaClara
+  action: web
+
+- name: Our Website
+  description: Visit our official website to see our vision.
+  image: images/website.png
+  src: http://aguaclara.cornell.edu
+  action: web

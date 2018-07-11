@@ -1,0 +1,30 @@
+{% extends "base.html" %} {% block content %}
+<div class="container" style='font-size: 1rem;'>
+  <div class="row" style>
+    {% for card in fields %}
+    <div class="col-xl-3 col-lg-3 col-md-5 col-sm-6">
+      <div class="card border-dark mb-3">
+
+        <img class="card-img-top" src="{{card.image}}" style='height:9rem; width:100%;' alt="Card image cap">
+
+        <div class="card-body" style="padding:1rem;">
+
+          <h5 class="card-title">{{card.name}}</h5>
+
+          <p class="card-text text-muted" style="font-size:0.8rem;">{{card.description}}</p>
+
+            {% if card.action == 'web'%}
+            <a href="{{card.src}}" class="btn btn-primary">Go to {{card.name}}</a>
+
+            {% else %}
+            <button type='button' class="btn btn-primary" onclick='sendInfoToFusion("{{card.action}}", "{{card.src}}")'>Go to {{card.name}}</button>
+            {% endif %}
+            
+        </div>
+
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

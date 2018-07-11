@@ -12,8 +12,6 @@ Working on creating a GUI within Fusion 360 to allow users to design their own A
 
 ## Goals:
 * Create a minimum viable product by the end of Spring 2018
-  * Please refer to branch spring-2018 
-
 
 ## Links to Reports and Presentations
 * [Spring 2018 Symposium](https://docs.google.com/presentation/d/1xEBxtsFOj9Vg3OqsJGKg5XGnLqnIBJ-bhff2sCJpQ-Q/edit?usp=sharing)
