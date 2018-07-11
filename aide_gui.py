@@ -5,6 +5,7 @@ from aide_gui import helper
 
 # Import local dependencies.
 sys.path.append(helper.abs_path('./dependencies'))
+sys.path.append(r'c:\users\en-ce-ac\appdata\local\continuum\anaconda3\envs\aide_fusion\lib\site-packages')
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
 f360_event_handlers = []
@@ -112,6 +113,9 @@ class HTMLEventHandler(adsk.core.HTMLEventHandler):
 
 def stop(context):
     try:
+        f360_app = adsk.core.Application.get()
+        f360_ui  = f360_app.userInterface
+
         palette = f360_ui.palettes.itemById('aide_gui')
         palette.deleteMe()
 
