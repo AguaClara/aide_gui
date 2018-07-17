@@ -50,7 +50,7 @@ setup(
     cmdclass={
         'coverage': Coverage,
     },
-    install_requires=['ruamel.yaml', 'aide_design', 'numpy'],
+    install_requires=['ruamel.yaml', 'aide_design', 'numpy', 'jinja2'],
     license='Apache License (2.0)',
     name='aide_gui',
     packages=find_packages(),

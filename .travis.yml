@@ -8,8 +8,8 @@ script:
 - pytest --cov=./
 deploy:
   provider: pypi
-  user: PYPI_USERNAME
-  password: PYPI_PASSWORD
+  user: $PYPI_USERNAME
+  password: $PYPI_PASSWORD
   on:
     tags: true
     branch: master
